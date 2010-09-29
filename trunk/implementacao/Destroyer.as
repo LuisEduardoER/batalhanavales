@@ -6,7 +6,7 @@
 	*/
 	public class Destroyer extends Embarcacao {
 		
-		private function Destroyer() {
+		public function Destroyer() {
 			super();			
 		}
 		
