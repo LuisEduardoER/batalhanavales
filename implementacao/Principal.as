@@ -26,20 +26,30 @@
 		/*Construtor da classe*/
 		public function Principal() {
 			this.alvo = alvo_mc;			
-			//this.introducao = this.attacharTela("Introducao", true);			
-			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
-			this.ganhou = this.attacharTela("Ganhou", true);
-			this.ganhou.addEventListener("continuar", continuarJogando);
+			//this.introducao = this.attacharTela("Introducao", true);		
+			/*this.regras = this.attacharTela("Regras", true);
+			this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);*/
+
+			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
+			//this.ganhou = this.attacharTela("Ganhou", true);
+			//this.ganhou.addEventListener("continuar", continuarJogando);
 		}
 		
 		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide continuar jogando. */
 		private function continuarJogando(e:Event):void{
-			trace("clicou em continuar");
+			trace("Feedback: clicou em continuar");
 		}
 		
 		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide não jogar mais. */
 		private function sair(e:Event):void{
-			trace("clicou em sair");
+			trace("Feedback: clicou em sair");
+		}
+		
+		/* Esse método será chamando quando, o OK da tela de Regras for pressionado. */
+		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
+		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
+		private function clicarOKRegras(e:Event):void{
+			trace("Regras: clicou em ok");			
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
