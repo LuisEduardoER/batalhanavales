@@ -7,7 +7,8 @@
 	public class Ganhou extends Feedback{
 		
 		public function Ganhou() {
-			
+			super();
+			this.clicar();
 		}
 	}
 	
