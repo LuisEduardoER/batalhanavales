@@ -9,15 +9,15 @@
 	* @author Lorena Tablada
 	*/
 	public class Feedback extends MovieClip {
-		protected var continuar_evt:Event;
-		protected var sair_evt:Event;
+		public var continuar_evt:Event;
+		public var sair_evt:Event;
 		
 		public function Feedback() {
-			this.sim_btn.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
-			this.nao_btn.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
+			this.continuar_evt = new Event("continuar");
+			this.sair_evt = new Event("sair");			
 		}
 		
-		protected function clicar(e:MouseEvent):void{
+		function clicar(e:MouseEvent):void{
 			var botao_btn:Button = Button(e.currentTarget);
 			if (botao_btn.name == "sim_btn") {
 				this.dispatchEvent(this.continuar_evt);

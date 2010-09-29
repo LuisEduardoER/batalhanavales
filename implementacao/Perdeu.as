@@ -6,9 +6,9 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Ganhou extends Feedback{
+	public class Perdeu extends Feedback{
 		
-		public function Ganhou() {
+		public function Perdeu() {
 			super();
 			this.sim_btn.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
 			this.nao_btn.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
