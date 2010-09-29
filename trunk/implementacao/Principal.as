@@ -26,7 +26,8 @@
 		/*Construtor da classe*/
 		public function Principal() {
 			this.alvo = alvo_mc;			
-			this.introducao = this.attacharTela("Introducao", true);			
+			//this.introducao = this.attacharTela("Introducao", true);			
+			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
