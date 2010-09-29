@@ -1,0 +1,26 @@
+﻿package {
+	import flash.display.MovieClip;
+	import flash.events.MouseEvent;
+	import flash.events.Event;
+	
+	/**
+	* ...
+	* @author Lorena Tablada
+	*/
+	public class Regras extends MovieClip {
+		private var clicar_evt:Event;
+		public function Regras() {
+			this.clicar_evt = new Event("clicar");
+			this.configurar();
+		}		
+		
+		private function configurar():void{
+			this.ok_btn.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
+		}
+		
+		private function clicar(e:MouseEvent):void {
+			this.dispatchEvent(this.clicar_evt);
+		}
+	}
+	
+}
