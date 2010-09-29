@@ -27,7 +27,19 @@
 		public function Principal() {
 			this.alvo = alvo_mc;			
 			//this.introducao = this.attacharTela("Introducao", true);			
-			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
+			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
+			this.ganhou = this.attacharTela("Ganhou", true);
+			this.ganhou.addEventListener("continuar", continuarJogando);
+		}
+		
+		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide continuar jogando. */
+		private function continuarJogando(e:Event):void{
+			trace("clicou em continuar");
+		}
+		
+		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide não jogar mais. */
+		private function sair(e:Event):void{
+			trace("clicou em sair");
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/

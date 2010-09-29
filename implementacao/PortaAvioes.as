@@ -6,7 +6,7 @@
 	*/
 	public class PortaAvioes extends Embarcacao {
 		
-		private function PortaAvioes() {
+		public function PortaAvioes() {
 			super();			
 		}
 		

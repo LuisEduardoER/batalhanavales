@@ -6,7 +6,7 @@
 	*/
 	public class Submarino extends Embarcacao {
 		
-		private function Submarino() {
+		public function Submarino() {
 			super();
 		}
 		
