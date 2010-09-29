@@ -10,7 +10,7 @@
 	public class Regras extends MovieClip {
 		private var clicar_evt:Event;
 		public function Regras() {
-			this.clicar_evt = new Event("clicar");
+			this.clicar_evt = new Event("Regras_clicarOK");
 			this.configurar();
 		}		
 		
