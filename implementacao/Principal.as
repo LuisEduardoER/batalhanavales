@@ -3,8 +3,10 @@
 	import fl.controls.RadioButton;
 	import fl.controls.TextArea;
 	import flash.display.MovieClip;
+	import flash.events.DataEvent;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.XMLSocket;
 	
 	/**
 	* ...
@@ -23,16 +25,30 @@
 		private var ganhou:MovieClip;
 		private var perdeu:MovieClip;
 		
+		/*Comunicação*/
+		public var socket:XMLSocket;
+		
 		/*Construtor da classe*/
 		public function Principal() {
+			this.socket = new XMLSocket();
+			this.socket.addEventListener(DataEvent.DATA, receberMensagem);
+			this.socket.connect("localhost", 8090);
+			
 			this.alvo = alvo_mc;			
 			//this.introducao = this.attacharTela("Introducao", true);		
 			/*this.regras = this.attacharTela("Regras", true);
 			this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);*/
 
-			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
+			this.distribuindoFrota = this.attacharTela("Introducao", true);			
 			//this.ganhou = this.attacharTela("Ganhou", true);
 			//this.ganhou.addEventListener("continuar", continuarJogando);
+			
+			
+			
+		}
+		
+		private function receberMensagem(e:DataEvent):void {
+			trace("teste -> " + e.data);
 		}
 		
 		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide continuar jogando. */
@@ -57,7 +73,7 @@
 			if (limpar)	this.limparAlvo();
 			var tela:MovieClip;
 			switch (nomeTela) {
-				case "Introducao":			tela = new Introducao();											
+				case "Introducao":			tela = new Introducao(this.socket);											
 											break;
 				case "Regras": 				tela = new Regras();
 											break;
