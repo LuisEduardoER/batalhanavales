@@ -2,15 +2,17 @@
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
+	import flash.net.XMLSocket;
 	
 	/**
 	* ...
 	* @author Lorena Tablada
 	*/
 	public class Introducao extends MovieClip {
-		
-		public function Introducao() {
+		private var comunicacao:XMLSocket;
+		public function Introducao(socket:XMLSocket) {
 			this.configurar();
+			comunicacao = socket;
 		}
 		
 		public function configurar():void {			
@@ -33,6 +35,7 @@
 			this.ok_btn.removeEventListener(MouseEvent.MOUSE_UP, this.logar);
 			this.ok_btn.enabled = false;
 			this.log_txt.htmlText += "Conectando ao servidor...";
+			this.comunicacao.send("saulo#conectar");
 		}
 	}
 	
