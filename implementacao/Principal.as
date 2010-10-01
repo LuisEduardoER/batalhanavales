@@ -31,15 +31,16 @@
 		/*Construtor da classe*/
 		public function Principal() {
 			this.socket = new XMLSocket();
-			this.socket.addEventListener(DataEvent.DATA, receberMensagem);
-			this.socket.connect("localhost", 8090);
+			//this.socket.addEventListener(DataEvent.DATA, receberMensagem);
+			//this.socket.addEventListener(Event.CONNECT, conectarCliente);
+			//this.socket.connect("localhost", 8090);
 			
 			this.alvo = alvo_mc;			
-			//this.introducao = this.attacharTela("Introducao", true);		
+			this.introducao = this.attacharTela("Introducao", true);		
 			/*this.regras = this.attacharTela("Regras", true);
 			this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);*/
 
-			this.distribuindoFrota = this.attacharTela("Introducao", true);			
+			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
 			//this.ganhou = this.attacharTela("Ganhou", true);
 			//this.ganhou.addEventListener("continuar", continuarJogando);
 			
@@ -47,9 +48,7 @@
 			
 		}
 		
-		private function receberMensagem(e:DataEvent):void {
-			trace("teste -> " + e.data);
-		}
+		
 		
 		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide continuar jogando. */
 		private function continuarJogando(e:Event):void{
