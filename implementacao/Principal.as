@@ -20,6 +20,7 @@
 		/*Telas*/
 		private var introducao:MovieClip;
 		private var regras:MovieClip;
+		private var convidandoOponente:MovieClip;
 		private var distribuindoFrota:MovieClip;
 		private var jogo:MovieClip;
 		private var ganhou:MovieClip;
@@ -35,9 +36,12 @@
 			//this.socket.addEventListener(Event.CONNECT, conectarCliente);
 			//this.socket.connect("localhost", 8090);
 			
-			this.alvo = alvo_mc;			
+			this.alvo = alvo_mc;	
+			
 			this.introducao = this.attacharTela("Introducao", true);
 			this.introducao.addEventListener("conexaoAceita", irParaRegras);
+						
+			
 			/*this.regras = this.attacharTela("Regras", true);
 			this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);*/
 
@@ -49,12 +53,13 @@
 			
 		}
 		
-		private function receberMensagem(e:DataEvent):void {
-			trace("recebeu msg");			
-			var xml:XML = new XML(e.data);			
+		private function receberMensagem(e:DataEvent):void {			
+			var xml:XML = new XML(e.data);	
+			trace("Principal recebeu msg do tipo " + xml.@tipo);
 			switch((xml.@tipo).toString()) {
-				case "liberacao": 	this.distribuindoFrota.liberar();
-									trace("entrou no case");
+				case "liberacao": 	this.distribuindoFrota.liberar();									
+									break;
+				default:			trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 									break;
 			}
 		}
@@ -80,7 +85,8 @@
 		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function clicarOKRegras(e:Event):void {
-			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
+			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
+			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -93,6 +99,8 @@
 				case "Regras": 				tela = new Regras();
 											break;
 				case "DistribuindoFrota": 	tela = new DistribuindoFrota();
+											break;
+				case "ConvidandoOponente": 	tela = new ConvidandoOponente(this.socket);
 											break;
 				case "Jogo": 				tela = new Jogo();
 											break;
