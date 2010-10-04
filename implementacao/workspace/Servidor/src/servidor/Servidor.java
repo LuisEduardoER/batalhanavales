@@ -18,7 +18,7 @@ public class Servidor {
         
     }
 
-	private void startServer(int port) {
+    private void startServer(int port) {
         writeActivity("Inicializando o Servidor");
         
         try {
@@ -37,6 +37,10 @@ public class Servidor {
                 client.start();		
                
                 broadcastMessage("<dados tipo='conecta' id='" + client.getId() + "' info='" + clients.size() + "'/>");
+                if(clients.size() == 2){
+                    broadcastMessage("<dados tipo='liberacao' />");
+                    System.out.println("size = 2");
+                }
                 
             }
         } catch(IOException ioe) {
