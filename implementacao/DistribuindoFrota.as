@@ -29,6 +29,13 @@
 			this.portaAvioes.addEventListener("terminarArrasto", this.terminarArrasto);
 		}
 		
+		public function liberar():void {
+			trace("Distribuindo frota: liberar");
+			this.log_txt.htmlText += "Oponente conectado. Posicione sua frota nos locais desejados e clique em \"Iniciar jogo\".";
+			
+			this.portaAvioes.addEventListener("terminarArrasto", this.terminarArrasto);
+		}
+		
 		private function terminarArrasto(e:Event):void {
 			var embarcacao:PortaAvioes = PortaAvioes(e.currentTarget);
 			this.estaDentroTabuleiro(embarcacao);
