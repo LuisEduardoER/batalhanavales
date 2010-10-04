@@ -10,10 +10,14 @@
 	* @author Lorena Tablada
 	*/
 	public class Introducao extends MovieClip {
+		
 		private var comunicacao:XMLSocket;
+		private var conexaoAceita_evt:Event;
+		
 		public function Introducao(socket:XMLSocket) {
 			this.configurar();
 			comunicacao = socket;
+			this.conexaoAceita_evt = new Event("conexaoAceita");
 		}
 		
 		public function configurar():void {			
@@ -43,6 +47,7 @@
 		private function confirmarConexao(e:Event):void {
 			//var xml:XML = XML(e.data);
 			this.log_txt.htmlText += "Conexão realizada com sucesso.";
+			this.dispatchEvent(this.conexaoAceita_evt);
 		}
 		
 		

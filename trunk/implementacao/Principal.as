@@ -31,12 +31,13 @@
 		/*Construtor da classe*/
 		public function Principal() {
 			this.socket = new XMLSocket();
-			//this.socket.addEventListener(DataEvent.DATA, receberMensagem);
+			this.socket.addEventListener(DataEvent.DATA, receberMensagem);
 			//this.socket.addEventListener(Event.CONNECT, conectarCliente);
 			//this.socket.connect("localhost", 8090);
 			
 			this.alvo = alvo_mc;			
-			this.introducao = this.attacharTela("Introducao", true);		
+			this.introducao = this.attacharTela("Introducao", true);
+			this.introducao.addEventListener("conexaoAceita", irParaRegras);
 			/*this.regras = this.attacharTela("Regras", true);
 			this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);*/
 
@@ -46,6 +47,21 @@
 			
 			
 			
+		}
+		
+		private function receberMensagem(e:DataEvent):void {
+			trace("recebeu msg");			
+			var xml:XML = new XML(e.data);			
+			switch((xml.@tipo).toString()) {
+				case "liberacao": 	this.distribuindoFrota.liberar();
+									trace("entrou no case");
+									break;
+			}
+		}
+		
+		private function irParaRegras(e:Event):void {
+			this.regras = this.attacharTela("Regras", true);
+			this.regras.addEventListener("Regras_clicarOK", clicarOKRegras);
 		}
 		
 		
@@ -63,8 +79,8 @@
 		/* Esse método será chamando quando, o OK da tela de Regras for pressionado. */
 		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
-		private function clicarOKRegras(e:Event):void{
-			trace("Regras: clicou em ok");			
+		private function clicarOKRegras(e:Event):void {
+			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -84,6 +100,7 @@
 											break;
 				case "Perdeu": 				tela = new Perdeu();
 											break;
+				default:					trace("Essa tela não existe.");
 			}
 			this.alvo.addChild(tela);
 			return tela;
