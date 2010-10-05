@@ -106,7 +106,8 @@ public class GuiServidor extends javax.swing.JFrame {
 
     private void btConectarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btConectarMouseReleased
         // TODO add your handling code here:
-         this.servidor = new Servidor(8090, this);
+        this.servidor = new Servidor(8090, this);
+        
     }//GEN-LAST:event_btConectarMouseReleased
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
