@@ -2,6 +2,8 @@ package servidor;
 
 import java.io.*;
 import java.net.*;
+import com.thoughtworks.xstream.XStream;
+import java.util.List;
 
 public class Cliente extends Thread {
     private Thread thrThis;
@@ -40,7 +42,8 @@ public class Cliente extends Thread {
                     stringBuffer.append(charBuffer[0]);
                     in.read(charBuffer, 0 ,1);
                 }
-                
+                System.out.println("recebido = "+stringBuffer.toString());
+                this.lerMensagem(stringBuffer.toString());
                 server.broadcastMessage(stringBuffer.toString());
             }
         } catch(IOException ioe) {
@@ -81,5 +84,11 @@ public class Cliente extends Thread {
             server.writeActivity("IP do Cliente: " + ip + " causou um erro  "
             + "enquanto desconectava.");
         }       
+    }
+
+    private void lerMensagem(String msg){
+        XStream stream = new XStream();
+        List dados = (List) stream.fromXML(msg);
+        System.out.println("atributo = ");
     }
 }

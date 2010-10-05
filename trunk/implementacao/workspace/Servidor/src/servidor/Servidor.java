@@ -9,12 +9,14 @@ import java.net.*;
 
 public class Servidor {
     private Vector<Cliente> clients = new Vector<Cliente>();
+    private ArrayList<ArrayList> clientes = new ArrayList<ArrayList>();
     ServerSocket server;
     //private GuiServidor gui;
 
     public Servidor(int port/*, GuiServidor gui*/) {
         //this.gui = gui;
         startServer(port);
+        
         
     }
 
@@ -31,12 +33,16 @@ public class Servidor {
                 writeActivity(client.getId() + " => " + client.getIP() + " conectado ao servidor.");
                 
                 clients.addElement(client);
+                /*Teste de Array de clientes*/
+                this.adicionarCliente(client, 0);
+                System.out.println("linha cliente = "+this.procurarCliente(client));
+                /*Fim teste*/
                 
                 int id = (int)client.getId();
                
                 client.start();		
                
-                broadcastMessage("<dados tipo='conecta' id='" + client.getId() + "' info='" + clients.size() + "'/>");
+               //broadcastMessage("<dados tipo='conecta' id='" + client.getId() + "' info='" + clients.size() + "'/>");
                 if(clients.size() == 2){
                     broadcastMessage("<dados tipo='liberacao' />");
                     System.out.println("size = 2");
@@ -93,6 +99,31 @@ public class Servidor {
         } catch (IOException ioe) {
             writeActivity("Erro enquanto parava o servidor");
         }
+    }
+
+    protected void adicionarCliente(Cliente cliente, int linha){
+        if(this.clientes.isEmpty()){
+            this.clientes.add(new ArrayList<Cliente>());
+            this.clientes.get(0).add(cliente);
+        }else{
+            if(this.clientes.get(linha) != null){
+                this.clientes.get(linha).add(cliente);
+            }else{
+                this.clientes.add(new ArrayList<Cliente>());
+                this.clientes.get(linha).add(cliente);
+            }
+        }
+    }
+
+    protected int procurarCliente(Cliente cliente){
+        int retorno = -1;
+        for(int i = 0;i<this.clientes.size();i++){
+            if(this.clientes.get(i).indexOf(cliente) != -1){
+                retorno = i;
+                break;
+            }
+        }
+        return retorno;
     }
     
     /*public static void main(String args[]) {
