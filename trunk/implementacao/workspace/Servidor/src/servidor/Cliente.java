@@ -47,7 +47,7 @@ public class Cliente extends Thread {
                     in.read(charBuffer, 0 ,1);
                 }
                 System.out.println("recebido = "+stringBuffer.toString());
-                //this.lerMensagem(stringBuffer.toString());
+                this.server.lerMensagem(stringBuffer.toString());
                // server.broadcastMessage(stringBuffer.toString());
             }
         } catch(IOException ioe) {
