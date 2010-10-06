@@ -39,11 +39,11 @@
 		
 		public function criarXML():String {
 			var retorno_str:String = new String();
-			retorno_str += "<dados>";
+			retorno_str += "<servidor.Mensagem>";
+			retorno_str += "<idCliente>" + this.idCliente + "</idCliente>";			
 			retorno_str += "<tipo>" + this.tipo + "</tipo>";					
-			retorno_str += "<id>" + this.idCliente + "</id>";
-			retorno_str += "<mensagem>" + this.texto + "</mensagem>";
-			retorno_str += "</dados>";
+			retorno_str += "<texto>" + this.texto+ "</texto>";			
+			retorno_str += "</servidor.Mensagem>";
 			return retorno_str;
 		}
 	}

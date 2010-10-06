@@ -3,6 +3,7 @@ package servidor;
 
 
 import com.thoughtworks.xstream.XStream;
+import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -71,26 +72,23 @@ public class Servidor {
     }
 
     public synchronized void enviarMensagem(Mensagem mensagem, Cliente cliente) {
-        //XStream stream = new XStream();
-        String xml = mensagem.criarXML();
+        XStream stream = new XStream(new DomDriver());
+        String xml = stream.toXML(mensagem);
         xml += '\0';
-        System.out.println("xml = " + xml);
+        System.out.println("enviando xml = " + xml);
         
         cliente.send(xml);
     }
 
-    private void lerMensagem(String msg){
-        XStream stream = new XStream();
-        List dados = (List) stream.fromXML(msg);
-        System.out.println("atributo = ");
+    public void lerMensagem(String msg){
+        XStream stream = new XStream(new DomDriver());
+        Mensagem mensagemLida = (Mensagem) stream.fromXML(msg);
+        System.out.println("recebendo xml = " + stream.toXML(mensagemLida));
     }
 
     public void removeClient(Cliente client) {
-        writeActivity(client.getIP() + " deixou o servidor.");
-        
-        clients.removeElement(client);
-        
-      //  broadcastMessage("<dados tipo='qtd' id='" + client.getId() + "' info='" + clients.size() + "'/>");
+        writeActivity(client.getIP() + " deixou o servidor.");        
+        clients.removeElement(client);             
     }
 
     public void writeActivity(String activity) {

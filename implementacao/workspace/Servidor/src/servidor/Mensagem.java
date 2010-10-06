@@ -59,14 +59,5 @@ public class Mensagem {
     public void setTexto(String texto) {
         this.texto = texto;
     }
-
-    public String criarXML(){
-        String retorno = new String();
-        retorno += "<dados>";
-        retorno += "<tipo>" + this.tipo + "</tipo>";
-        retorno += "<id>" + this.idCliente + "</id>";
-        retorno += "<mensagem>" + this.texto + "</mensagem>";
-        retorno += "</dados>";
-        return retorno;
-    }
+    
 }
