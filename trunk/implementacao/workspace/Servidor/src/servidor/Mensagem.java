@@ -11,8 +11,12 @@ package servidor;
  */
 public class Mensagem {
     private int idCliente;
-    private int tipo;
-    private String mensagem;
+    private String tipo;
+    private String texto;
+
+    public void Mensagem(){
+        this.texto = "";
+    }
 
     /**
      * @return o id do cliente
@@ -24,15 +28,15 @@ public class Mensagem {
     /**
      * @return o tipo
      */
-    public int getTipo() {
+    public String getTipo() {
         return tipo;
     }
 
     /**
      * @return a mensagem
      */
-    public String getMensagem() {
-        return mensagem;
+    public String getTexto() {
+        return texto;
     }
 
     /**
@@ -45,14 +49,24 @@ public class Mensagem {
     /**
      * @param tipo o tipo para setar
      */
-    public void setTipo(int tipo) {
+    public void setTipo(String tipo) {
         this.tipo = tipo;
     }
 
     /**
      * @param mensagem a mensagem para setar
      */
-    public void setMensagem(String mensagem) {
-        this.mensagem = mensagem;
+    public void setTexto(String texto) {
+        this.texto = texto;
+    }
+
+    public String criarXML(){
+        String retorno = new String();
+        retorno += "<dados>";
+        retorno += "<tipo>" + this.tipo + "</tipo>";
+        retorno += "<id>" + this.idCliente + "</id>";
+        retorno += "<mensagem>" + this.texto + "</mensagem>";
+        retorno += "</dados>";
+        return retorno;
     }
 }
