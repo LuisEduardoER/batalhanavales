@@ -16,6 +16,8 @@ public class Cliente extends Thread {
     private int id;
     private static int count = 0;
 
+    private String nome;
+
     public Cliente(Servidor server, Socket socket) {
     	this.id = Cliente.count++;
     	
@@ -46,8 +48,8 @@ public class Cliente extends Thread {
                     stringBuffer.append(charBuffer[0]);
                     in.read(charBuffer, 0 ,1);
                 }
-                System.out.println("recebido = "+stringBuffer.toString());
-                this.server.lerMensagem(stringBuffer.toString());
+                //System.out.println("recebido = "+stringBuffer.toString());
+                this.server.lerMensagem(stringBuffer.toString(), this);
                // server.broadcastMessage(stringBuffer.toString());
             }
         } catch(IOException ioe) {
@@ -94,5 +96,19 @@ public class Cliente extends Thread {
         XStream stream = new XStream();
         List dados = (List) stream.fromXML(msg);
         System.out.println("atributo = ");
+    }
+
+    /**
+     * @return the nome
+     */
+    public String getNome() {
+        return nome;
+    }
+
+    /**
+     * @param nome the nome to set
+     */
+    public void setNome(String nome) {
+        this.nome = nome;        
     }
 }

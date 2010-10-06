@@ -80,10 +80,43 @@ public class Servidor {
         cliente.send(xml);
     }
 
-    public void lerMensagem(String msg){
+    public void lerMensagem(String msg, Cliente cliente){
         XStream stream = new XStream(new DomDriver());
         Mensagem mensagemLida = (Mensagem) stream.fromXML(msg);
         System.out.println("recebendo xml = " + stream.toXML(mensagemLida));
+        this.interpretarMensagem(mensagemLida, cliente);
+    }
+
+    private void interpretarMensagem(Mensagem msg, Cliente cliente){
+        String tipo = msg.getTipo();
+        System.out.println("tipo = " + tipo);
+        Mensagem mensagemResposta = new Mensagem();
+        if( tipo.equals("pedidoJogadores") ){
+           mensagemResposta.setTexto(this.getNomesJogadores());
+           mensagemResposta.setTipo("respostaPedidoJogadores");
+           this.enviarMensagem(mensagemResposta, cliente);            
+        }
+        else if( tipo.equals("envioNome") ){
+            cliente.setNome(msg.getTexto());
+        }
+    }
+
+    private String getNomesJogadores(){
+        String retorno = new String();
+        Enumeration enume = clients.elements();
+        while (enume.hasMoreElements()) {
+            Cliente cliente = (Cliente)enume.nextElement();
+            retorno += cliente.getNome() + ",";
+        }
+        enume = clients.elements();
+        while(enume.hasMoreElements()){
+            Cliente cliente = (Cliente)enume.nextElement();
+            retorno += cliente.getId();
+            if(cliente.getId() != clients.get(clients.size()-1).getId()){
+                retorno += ",";
+            }
+        }
+        return retorno;
     }
 
     public void removeClient(Cliente client) {

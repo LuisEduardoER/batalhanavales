@@ -30,6 +30,7 @@
 		public var socket:XMLSocket;
 		
 		private var id:int;
+		private var nome:String;
 		
 		/*Construtor da classe*/
 		public function Principal() {
@@ -57,18 +58,36 @@
 		
 		private function receberMensagem(e:DataEvent):void {			
 			var xml:XML = new XML(e.data);	
-			trace("Principal recebeu msg do tipo " + xml.tipo.text());
-			switch((xml.dados.tipo).toString()) {
-				case "liberacao": 		this.distribuindoFrota.liberar();									
-										break;
+			trace("Principal recebeu msg do tipo " + xml.tipo);
+			switch((xml.tipo).toString()) {
+				case "liberacao": 				this.distribuindoFrota.liberar();									
+												break;
 									
-				case "respostaConecta": this.id = int(xml.@info);
-										trace("this.id = " + this.id);
-										break;
+				case "respostaConecta": 		this.id = int(xml.idCliente);
+												trace("Seu id agora é = " + this.id);
+												break;
+									
+				case "respostaPedidoJogadores": trace("xml.texto = " + xml.texto);
+												this.preencherDataGrid(xml.texto);
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}
+		}
+		
+		private function preencherDataGrid(texto:String):void {
+			var nomes:Array = texto.split(",");
+			var ids:Array = [];			
+			for (var i:int = (nomes.length/2); i < nomes.length; i++) {
+				ids.push(nomes[i]);
+			}
+			nomes.splice( (nomes.length/2), (nomes.length/2) );			
+			for (var j:int = 0; j < nomes.length; j++) {
+				/*trace("nomes["+j+"] = " + nomes[j]);
+				trace("ids[" + j + "] = " + ids[j]);*/
+				this.convidandoOponente.adicionarJogador(ids[j], nomes[j]);
+			}			
 		}
 		
 		private function irParaRegras(e:Event):void {
@@ -101,7 +120,7 @@
 			if (limpar)	this.limparAlvo();
 			var tela:MovieClip;
 			switch (nomeTela) {
-				case "Introducao":			tela = new Introducao(this.socket);											
+				case "Introducao":			tela = new Introducao(this.socket, this.id);											
 											break;
 				case "Regras": 				tela = new Regras();
 											break;
