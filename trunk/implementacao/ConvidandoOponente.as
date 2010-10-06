@@ -19,9 +19,7 @@
 			this.idCliente = id;
 			this.configurarFataGrid();
 			this.comunicacao = socket;
-			this.pedirJogadores();
-			
-			//this.adicionarJogador("1", "Lorena");
+			this.pedirJogadores();						
 		}
 		
 		private function pedirJogadores():void {
@@ -31,9 +29,11 @@
 			this.comunicacao.send(msg.criarXML());
 		}
 		
-		public function adicionarJogador(id:String, nome:String):void {
-			this.jogadores.addItem( { Id: id, Nome: nome } );
-			this.log_txt.text += "-> " + nome + " entrou na sala.";
+		public function adicionarJogador(id:String, nome:String, enviaLog_bool:Boolean = false):void {
+			this.jogadores.addItem( { Id: id, Nome: nome } );			
+			if ( (enviaLog_bool) || (int(id) == this.idCliente) ) {
+				this.log_txt.text += "-> " + nome + " entrou na sala.\n";
+			}
 		}
 		
 		private function configurarFataGrid():void {						

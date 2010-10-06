@@ -13,10 +13,12 @@
 		
 		private var comunicacao:XMLSocket;
 		private var conexaoAceita_evt:Event;
+		private var idCliente:int;
 		
-		public function Introducao(socket:XMLSocket) {
+		public function Introducao(socket:XMLSocket, id:int) {
 			this.configurar();
-			comunicacao = socket;
+			this.comunicacao = socket;
+			this.idCliente = id;
 			this.conexaoAceita_evt = new Event("conexaoAceita");
 		}
 		
@@ -42,6 +44,12 @@
 			this.log_txt.htmlText += "Conectando ao servidor...";
 			this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
 			this.comunicacao.connect("localhost", 8090);
+			
+			var mensagem:Mensagem = new Mensagem();
+			mensagem.tipo = "envioNome";
+			mensagem.idCliente = this.idCliente;
+			mensagem.texto = this.nome_txt.text;
+			this.comunicacao.send(mensagem.criarXML());
 		}
 		
 		private function confirmarConexao(e:Event):void {
