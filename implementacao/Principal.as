@@ -29,6 +29,8 @@
 		/*Comunicação*/
 		public var socket:XMLSocket;
 		
+		private var id:int;
+		
 		/*Construtor da classe*/
 		public function Principal() {
 			this.socket = new XMLSocket();
@@ -55,12 +57,17 @@
 		
 		private function receberMensagem(e:DataEvent):void {			
 			var xml:XML = new XML(e.data);	
-			trace("Principal recebeu msg do tipo " + xml.@tipo);
-			switch((xml.@tipo).toString()) {
-				case "liberacao": 	this.distribuindoFrota.liberar();									
-									break;
-				default:			trace("Principal -> receberMensagem -> não entrou em case nenhum.");
-									break;
+			trace("Principal recebeu msg do tipo " + xml.tipo.text());
+			switch((xml.dados.tipo).toString()) {
+				case "liberacao": 		this.distribuindoFrota.liberar();									
+										break;
+									
+				case "respostaConecta": this.id = int(xml.@info);
+										trace("this.id = " + this.id);
+										break;
+				
+				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
+										break;
 			}
 		}
 		
@@ -100,7 +107,7 @@
 											break;
 				case "DistribuindoFrota": 	tela = new DistribuindoFrota();
 											break;
-				case "ConvidandoOponente": 	tela = new ConvidandoOponente(this.socket);
+				case "ConvidandoOponente": 	tela = new ConvidandoOponente(this.socket, this.id);
 											break;
 				case "Jogo": 				tela = new Jogo();
 											break;

@@ -2,6 +2,7 @@ package servidor;
 
 
 
+import com.thoughtworks.xstream.XStream;
 import java.util.*;
 import java.io.*;
 import java.net.*;
@@ -44,7 +45,7 @@ public class Servidor {
                
                //broadcastMessage("<dados tipo='conecta' id='" + client.getId() + "' info='" + clients.size() + "'/>");
                 if(clients.size() == 2){
-                    broadcastMessage("<dados tipo='liberacao' />");
+                  //  broadcastMessage("<dados tipo='liberacao' />");
                     System.out.println("size = 2");
                 }
                 
@@ -56,18 +57,32 @@ public class Servidor {
         } 
     }
 
-    public synchronized void broadcastMessage(String message) { 
+    public synchronized void broadcastMessage(Mensagem mensagem) {
        
-        message += '\0';
-        
-        System.out.println(message);
+        //teste de xstream
+        //String xml = xstream
 
         Enumeration enume = clients.elements();
         while (enume.hasMoreElements()) {
-            Cliente client = (Cliente)enume.nextElement();
-            client.send(message);
+            Cliente cliente = (Cliente)enume.nextElement();
+            this.enviarMensagem(mensagem, cliente);
         }
 
+    }
+
+    public synchronized void enviarMensagem(Mensagem mensagem, Cliente cliente) {
+        //XStream stream = new XStream();
+        String xml = mensagem.criarXML();
+        xml += '\0';
+        System.out.println("xml = " + xml);
+        
+        cliente.send(xml);
+    }
+
+    private void lerMensagem(String msg){
+        XStream stream = new XStream();
+        List dados = (List) stream.fromXML(msg);
+        System.out.println("atributo = ");
     }
 
     public void removeClient(Cliente client) {
@@ -75,7 +90,7 @@ public class Servidor {
         
         clients.removeElement(client);
         
-        broadcastMessage("<dados tipo='qtd' id='" + client.getId() + "' info='" + clients.size() + "'/>");        
+      //  broadcastMessage("<dados tipo='qtd' id='" + client.getId() + "' info='" + clients.size() + "'/>");
     }
 
     public void writeActivity(String activity) {

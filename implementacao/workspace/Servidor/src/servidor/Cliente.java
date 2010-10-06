@@ -26,6 +26,10 @@ public class Cliente extends Thread {
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
+            Mensagem mensagem = new Mensagem();
+            mensagem.setTipo("respostaConecta");
+            mensagem.setIdCliente(this.id);
+            this.server.enviarMensagem(mensagem, this);
         } catch(IOException ioe) {
             server.writeActivity("Client IP: " + ip + " não pôde ser inicializado e foi desconectado.");
             killClient();
@@ -43,8 +47,8 @@ public class Cliente extends Thread {
                     in.read(charBuffer, 0 ,1);
                 }
                 System.out.println("recebido = "+stringBuffer.toString());
-                this.lerMensagem(stringBuffer.toString());
-                server.broadcastMessage(stringBuffer.toString());
+                //this.lerMensagem(stringBuffer.toString());
+               // server.broadcastMessage(stringBuffer.toString());
             }
         } catch(IOException ioe) {
             server.writeActivity("IP do Cliente: " + ip + " causou um erro de leitura " 
