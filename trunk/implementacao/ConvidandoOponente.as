@@ -32,9 +32,20 @@
 		public function adicionarJogador(id:String, nome:String, novoJogador:Boolean = false):void {
 			var item:Object = { Id: id, Nome: nome };
 			if(!this.verificarExistencia(item)){
-				this.jogadores.addItem( item );			
+				this.jogadores.addItem( item );		
+				trace(id + " == " + this.idCliente);
 				if ( (novoJogador) || (int(id) == this.idCliente) ) {
 					this.log_txt.text += "-> " + nome + " entrou na sala.\n";
+				}
+			}
+		}
+		public function removerJogador(id:String, nome:String):void {
+			var item:Object = { Id: id, Nome: nome };
+			for (var i:int = 0; i < this.jogadores.length; i++) {
+				if (this.jogadores.getItemAt(i).Id == id) {
+					this.jogadores.removeItem(this.jogadores.getItemAt(i));
+					this.log_txt.text += "-> " + nome + " saiu da sala.\n";
+					break;
 				}
 			}
 		}

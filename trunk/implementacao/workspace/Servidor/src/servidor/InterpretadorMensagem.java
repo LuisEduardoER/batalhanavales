@@ -29,9 +29,6 @@ public class InterpretadorMensagem {
        switch(this.mapearTipo(tipo)){
            case 1://pedidoJogadores
                Mensagem mensagemResposta = new Mensagem();
-              // resposta.setTipo("respostaPedidoJogadores");
-             //  resposta.setTexto(this.servidor.getNomesJogadores());
-               //this.servidor.broadcastMessage(resposta);
                mensagemResposta.setTexto(this.servidor.getNomesJogadores());
                mensagemResposta.setTipo("respostaPedidoJogadores");
                this.servidor.enviarMensagem(mensagemResposta, cliente);

@@ -19,6 +19,7 @@
 		
 		/*Telas*/
 		private var introducao:MovieClip;
+		private var login:MovieClip;
 		private var regras:MovieClip;
 		private var convidandoOponente:MovieClip;
 		private var distribuindoFrota:MovieClip;
@@ -42,7 +43,7 @@
 			this.alvo = alvo_mc;	
 			
 			this.introducao = this.attacharTela("Introducao", true);
-			this.introducao.addEventListener("conexaoAceita", irParaRegras);
+			this.introducao.addEventListener(EventosBatalhaNaval.INTRODUCAOPASSARTELA, this.irParaRegras);
 						
 			
 			/*this.regras = this.attacharTela("Regras", true);
@@ -64,7 +65,7 @@
 												break;
 									
 				case "respostaConecta": 		this.id = int(xml.idCliente);
-												trace("Seu id agora é = " + this.id);
+												this.irParaConvidandoOponente();
 												break;
 									
 				case "respostaPedidoJogadores": trace("xml.texto = " + xml.texto);
@@ -74,9 +75,20 @@
 				case "eventoEntradaJogador": 	trace("chegou novo jogador");
 												this.preencherDataGrid(xml.texto, true);
 												break;
+									
+				case "eventoSaidaJogador": 		trace("saiu jogador");
+												this.removerDoDataGrid(xml.texto);
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
+			}
+		}
+		
+		private function removerDoDataGrid(texto:String):void {
+			if(this.convidandoOponente.parent == this.alvo_mc){
+				var dados:Array = texto.split(",");						
+				this.convidandoOponente.removerJogador(dados[1], dados[0]); 	
 			}
 		}
 		
@@ -98,7 +110,7 @@
 		
 		private function irParaRegras(e:Event):void {
 			this.regras = this.attacharTela("Regras", true);
-			this.regras.addEventListener("Regras_clicarOK", clicarOKRegras);
+			this.regras.addEventListener(EventosBatalhaNaval.REGRASPASSARTELA, irParaLogin);
 		}
 		
 		
@@ -116,9 +128,14 @@
 		/* Esse método será chamando quando, o OK da tela de Regras for pressionado. */
 		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
-		private function clicarOKRegras(e:Event):void {
-			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
+		private function irParaLogin(e:Event):void {
+			this.login = this.attacharTela("Login", true);
+			//this.login.addEventListener(EventosBatalhaNaval.CONEXAOACEITA, irParaConvidandoOponente);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
+		}
+		
+		private function irParaConvidandoOponente():void {
+			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -126,7 +143,9 @@
 			if (limpar)	this.limparAlvo();
 			var tela:MovieClip;
 			switch (nomeTela) {
-				case "Introducao":			tela = new Introducao(this.socket, this.id);											
+				case "Introducao":			tela = new Introducao();											
+											break;
+				case "Login":				tela = new Login(this.socket);											
 											break;
 				case "Regras": 				tela = new Regras();
 											break;

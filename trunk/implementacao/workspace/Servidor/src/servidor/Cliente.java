@@ -80,6 +80,10 @@ public class Cliente extends Thread {
    
     private void killClient() {
         server.removeClient(this);
+        Mensagem mensagemSaida = new Mensagem();
+        mensagemSaida.setTexto( this.getNome() + "," + this.getId() );
+        mensagemSaida.setTipo("eventoSaidaJogador");
+        this.server.broadcastMessage(mensagemSaida);
 
         try {
             in.close();
