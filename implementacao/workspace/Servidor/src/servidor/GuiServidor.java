@@ -20,10 +20,12 @@ import javax.swing.JTextArea;
 public class GuiServidor extends javax.swing.JFrame {
 
     Servidor servidor;
+    ServerThread sThread;
 
     /** Creates new form GuiServidor */
     public GuiServidor() {
         initComponents();
+        jButton1.setEnabled(false);
     }
 
     /** This method is called from within the constructor to
@@ -52,6 +54,11 @@ public class GuiServidor extends javax.swing.JFrame {
                 btConectarMouseReleased(evt);
             }
         });
+        btConectar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btConectarActionPerformed(evt);
+            }
+        });
 
         jLabel1.setText("Status:");
 
@@ -63,6 +70,11 @@ public class GuiServidor extends javax.swing.JFrame {
         jButton1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseReleased(java.awt.event.MouseEvent evt) {
                 jButton1MouseReleased(evt);
+            }
+        });
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
             }
         });
 
@@ -106,14 +118,32 @@ public class GuiServidor extends javax.swing.JFrame {
 
     private void btConectarMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_btConectarMouseReleased
         // TODO add your handling code here:
-        this.servidor = new Servidor(8090, this);
-        
+       // this.servidor = new Servidor(8090);
+       
     }//GEN-LAST:event_btConectarMouseReleased
 
     private void jButton1MouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jButton1MouseReleased
         // TODO add your handling code here:
-        this.servidor.killServer();
     }//GEN-LAST:event_jButton1MouseReleased
+
+private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
+// TODO add your handling code here:
+    this.taStatus.append("Abrindo conexão...\n");    
+    sThread = new ServerThread(8090);
+    sThread.start();
+    this.taStatus.append("Conectado.\n");
+    btConectar.setEnabled(false);
+    jButton1.setEnabled(true);
+}//GEN-LAST:event_btConectarActionPerformed
+
+private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+// TODO add your handling code here:
+    this.taStatus.append("Fechando conexão...\n");
+    sThread.stopConexao();
+    this.taStatus.append("Fim da conexão.\n");
+    btConectar.setEnabled(true);
+    jButton1.setEnabled(false);
+}//GEN-LAST:event_jButton1ActionPerformed
 
     /**
     * @param args the command line arguments
