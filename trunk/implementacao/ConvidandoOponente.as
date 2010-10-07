@@ -30,10 +30,25 @@
 		}
 		
 		public function adicionarJogador(id:String, nome:String, enviaLog_bool:Boolean = false):void {
-			this.jogadores.addItem( { Id: id, Nome: nome } );			
-			if ( (enviaLog_bool) || (int(id) == this.idCliente) ) {
-				this.log_txt.text += "-> " + nome + " entrou na sala.\n";
+			var item:Object = { Id: id, Nome: nome };
+			if(!this.verificarExistencia(item)){
+				this.jogadores.addItem( item );			
+				if ( (enviaLog_bool) || (int(id) == this.idCliente) ) {
+					this.log_txt.text += "-> " + nome + " entrou na sala.\n";
+				}
 			}
+		}
+		
+		private function verificarExistencia(item:Object):Boolean {
+			var retorno:Boolean = false;
+			for (var i:int = 0; i < this.jogadores.length; i++) {
+				if (this.jogadores.getItemAt(i).Id == item.Id) {
+					retorno = true;
+					break;
+				}
+			}
+			
+			return retorno;
 		}
 		
 		private function configurarFataGrid():void {						
