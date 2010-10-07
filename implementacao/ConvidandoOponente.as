@@ -29,11 +29,11 @@
 			this.comunicacao.send(msg.criarXML());
 		}
 		
-		public function adicionarJogador(id:String, nome:String, enviaLog_bool:Boolean = false):void {
+		public function adicionarJogador(id:String, nome:String, novoJogador:Boolean = false):void {
 			var item:Object = { Id: id, Nome: nome };
 			if(!this.verificarExistencia(item)){
 				this.jogadores.addItem( item );			
-				if ( (enviaLog_bool) || (int(id) == this.idCliente) ) {
+				if ( (novoJogador) || (int(id) == this.idCliente) ) {
 					this.log_txt.text += "-> " + nome + " entrou na sala.\n";
 				}
 			}
