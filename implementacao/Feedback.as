@@ -13,8 +13,8 @@
 		public var sair_evt:Event;
 		
 		public function Feedback() {
-			this.continuar_evt = new Event("continuar");
-			this.sair_evt = new Event("sair");			
+			this.continuar_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONTINUAR);
+			this.sair_evt = new EventosBatalhaNaval(EventosBatalhaNaval.SAIR);
 		}
 		
 		function clicar(e:MouseEvent):void{
