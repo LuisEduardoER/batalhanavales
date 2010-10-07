@@ -13,24 +13,26 @@ public class Servidor {
     private Vector<Cliente> clients = new Vector<Cliente>();
     private ArrayList<ArrayList> clientes = new ArrayList<ArrayList>();
     ServerSocket server;
+    private int port;
     //private GuiServidor gui;
 
     public Servidor(int port/*, GuiServidor gui*/) {
-        //this.gui = gui;
-        startServer(port);
+        this.port = port;
+        //startServer(port);
         
         
     }
 
-    private void startServer(int port) {
+    public void startServer() {
         writeActivity("Inicializando o Servidor");
         
         try {
-            server = new ServerSocket(port);
+            server = new ServerSocket(this.port);
             writeActivity("Servidor inicializado na porta: " + port);
 
             while(true) {
                 Socket socket = server.accept();
+                
                 Cliente client = new Cliente(this, socket);
                 writeActivity(client.getId() + " => " + client.getIP() + " conectado ao servidor.");
                 
