@@ -70,13 +70,19 @@
 				case "respostaPedidoJogadores": trace("xml.texto = " + xml.texto);
 												this.preencherDataGrid(xml.texto);
 												break;
+									
+				case "eventoEntradaJogador": 	trace("chegou novo jogador");
+												this.preencherDataGrid(xml.texto, true);
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}
 		}
 		
-		private function preencherDataGrid(texto:String):void {
+		
+		
+		private function preencherDataGrid(texto:String, novoJogador:Boolean = false):void {
 			var nomes:Array = texto.split(",");
 			var ids:Array = [];			
 			for (var i:int = (nomes.length/2); i < nomes.length; i++) {
@@ -85,8 +91,8 @@
 			nomes.splice( (nomes.length/2), (nomes.length/2) );			
 			for (var j:int = 0; j < nomes.length; j++) {
 				/*trace("nomes["+j+"] = " + nomes[j]);
-				trace("ids[" + j + "] = " + ids[j]);*/
-				this.convidandoOponente.adicionarJogador(ids[j], nomes[j]);
+				trace("ids[" + j + "] = " + ids[j]);*/				
+				this.convidandoOponente.adicionarJogador(ids[j], nomes[j], novoJogador); 	
 			}			
 		}
 		

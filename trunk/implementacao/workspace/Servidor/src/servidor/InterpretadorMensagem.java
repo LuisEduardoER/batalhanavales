@@ -28,10 +28,19 @@ public class InterpretadorMensagem {
 
        switch(this.mapearTipo(tipo)){
            case 1://pedidoJogadores
-               Mensagem resposta = new Mensagem();
-               resposta.setTipo("respostaPedidoJogadores");
-               resposta.setTexto(this.servidor.getNomesJogadores());
-               this.servidor.broadcastMessage(resposta);
+               Mensagem mensagemResposta = new Mensagem();
+              // resposta.setTipo("respostaPedidoJogadores");
+             //  resposta.setTexto(this.servidor.getNomesJogadores());
+               //this.servidor.broadcastMessage(resposta);
+               mensagemResposta.setTexto(this.servidor.getNomesJogadores());
+               mensagemResposta.setTipo("respostaPedidoJogadores");
+               this.servidor.enviarMensagem(mensagemResposta, cliente);
+
+               Mensagem mensagemResposta2 = new Mensagem();
+               mensagemResposta2.setTexto( this.cliente.getNome() + "," + this.cliente.getId() );
+               mensagemResposta2.setTipo("eventoEntradaJogador");
+               this.servidor.broadcastMessage(mensagemResposta2);
+
            break;
            case 2://enviarNome
                this.cliente.setNome(this.mensagem.getTexto());
