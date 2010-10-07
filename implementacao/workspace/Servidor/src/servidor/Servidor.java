@@ -84,24 +84,25 @@ public class Servidor {
         XStream stream = new XStream(new DomDriver());
         Mensagem mensagemLida = (Mensagem) stream.fromXML(msg);
         System.out.println("recebendo xml = " + stream.toXML(mensagemLida));
-        this.interpretarMensagem(mensagemLida, cliente);
+        InterpretadorMensagem interpretador = new InterpretadorMensagem(this,mensagemLida,cliente);
+        //this.interpretarMensagem(mensagemLida, cliente);
     }
 
-    private void interpretarMensagem(Mensagem msg, Cliente cliente){
-        String tipo = msg.getTipo();
-        System.out.println("tipo = " + tipo);
-        Mensagem mensagemResposta = new Mensagem();
-        if( tipo.equals("pedidoJogadores") ){
-           mensagemResposta.setTexto(this.getNomesJogadores());
-           mensagemResposta.setTipo("respostaPedidoJogadores");
-           this.enviarMensagem(mensagemResposta, cliente);            
-        }
-        else if( tipo.equals("envioNome") ){
-            cliente.setNome(msg.getTexto());
-        }
-    }
+//    private void interpretarMensagem(Mensagem msg, Cliente cliente){
+//        String tipo = msg.getTipo();
+//        System.out.println("tipo = " + tipo);
+//        Mensagem mensagemResposta = new Mensagem();
+//        if( tipo.equals("pedidoJogadores") ){
+//           mensagemResposta.setTexto(this.getNomesJogadores());
+//           mensagemResposta.setTipo("respostaPedidoJogadores");
+//           this.enviarMensagem(mensagemResposta, cliente);
+//        }
+//        else if( tipo.equals("envioNome") ){
+//            cliente.setNome(msg.getTexto());
+//        }
+//    }
 
-    private String getNomesJogadores(){
+    public String getNomesJogadores(){
         String retorno = new String();
         Enumeration enume = clients.elements();
         while (enume.hasMoreElements()) {
