@@ -129,7 +129,7 @@ public class GuiServidor extends javax.swing.JFrame {
 private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
 // TODO add your handling code here:
     this.taStatus.append("Abrindo conexão...\n");    
-    sThread = new ServerThread(8090);
+    sThread = new ServerThread(8090,this);
     sThread.start();
     this.taStatus.append("Conectado.\n");
     btConectar.setEnabled(false);
