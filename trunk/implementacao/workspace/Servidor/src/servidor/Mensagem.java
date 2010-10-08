@@ -10,12 +10,24 @@ package servidor;
  * @author Lorena Tablada
  */
 public class Mensagem {
+
+    private String nomeCliente;
     private int idCliente;
     private String tipo;
     private String texto;
+    private int idDestinatario;
+
 
     public void Mensagem(){
         this.texto = "";
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
     }
 
     /**
@@ -59,5 +71,12 @@ public class Mensagem {
     public void setTexto(String texto) {
         this.texto = texto;
     }
-    
+
+    public int getDestinatario() {
+        return idDestinatario;
+    }
+
+    public void setDestinatario(int destinatario) {
+        this.idDestinatario = destinatario;
+    }
 }

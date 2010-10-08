@@ -37,11 +37,23 @@ public class InterpretadorMensagem {
                mensagemResposta2.setTexto( this.cliente.getNome() + "," + this.cliente.getId() );
                mensagemResposta2.setTipo("eventoEntradaJogador");
                this.servidor.broadcastMessage(mensagemResposta2);
+               break;
 
-           break;
            case 2://enviarNome
                this.cliente.setNome(this.mensagem.getTexto());
-           break;
+               break;
+
+           case 3://conversaPublica
+               this.mensagem.setNomeCliente(this.cliente.getNome());
+               this.servidor.broadcastMessage(this.mensagem);
+               break;
+
+           case 4://conversaPrivada
+               this.mensagem.setNomeCliente(this.cliente.getNome());
+               Cliente destinatario = this.servidor.procurarCliente(this.mensagem.getDestinatario());
+               this.servidor.enviarMensagem(this.mensagem, destinatario);
+               this.servidor.enviarMensagem(this.mensagem, this.cliente);
+               break;
 
        }
         
@@ -51,6 +63,8 @@ public class InterpretadorMensagem {
         int retorno = -1;
         if(tipo.equals("pedidoJogadores"))retorno = 1;
         else if(tipo.equals("envioNome"))retorno = 2;
+        else if(tipo.equals("conversaPublica"))retorno = 3;
+        else if(tipo.equals("conversaPrivada"))retorno = 4;
 
         return retorno;
     }

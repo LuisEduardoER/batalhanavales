@@ -39,7 +39,7 @@ public class Servidor {
                 clients.addElement(client);
                 /*Teste de Array de clientes*/
                 this.adicionarCliente(client, 0);
-                System.out.println("linha cliente = "+this.procurarCliente(client));
+                System.out.println("linha cliente = "+this.procurarIdCliente(client));
                 /*Fim teste*/
                 
                 int id = (int)client.getId();
@@ -164,7 +164,7 @@ public class Servidor {
         }
     }
 
-    protected int procurarCliente(Cliente cliente){
+    protected int procurarIdCliente(Cliente cliente){
         int retorno = -1;
         for(int i = 0;i<this.clientes.size();i++){
             if(this.clientes.get(i).indexOf(cliente) != -1){
@@ -173,6 +173,18 @@ public class Servidor {
             }
         }
         return retorno;
+    }
+
+    protected Cliente procurarCliente(int id){
+       Cliente retorno = null;
+       Enumeration enume = clients.elements();
+        while (enume.hasMoreElements()) {
+           retorno = (Cliente)enume.nextElement();
+           if( (retorno).getId() == id ){
+                break;
+           }
+        }
+       return retorno;
     }
     
     /*public static void main(String args[]) {
