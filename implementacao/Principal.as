@@ -76,13 +76,25 @@
 												this.preencherDataGrid(xml.texto, true);
 												break;
 									
-				case "eventoSaidaJogador": 		trace("saiu jogador");
-												this.removerDoDataGrid(xml.texto);
+				case "eventoSaidaJogador": 		this.removerDoDataGrid(xml.texto);
+												break;
+									
+				case "conversaPublica": 		this.falarChat(xml);
+												break;
+												
+				case "conversaPrivada": 		this.falarChat(xml, true);
 												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}
+		}
+		
+		private function falarChat(xml:XML, reservado:Boolean = false):void {
+			var remetente:String = xml.nomeCliente;
+			var idDestinatario:String = xml.idDestinatario;
+			var fala:String = xml.texto;
+			this.convidandoOponente.receberFala(remetente, idDestinatario, fala, reservado);
 		}
 		
 		private function removerDoDataGrid(texto:String):void {
@@ -91,8 +103,6 @@
 				this.convidandoOponente.removerJogador(dados[1], dados[0]); 	
 			}
 		}
-		
-		
 		
 		private function preencherDataGrid(texto:String, novoJogador:Boolean = false):void {
 			var nomes:Array = texto.split(",");
