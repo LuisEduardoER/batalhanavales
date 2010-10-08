@@ -41,6 +41,7 @@ public class InterpretadorMensagem {
 
            case 2://enviarNome
                this.cliente.setNome(this.mensagem.getTexto());
+               this.servidor.writeActivity(this.cliente.getId() + " => " + this.cliente.getNome() + " conectado ao servidor.");
                break;
 
            case 3://conversaPublica

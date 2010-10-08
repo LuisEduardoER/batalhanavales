@@ -14,12 +14,12 @@ public class Servidor {
     private ArrayList<ArrayList> clientes = new ArrayList<ArrayList>();
     ServerSocket server;
     private int port;
-    //private GuiServidor gui;
+    private GuiServidor gui;
 
-    public Servidor(int port/*, GuiServidor gui*/) {
+    public Servidor(int port, GuiServidor gui) {
         this.port = port;
         //startServer(port);
-        
+        this.gui = gui;
         
     }
 
@@ -35,6 +35,7 @@ public class Servidor {
                 
                 Cliente client = new Cliente(this, socket);
                 writeActivity(client.getId() + " => " + client.getIP() + " conectado ao servidor.");
+                
                 
                 clients.addElement(client);
                 /*Teste de Array de clientes*/
@@ -138,7 +139,7 @@ public class Servidor {
                  + ":" + cal.get(Calendar.SECOND) 
                  + "] " + activity + "\n";
         System.out.print(activity);
-       // this.gui.mostrarMensagem("teste qualquer mensagem");
+       this.gui.mostrarMensagem(activity);
     }
 
     protected void killServer() {
