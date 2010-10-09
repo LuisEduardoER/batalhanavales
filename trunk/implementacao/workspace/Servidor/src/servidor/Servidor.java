@@ -11,7 +11,7 @@ import java.net.*;
 
 public class Servidor {
     private Vector<Cliente> clients = new Vector<Cliente>();
-    private ArrayList<ArrayList> clientes = new ArrayList<ArrayList>();
+    private ArrayList<ArrayList> duplas = new ArrayList<ArrayList>();
     ServerSocket server;
     private int port;
     private GuiServidor gui;
@@ -19,8 +19,7 @@ public class Servidor {
     public Servidor(int port, GuiServidor gui) {
         this.port = port;
         //startServer(port);
-        this.gui = gui;
-        
+        this.gui = gui;        
     }
 
     public void startServer() {
@@ -34,20 +33,20 @@ public class Servidor {
                 Socket socket = server.accept();
                 
                 Cliente client = new Cliente(this, socket);
-                writeActivity(client.getId() + " => " + client.getIP() + " conectado ao servidor.");
+                writeActivity(client.getIdCliente() + " => " + client.getIP() + " conectado ao servidor.");
                 
                 
                 clients.addElement(client);
                 /*Teste de Array de clientes*/
-                this.adicionarCliente(client, 0);
-                System.out.println("linha cliente = "+this.procurarIdCliente(client));
+               // this.adicionarCliente(client, 0);
+//                System.out.println("linha cliente = "+this.procurarIdCliente(client));
                 /*Fim teste*/
                 
-                int id = (int)client.getId();
+                int id = (int)client.getIdCliente();
                
                 client.start();		
                
-               //broadcastMessage("<dados tipo='conecta' id='" + client.getId() + "' info='" + clients.size() + "'/>");
+               //broadcastMessage("<dados tipo='conecta' id='" + client.getIdCliente() + "' info='" + clients.size() + "'/>");
                 if(clients.size() == 2){
                   //  broadcastMessage("<dados tipo='liberacao' />");
                     System.out.println("size = 2");
@@ -55,7 +54,7 @@ public class Servidor {
                 
             }
         } catch(IOException ioe) {
-            writeActivity("Erro do Servidor...Parando o Servidor");
+            //writeActivity("Erro do Servidor...Parando o Servidor");
             
             killServer();
         } 
@@ -115,8 +114,13 @@ public class Servidor {
         enume = clients.elements();
         while(enume.hasMoreElements()){
             Cliente cliente = (Cliente)enume.nextElement();
-            retorno += cliente.getId();
-            if(cliente.getId() != clients.get(clients.size()-1).getId()){
+            retorno += cliente.getIdCliente() + ",";
+        }
+        enume = clients.elements();
+        while(enume.hasMoreElements()){
+            Cliente cliente = (Cliente)enume.nextElement();
+            retorno += cliente.getEstado();
+            if(cliente.getIdCliente() != clients.get(clients.size()-1).getIdCliente()){
                 retorno += ",";
             }
         }
@@ -151,7 +155,7 @@ public class Servidor {
         }
     }
 
-    protected void adicionarCliente(Cliente cliente, int linha){
+   /* protected void adicionarCliente(Cliente cliente, int linha){
         if(this.clientes.isEmpty()){
             this.clientes.add(new ArrayList<Cliente>());
             this.clientes.get(0).add(cliente);
@@ -163,12 +167,18 @@ public class Servidor {
                 this.clientes.get(linha).add(cliente);
             }
         }
+    }*/
+
+    protected void adicionarDupla(Cliente c1, Cliente c2){
+        this.duplas.add( new ArrayList<Cliente>() );
+        this.duplas.get(this.duplas.size()-1).add(c1);
+        this.duplas.get(this.duplas.size()-1).add(c2);
     }
 
     protected int procurarIdCliente(Cliente cliente){
         int retorno = -1;
-        for(int i = 0;i<this.clientes.size();i++){
-            if(this.clientes.get(i).indexOf(cliente) != -1){
+        for(int i = 0;i<this.duplas.size();i++){
+            if(this.duplas.get(i).indexOf(cliente) != -1){
                 retorno = i;
                 break;
             }
@@ -181,7 +191,7 @@ public class Servidor {
        Enumeration enume = clients.elements();
         while (enume.hasMoreElements()) {
            retorno = (Cliente)enume.nextElement();
-           if( (retorno).getId() == id ){
+           if( (retorno).getIdCliente() == id ){
                 break;
            }
         }

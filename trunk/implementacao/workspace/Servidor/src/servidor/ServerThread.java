@@ -24,6 +24,6 @@ public class ServerThread extends Thread{
     }
     
     public void stopConexao(){
-      server.killServer();  
+      server.killServer();
     }
 }

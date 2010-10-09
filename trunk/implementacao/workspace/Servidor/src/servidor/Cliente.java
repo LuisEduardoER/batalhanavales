@@ -13,24 +13,29 @@ public class Cliente extends Thread {
     protected BufferedReader in;
     protected PrintWriter out;
     
-    private int id;
+    private int idCliente;
+
     private static int count = 0;
 
     private String nome;
+    private String estado;
 
     public Cliente(Servidor server, Socket socket) {
-    	this.id = Cliente.count++;
+    	this.idCliente = Cliente.count++;
+        System.out.println("this.idCliente = " + this.idCliente);
     	
         this.server = server;
         this.socket = socket;
         this.ip = socket.getInetAddress().getHostAddress();
-        
+        this.estado = "Livre";
+
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
             out = new PrintWriter(socket.getOutputStream(), true);
             Mensagem mensagem = new Mensagem();
             mensagem.setTipo("respostaConecta");
-            mensagem.setIdCliente(this.id);
+            System.out.println("---> this.idCliente = " + this.idCliente);
+            mensagem.setIdCliente(this.idCliente);
             this.server.enviarMensagem(mensagem, this);
         } catch(IOException ioe) {
             server.writeActivity("Client IP: " + ip + " não pôde ser inicializado e foi desconectado.");
@@ -64,9 +69,9 @@ public class Cliente extends Thread {
         return ip;
     }
     
-    public long getId() {
-		return id;
-	}
+    public int getIdCliente() {
+	return this.idCliente;
+    }
 
     public void send(String message) {
         out.print(message);
@@ -81,7 +86,7 @@ public class Cliente extends Thread {
     private void killClient() {
         server.removeClient(this);
         Mensagem mensagemSaida = new Mensagem();
-        mensagemSaida.setTexto( this.getNome() + "," + this.getId() );
+        mensagemSaida.setTexto( this.getNome() + "," + this.getIdCliente() );
         mensagemSaida.setTipo("eventoSaidaJogador");
         this.server.broadcastMessage(mensagemSaida);
 
@@ -114,5 +119,13 @@ public class Cliente extends Thread {
      */
     public void setNome(String nome) {
         this.nome = nome;        
+    }
+
+    public String getEstado() {
+        return estado;
+    }
+
+    public void setEstado(String estado) {
+        this.estado = estado;
     }
 }
