@@ -128,19 +128,19 @@ public class GuiServidor extends javax.swing.JFrame {
 
 private void btConectarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btConectarActionPerformed
 // TODO add your handling code here:
-    this.taStatus.append("Abrindo conexão...\n");    
+    //this.taStatus.append("Abrindo conexão...\n");
     sThread = new ServerThread(8090,this);
     sThread.start();
-    this.taStatus.append("Conectado.\n");
+    //this.taStatus.append("Conectado.\n");
     btConectar.setEnabled(false);
     jButton1.setEnabled(true);
 }//GEN-LAST:event_btConectarActionPerformed
 
 private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
 // TODO add your handling code here:
-    this.taStatus.append("Fechando conexão...\n");
+    //this.taStatus.append("Fechando conexão...\n");
     sThread.stopConexao();
-    this.taStatus.append("Fim da conexão.\n");
+    //sthis.taStatus.append("Fim da conexão.\n");
     btConectar.setEnabled(true);
     jButton1.setEnabled(false);
 }//GEN-LAST:event_jButton1ActionPerformed
