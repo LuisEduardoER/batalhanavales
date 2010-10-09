@@ -24,11 +24,12 @@
 		private var convidar:Button;
 		private var alvo:MovieClip;
 		
-		/*Convites*/
+		/*Caixas*/
 		private var idConvidado:int;
 		private var idConvidador:int;
 		private var caixaConviteEnviado:CaixaConviteEnviado;
 		private var caixaConviteRecebido:CaixaConviteRecebido;
+		private var caixaGeral:CaixaGeral;
 		
 		public function ConvidandoOponente(socket:XMLSocket, id:int) {
 			this.jogadores = this.jogadores_dg;
@@ -50,12 +51,68 @@
 		}
 		
 		private function convidarOponente(e:MouseEvent):void {
-			var msg:Mensagem = new Mensagem();
-			msg.tipo = "conviteOponente";
-			msg.idDestinatario = this.jogadores.selectedItem.Id;
-			this.idConvidado = msg.idDestinatario;
-			this.comunicacao.send( msg.criarXML() );
-			this.mostrarCaixaConviteEnviado(this.jogadores.selectedItem.Nome);
+			if (this.jogadores.selectedItem.Id == this.idCliente) {
+				this.caixaGeral = new CaixaGeral("Você não pode convidar você mesmo para jogar.");
+				this.caixaGeral.addEventListener(EventosBatalhaNaval.CAIXAGERALOK, this.fecharCaixaGeral);
+				this.alvo.addChild(this.caixaGeral);
+				this.habilitar(false);
+			}
+			else if (this.jogadores.selectedItem.Estado == "Jogando") {
+				this.caixaGeral = new CaixaGeral("Este jogador já esta jogando com outra pessoa.");
+				this.caixaGeral.addEventListener(EventosBatalhaNaval.CAIXAGERALOK, this.fecharCaixaGeral);
+				this.alvo.addChild(this.caixaGeral);
+				this.habilitar(false);
+			}
+			else {
+				var msg:Mensagem = new Mensagem();
+				msg.tipo = "conviteOponente";
+				msg.idDestinatario = this.jogadores.selectedItem.Id;
+				this.idConvidado = msg.idDestinatario;
+				this.comunicacao.send( msg.criarXML() );
+				this.mostrarCaixaConviteEnviado(this.jogadores.selectedItem.Nome);
+			}			
+		}
+		
+		private function fecharCaixaGeral(e:Event):void {
+			this.caixaGeral.removeEventListener(EventosBatalhaNaval.CAIXAGERALOK, fecharCaixaGeral);
+			this.alvo.removeChild(this.caixaGeral);
+			this.habilitar(true);
+		}
+		
+		public function atualizarEstados(id1:String, id2:String, novoEstado:String):void {
+			trace("Atualizou estados de " + id1 + " e " + id2);
+			var cont:int = 0;
+			var item1:Object = { Id: id1, Nome: "", Estado: novoEstado };
+			var item2:Object = { Id: id2, Nome: "", Estado: novoEstado };
+			for (var i:int = 0; i < this.jogadores.length; i++) {
+				if ( (this.jogadores.getItemAt(i).Id == id1) || (this.jogadores.getItemAt(i).Id == id2) ) {								
+					this.jogadores.editField(i, "Estado", novoEstado);
+					this.log_txt.text += "-> " + this.jogadores.getItemAt(i).Nome + " mudou o estado para " + novoEstado + ".\n" ;
+					if (++cont == 2) {
+						item2.Nome = this.jogadores.getItemAt(i).Nome;
+						break;
+					}
+					else {
+						item1.Nome = this.jogadores.getItemAt(i).Nome;
+					}					
+				}
+			}
+			if (novoEstado == "Jogando") {
+				cont = 0;
+				for (var j:int = 0; j < this.destinatarios.length; j++) {
+					if ( (this.destinatarios.getItemAt(j).data == id1) || (this.destinatarios.getItemAt(j).data == id2) ) {
+						this.destinatarios.removeItemAt(j);
+						j--;
+						if (++ cont == 2) {
+							break;
+						}
+					}
+				}
+			}
+			else {
+				this.destinatarios.addItem(item1);
+				this.destinatarios.addItem(item2);
+			}
 		}
 		
 		private function habilitar(estadoFinal:Boolean):void {
@@ -124,19 +181,25 @@
 			this.comunicacao.send(msg.criarXML());
 		}
 		
-		public function adicionarJogador(id:String, nome:String, novoJogador:Boolean = false):void {
-			var item:Object = { Id: id, Nome: nome };
+		public function adicionarJogador(id:String, nome:String, estado:String, novoJogador:Boolean = false):void {
+			var nomeFinal:String = nome;
+			trace(id + " == " + this.idCliente);
+			if (id == this.idCliente.toString()) {
+				nomeFinal += " (eu)";
+			}
+			var item:Object = { Id: id, Nome: nomeFinal, Estado: estado };
 			var itemCB:Object = { label: nome, data: id};
 			if(!this.verificarExistencia(item)){
 				this.jogadores.addItem( item );						
 				if ( (novoJogador) || (int(id) == this.idCliente) ) {
 					this.log_txt.text += "-> " + nome + " entrou na sala.\n";
 				}
-				if (int(id) != this.idCliente) {
+				if ( (int(id) != this.idCliente) && (estado == "Livre") ) {
 					this.destinatarios.addItem(itemCB);
 				}
 			}
 		}
+		
 		public function removerJogador(id:String, nome:String):void {
 			var item:Object = { Id: id, Nome: nome };
 			for (var i:int = 0; i < this.jogadores.length; i++) {
@@ -172,7 +235,7 @@
 		}
 		
 		private function configurarFataGrid():void {						
-			jogadores.columns = ["Id", "Nome"]; 
+			jogadores.columns = ["Id", "Nome", "Estado"]; 
 			jogadores.columns[0].width = 35; 
 		}
 		
@@ -214,6 +277,7 @@
 		}				
 		
 		public function receberAceitacao():void {
+			trace("ConvidandoOponente: receberAceitacao");
 			this.caixaConviteEnviado.mudarEstado("respostaPositiva");
 			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA) );
 		}			
@@ -242,7 +306,10 @@
 			this.habilitar(true);
 		}
 		
-		private function voltarConvidandoOponente(e:Event):void{
+		private function voltarConvidandoOponente(e:Event):void {
+			this.caixaConviteRecebido.removeEventListener(EventosBatalhaNaval.ACEITARCONVITE, this.aceitarConvite);
+			this.caixaConviteRecebido.removeEventListener(EventosBatalhaNaval.RECUSARCONVITE, this.recusarConvite);
+			this.caixaConviteRecebido.removeEventListener(EventosBatalhaNaval.VOLTARCONVIDANDOOPONENTE, this.voltarConvidandoOponente);
 			this.alvo.removeChild(this.caixaConviteRecebido);
 			this.habilitar(true);
 		}
@@ -256,6 +323,8 @@
 		}
 		
 		private function escolherNovoOponente(e:Event):void {			
+			this.caixaConviteEnviado.removeEventListener(EventosBatalhaNaval.CANCELARCONVITE, this.cancelarConvite);
+			this.caixaConviteEnviado.removeEventListener(EventosBatalhaNaval.ESCOLHERNOVOOPONENTE, this.escolherNovoOponente);
 			this.alvo.removeChild(this.caixaConviteEnviado);
 			this.habilitar(true);
 		}

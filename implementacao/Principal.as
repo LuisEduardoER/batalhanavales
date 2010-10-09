@@ -64,12 +64,12 @@
 				case "liberacao": 				this.distribuindoFrota.liberar();									
 												break;
 									
-				case "respostaConecta": 		this.id = int(xml.idCliente);
+				case "respostaConecta": 		trace("recebi id = " + xml.idCliente);
+												this.id = int(xml.idCliente);
 												this.irParaConvidandoOponente();
 												break;
 									
-				case "respostaPedidoJogadores": trace("xml.texto = " + xml.texto);
-												this.preencherDataGrid(xml.texto);
+				case "respostaPedidoJogadores": this.preencherDataGrid(xml.texto);
 												break;
 									
 				case "eventoEntradaJogador": 	trace("chegou novo jogador");
@@ -94,13 +94,22 @@
 				case "aceitacaoConvite":		this.convidandoOponente.receberAceitacao();
 												break;
 												
-				case "recusaConvite":			this.convidandoOponente.receberRecusa();
-												trace("Principal: receberRecusa");
+				case "recusaConvite":			this.convidandoOponente.receberRecusa();												
+												break;
+												
+				case "mudancaEstado":			this.atualizarEstadosJogadores(xml);												
 												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}
+		}
+		
+		private function atualizarEstadosJogadores(xml:XML):void{
+			var id1:String = xml.idDestinatario;
+			var id2:String = xml.idCliente;
+			var novoEstado:String = xml.texto;
+			this.convidandoOponente.atualizarEstados(id1, id2, novoEstado);
 		}
 		
 		private function falarChat(xml:XML, reservado:Boolean = false):void {
@@ -118,16 +127,21 @@
 		}
 		
 		private function preencherDataGrid(texto:String, novoJogador:Boolean = false):void {
+			trace("texto = " + texto);
 			var nomes:Array = texto.split(",");
 			var ids:Array = [];			
-			for (var i:int = (nomes.length/2); i < nomes.length; i++) {
+			var estados:Array = [];			
+			for (var i:int = (nomes.length/3); i < (2*nomes.length/3); i++) {
 				ids.push(nomes[i]);
 			}
-			nomes.splice( (nomes.length/2), (nomes.length/2) );			
+			for (var k:int = (2*nomes.length/3); k < nomes.length; k++) {
+				estados.push(nomes[k]);
+			}
+			nomes.splice( (nomes.length/3), (2*nomes.length/3) );			
 			for (var j:int = 0; j < nomes.length; j++) {
 				/*trace("nomes["+j+"] = " + nomes[j]);
 				trace("ids[" + j + "] = " + ids[j]);*/				
-				this.convidandoOponente.adicionarJogador(ids[j], nomes[j], novoJogador); 	
+				this.convidandoOponente.adicionarJogador(ids[j], nomes[j], estados[j], novoJogador); 	
 			}			
 		}
 		
