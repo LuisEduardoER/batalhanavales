@@ -84,6 +84,19 @@
 												
 				case "conversaPrivada": 		this.falarChat(xml, true);
 												break;
+												
+				case "conviteOponente": 		this.convidandoOponente.mostrarCaixaConviteRecebido(xml.nomeCliente, xml.idCliente);
+												break;
+												
+				case "cancelamentoConvite":		this.convidandoOponente.receberCancelamentoConvite();
+												break;
+												
+				case "aceitacaoConvite":		this.convidandoOponente.receberAceitacao();
+												break;
+												
+				case "recusaConvite":			this.convidandoOponente.receberRecusa();
+												trace("Principal: receberRecusa");
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
@@ -146,6 +159,11 @@
 		
 		private function irParaConvidandoOponente():void {
 			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
+			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
+		}
+		
+		private function irParaDistribuindoFrota(e:Event):void{
+			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/

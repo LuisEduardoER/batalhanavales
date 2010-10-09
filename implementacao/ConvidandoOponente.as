@@ -21,19 +21,74 @@
 		private var idCliente:int;
 		private var fala:TextArea;
 		private var enviar:Button;
+		private var convidar:Button;
+		private var alvo:MovieClip;
+		
+		/*Convites*/
+		private var idConvidado:int;
+		private var idConvidador:int;
+		private var caixaConviteEnviado:CaixaConviteEnviado;
+		private var caixaConviteRecebido:CaixaConviteRecebido;
 		
 		public function ConvidandoOponente(socket:XMLSocket, id:int) {
 			this.jogadores = this.jogadores_dg;
 			this.destinatarios = this.destinatarios_cb;
+			this.alvo = this.alvo_mc;
 			this.idCliente = id;
+			this.idConvidado = -1;			
 			this.configurarFataGrid();
 			this.comunicacao = socket;
 			this.fala = this.fala_txt;
 			this.enviar = this.enviar_btn;
+			this.convidar = this.convidar_btn;
 			this.pedirJogadores();	
 			
-			this.fala.addEventListener(Event.CHANGE, this.habilitarBotao);
+			this.fala.addEventListener(Event.CHANGE, this.habilitarEnviar);
 			this.enviar.addEventListener(MouseEvent.MOUSE_UP, this.enviarTexto);
+			this.jogadores.addEventListener(Event.CHANGE, this.habilitarConvidar);
+			this.convidar.addEventListener(MouseEvent.MOUSE_UP, this.convidarOponente);
+		}
+		
+		private function convidarOponente(e:MouseEvent):void {
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "conviteOponente";
+			msg.idDestinatario = this.jogadores.selectedItem.Id;
+			this.idConvidado = msg.idDestinatario;
+			this.comunicacao.send( msg.criarXML() );
+			this.mostrarCaixaConviteEnviado(this.jogadores.selectedItem.Nome);
+		}
+		
+		private function habilitar(estadoFinal:Boolean):void {
+			if (estadoFinal) {
+				if (this.jogadores.selectedIndex != -1) {
+					this.convidar.enabled =
+					this.convidar.mouseEnabled = true;
+				}
+				if (this.fala.text != "") {
+					this.enviar.enabled =
+					this.enviar.mouseEnabled = true;
+				}
+			}
+			else {
+				this.convidar.enabled = 
+				this.convidar.mouseEnabled =
+				this.enviar.enabled =
+				this.enviar.mouseEnabled = false;
+			}
+			this.fala.editable =
+			this.jogadores.selectable =
+			this.destinatarios.enabled = estadoFinal;
+		}
+		
+		private function habilitarConvidar(e:Event):void {
+			if (this.jogadores.selectedIndex != -1) {
+				this.convidar.enabled = true;
+				this.convidar.addEventListener(MouseEvent.MOUSE_UP, this.convidarOponente);
+			}
+			else {
+				this.convidar.enabled = false;
+				this.convidar.removeEventListener(MouseEvent.MOUSE_UP, this.convidarOponente);
+			}
 		}
 		
 		private function enviarTexto(e:MouseEvent):void{
@@ -53,7 +108,7 @@
 			this.enviar.enabled = false;
 		}
 		
-		private function habilitarBotao(e:Event):void{
+		private function habilitarEnviar(e:Event):void{
 			if (this.fala.text != "") {
 				this.enviar.enabled = true;
 			}
@@ -146,6 +201,76 @@
 				}
 			}
 			return retorno;
+		}
+		
+		public function mostrarCaixaConviteRecebido(nome:String, id:String):void {
+			this.idConvidador = int(id);
+			this.habilitar(false);
+			this.caixaConviteRecebido = new CaixaConviteRecebido(nome);
+			this.alvo.addChild(this.caixaConviteRecebido);
+			this.caixaConviteRecebido.addEventListener(EventosBatalhaNaval.ACEITARCONVITE, this.aceitarConvite);
+			this.caixaConviteRecebido.addEventListener(EventosBatalhaNaval.RECUSARCONVITE, this.recusarConvite);
+			this.caixaConviteRecebido.addEventListener(EventosBatalhaNaval.VOLTARCONVIDANDOOPONENTE, this.voltarConvidandoOponente);
+		}				
+		
+		public function receberAceitacao():void {
+			this.caixaConviteEnviado.mudarEstado("respostaPositiva");
+			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA) );
+		}			
+		
+		public function receberRecusa():void {
+			trace("ConvidandoOponente: receberRecusa");
+			this.caixaConviteEnviado.mudarEstado("respostaNegativa");
+		}
+		
+		private function aceitarConvite(e:Event):void{
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "aceitacaoConvite";
+			msg.idDestinatario = this.idConvidador;
+			this.comunicacao.send( msg.criarXML() );
+			this.caixaConviteRecebido.enviarAceitacao();
+			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA) );
+		}
+		
+		private function recusarConvite(e:Event):void{
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "recusaConvite";
+			msg.idDestinatario = this.idConvidador;
+			this.comunicacao.send( msg.criarXML() );
+			this.caixaConviteRecebido.enviarRecusa();
+			this.alvo.removeChild(this.caixaConviteRecebido);
+			this.habilitar(true);
+		}
+		
+		private function voltarConvidandoOponente(e:Event):void{
+			this.alvo.removeChild(this.caixaConviteRecebido);
+			this.habilitar(true);
+		}
+		
+		public function mostrarCaixaConviteEnviado(nome:String):void {
+			this.habilitar(false);
+			this.caixaConviteEnviado = new CaixaConviteEnviado(nome);
+			this.alvo.addChild(this.caixaConviteEnviado);
+			this.caixaConviteEnviado.addEventListener(EventosBatalhaNaval.CANCELARCONVITE, this.cancelarConvite);
+			this.caixaConviteEnviado.addEventListener(EventosBatalhaNaval.ESCOLHERNOVOOPONENTE, this.escolherNovoOponente);
+		}
+		
+		private function escolherNovoOponente(e:Event):void {			
+			this.alvo.removeChild(this.caixaConviteEnviado);
+			this.habilitar(true);
+		}
+		
+		private function cancelarConvite(e:Event):void {
+			var msgCancelamento:Mensagem = new Mensagem();
+			msgCancelamento.tipo = "cancelamentoConvite";
+			msgCancelamento.idDestinatario = this.idConvidado;
+			this.idConvidado = -1;
+			this.comunicacao.send( msgCancelamento.criarXML() );
+			this.caixaConviteEnviado.mudarEstado("cancelamento");			
+		}
+		
+		public function receberCancelamentoConvite():void {
+			this.caixaConviteRecebido.receberCancelamento();
 		}
 	}
 	
