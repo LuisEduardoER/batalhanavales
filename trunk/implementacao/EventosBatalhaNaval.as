@@ -16,6 +16,7 @@ package {
 		public static const CANCELARCONVITE: String = "cancelarConvite";
 		public static const ESCOLHERNOVOOPONENTE: String = "escolherNovoOponente";
 		public static const VOLTARCONVIDANDOOPONENTE: String = "voltarConvidandoOponente";
+		public static const CAIXAGERALOK: String = "caixaGeralOk";
 		
 		/* Passar telas*/
 		
