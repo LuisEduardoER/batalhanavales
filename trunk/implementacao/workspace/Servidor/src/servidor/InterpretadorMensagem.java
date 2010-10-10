@@ -79,15 +79,31 @@ public class InterpretadorMensagem {
                msgMudancaEstado.setIdCliente(this.cliente.getIdCliente());
                msgMudancaEstado.setTexto("Jogando");
                this.servidor.broadcastMessage(msgMudancaEstado);
+
+               this.cliente.setEstado("Jogando");
+               convidador.setEstado("Jogando");
+
                break;
            case 8://recusaConvite
                Cliente convidador2 = this.servidor.procurarCliente(this.mensagem.getDestinatario());
                this.servidor.enviarMensagem(this.mensagem, convidador2);
                break;
            case 9://saida
-               //Cliente oponente = pegar o oponente de quem enviou a msg
-               //this.servidor.enviarMensagem(this.mensagem, oponente);
+               Cliente oponente = this.servidor.getOponente(cliente);
+               System.out.println("Nome oponente = "+oponente.getNome());
+               this.servidor.enviarMensagem(this.mensagem, oponente);
+               this.servidor.removerLinha(this.servidor.procurarLinhaCliente(this.cliente));
+               this.cliente.setEstado("Livre");
+               oponente.setEstado("Livre");
                //tirar os 2 do array de duplas.
+
+               Mensagem msgMudancaEstado2 = new Mensagem();
+               msgMudancaEstado2.setTipo("mudancaEstado");
+               msgMudancaEstado2.setDestinatario(oponente.getIdCliente());
+               msgMudancaEstado2.setIdCliente(this.cliente.getIdCliente());
+               msgMudancaEstado2.setTexto("Livre");
+               this.servidor.broadcastMessage(msgMudancaEstado2);
+
                break;
 
        }
