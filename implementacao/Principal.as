@@ -32,6 +32,7 @@
 		
 		private var id:int;
 		private var nome:String;
+		private var caixaConfirmacao:CaixaConfirmacao;
 		
 		/*Construtor da classe*/
 		public function Principal() {
@@ -99,6 +100,11 @@
 												
 				case "mudancaEstado":			this.atualizarEstadosJogadores(xml);												
 												break;
+												
+				case "saida":					var caixaGeral:CaixaGeral = new CaixaGeral("Seu oponente desistiu do jogo!");
+												this.alvo.addChild(caixaGeral);
+												caixaGeral.addEventListener(EventosBatalhaNaval.CAIXAGERALOK, this.irParaConvidandoOponente);
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
@@ -159,7 +165,23 @@
 		
 		/* Esse método será chamando quando, depois de terminado o jogo, o jogador decide não jogar mais. */
 		private function sair(e:Event):void{
-			trace("Feedback: clicou em sair");
+			this.caixaConfirmacao = new CaixaConfirmacao("Tem certeza que deseja sair?");
+			this.alvo.addChild(this.caixaConfirmacao);
+			this.caixaConfirmacao.addEventListener(EventosBatalhaNaval.CAIXACONFIRMACAOSIM, this.confirmarSaida);
+			this.caixaConfirmacao.addEventListener(EventosBatalhaNaval.CAIXACONFIRMACAONAO, this.fecharCaixaConfirmacao);
+			this.distribuindoFrota.habilitar(false);
+		}
+		
+		private function confirmarSaida(e:EventosBatalhaNaval):void {
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "saida";
+			this.socket.send(msg.criarXML());
+			this.irParaConvidandoOponente();
+		}
+		
+		private function fecharCaixaConfirmacao(e:Event):void{
+			this.alvo.removeChild(this.caixaConfirmacao);
+			this.distribuindoFrota.habilitar(true);
 		}
 		
 		/* Esse método será chamando quando, o OK da tela de Regras for pressionado. */
@@ -171,13 +193,14 @@
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
-		private function irParaConvidandoOponente():void {
+		private function irParaConvidandoOponente(e:Event = null):void {			
 			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
 			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
 		}
 		
-		private function irParaDistribuindoFrota(e:Event):void{
+		private function irParaDistribuindoFrota(e:Event):void {		
 			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);
+			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -191,7 +214,7 @@
 											break;
 				case "Regras": 				tela = new Regras();
 											break;
-				case "DistribuindoFrota": 	tela = new DistribuindoFrota();
+				case "DistribuindoFrota": 	tela = new DistribuindoFrota(this.socket, this.id);
 											break;
 				case "ConvidandoOponente": 	tela = new ConvidandoOponente(this.socket, this.id);
 											break;

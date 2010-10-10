@@ -17,6 +17,9 @@ package {
 		public static const ESCOLHERNOVOOPONENTE: String = "escolherNovoOponente";
 		public static const VOLTARCONVIDANDOOPONENTE: String = "voltarConvidandoOponente";
 		public static const CAIXAGERALOK: String = "caixaGeralOk";
+		public static const CAIXACONFIRMACAOSIM: String = "caixaConfirmacaoSim";
+		public static const CAIXACONFIRMACAONAO: String = "caixaConfirmacaoNao";
+		
 		
 		/* Passar telas*/
 		

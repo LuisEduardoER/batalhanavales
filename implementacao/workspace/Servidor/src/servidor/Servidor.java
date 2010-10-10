@@ -175,7 +175,7 @@ public class Servidor {
         this.duplas.get(this.duplas.size()-1).add(c2);
     }
 
-    protected int procurarIdCliente(Cliente cliente){
+    protected int procurarLinhaCliente(Cliente cliente){
         int retorno = -1;
         for(int i = 0;i<this.duplas.size();i++){
             if(this.duplas.get(i).indexOf(cliente) != -1){
@@ -184,6 +184,22 @@ public class Servidor {
             }
         }
         return retorno;
+    }
+
+    protected Cliente getOponente(Cliente cliente){
+        Cliente oponente = null;
+        int linha = this.procurarLinhaCliente(cliente);
+        for (int i = 0; i < this.duplas.get(linha).size(); i++) {
+            if( ((Cliente)(this.duplas.get(linha).get(i))).getIdCliente() != cliente.getIdCliente() ){
+                oponente = (Cliente)(this.duplas.get(linha).get(i));
+                break;
+            }
+        }
+        return oponente;
+    }
+
+    protected void removerLinha(int indice){
+        this.duplas.remove(indice);
     }
 
     protected Cliente procurarCliente(int id){
