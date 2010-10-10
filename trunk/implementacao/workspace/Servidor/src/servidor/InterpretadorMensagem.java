@@ -84,6 +84,11 @@ public class InterpretadorMensagem {
                Cliente convidador2 = this.servidor.procurarCliente(this.mensagem.getDestinatario());
                this.servidor.enviarMensagem(this.mensagem, convidador2);
                break;
+           case 9://saida
+               //Cliente oponente = pegar o oponente de quem enviou a msg
+               //this.servidor.enviarMensagem(this.mensagem, oponente);
+               //tirar os 2 do array de duplas.
+               break;
 
        }
         
@@ -99,6 +104,7 @@ public class InterpretadorMensagem {
         else if(tipo.equals("cancelamentoConvite"))retorno = 6;
         else if(tipo.equals("aceitacaoConvite"))retorno = 7;
         else if(tipo.equals("recusaConvite"))retorno = 8;
+        else if(tipo.equals("saida"))retorno = 9;
 
         return retorno;
     }
