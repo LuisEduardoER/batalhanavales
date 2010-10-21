@@ -7,9 +7,10 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Regras extends MovieClip {
+	public class ControleRegras extends MovieClip {
 		private var clicar_evt:Event;
-		public function Regras() {
+		
+		public function ControleRegras() {
 			this.clicar_evt = new EventosBatalhaNaval(EventosBatalhaNaval.REGRASPASSARTELA);
 			this.configurar();
 		}		

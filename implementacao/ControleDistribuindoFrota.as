@@ -10,7 +10,7 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class DistribuindoFrota extends MovieClip{
+	public class ControleDistribuindoFrota extends MovieClip{
 		
 		private var submarino:MovieClip;
 		private var destroyer:MovieClip;
@@ -31,7 +31,7 @@
 		private var idCliente:int;
 		/*Fim de Comunicacao*/
 		
-		public function DistribuindoFrota(socket:XMLSocket, id:int) {
+		public function ControleDistribuindoFrota(socket:XMLSocket, id:int) {
 			/*Comunicacao*/
 			this.comunicacao = socket;
 			this.idCliente = id;

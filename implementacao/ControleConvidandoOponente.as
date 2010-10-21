@@ -13,7 +13,7 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class ConvidandoOponente extends MovieClip {
+	public class ControleConvidandoOponente extends MovieClip {
 		
 		private var jogadores:DataGrid;
 		private var destinatarios:ComboBox;
@@ -31,7 +31,7 @@
 		private var caixaConviteRecebido:CaixaConviteRecebido;
 		private var caixaGeral:CaixaGeral;
 		
-		public function ConvidandoOponente(socket:XMLSocket, id:int) {
+		public function ControleConvidandoOponente(socket:XMLSocket, id:int) {
 			this.jogadores = this.jogadores_dg;
 			this.destinatarios = this.destinatarios_cb;
 			this.alvo = this.alvo_mc;
@@ -276,14 +276,12 @@
 			this.caixaConviteRecebido.addEventListener(EventosBatalhaNaval.VOLTARCONVIDANDOOPONENTE, this.voltarConvidandoOponente);
 		}				
 		
-		public function receberAceitacao():void {
-			trace("ConvidandoOponente: receberAceitacao");
+		public function receberAceitacao():void {			
 			this.caixaConviteEnviado.mudarEstado("respostaPositiva");
 			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA) );
 		}			
 		
-		public function receberRecusa():void {
-			trace("ConvidandoOponente: receberRecusa");
+		public function receberRecusa():void {			
 			this.caixaConviteEnviado.mudarEstado("respostaNegativa");
 		}
 		
