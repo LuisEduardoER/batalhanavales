@@ -43,7 +43,7 @@
 			
 			this.alvo = alvo_mc;	
 			
-			this.introducao = this.attacharTela("Introducao", true);
+			this.introducao = this.attacharTela("ControleIntroducao", true);
 			this.introducao.addEventListener(EventosBatalhaNaval.INTRODUCAOPASSARTELA, this.irParaRegras);
 						
 			
@@ -65,16 +65,14 @@
 				case "liberacao": 				this.distribuindoFrota.liberar();									
 												break;
 									
-				case "respostaConecta": 		trace("recebi id = " + xml.idCliente);
-												this.id = int(xml.idCliente);
+				case "respostaConecta": 		this.id = int(xml.idCliente);
 												this.irParaConvidandoOponente();
 												break;
 									
 				case "respostaPedidoJogadores": this.preencherDataGrid(xml.texto);
 												break;
 									
-				case "eventoEntradaJogador": 	trace("chegou novo jogador");
-												this.preencherDataGrid(xml.texto, true);
+				case "eventoEntradaJogador": 	this.preencherDataGrid(xml.texto, true);
 												break;
 									
 				case "eventoSaidaJogador": 		this.removerDoDataGrid(xml.texto);
@@ -152,7 +150,7 @@
 		}
 		
 		private function irParaRegras(e:Event):void {
-			this.regras = this.attacharTela("Regras", true);
+			this.regras = this.attacharTela("ControleRegras", true);
 			this.regras.addEventListener(EventosBatalhaNaval.REGRASPASSARTELA, irParaLogin);
 		}
 		
@@ -188,18 +186,18 @@
 		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function irParaLogin(e:Event):void {
-			this.login = this.attacharTela("Login", true);
+			this.login = this.attacharTela("ControleLogin", true);
 			//this.login.addEventListener(EventosBatalhaNaval.CONEXAOACEITA, irParaConvidandoOponente);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
 		private function irParaConvidandoOponente(e:Event = null):void {			
-			this.convidandoOponente = this.attacharTela("ConvidandoOponente", true);
+			this.convidandoOponente = this.attacharTela("ControleConvidandoOponente", true);
 			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
 		}
 		
 		private function irParaDistribuindoFrota(e:Event):void {		
-			this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);
+			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
 		}
 		
@@ -208,21 +206,21 @@
 			if (limpar)	this.limparAlvo();
 			var tela:MovieClip;
 			switch (nomeTela) {
-				case "Introducao":			tela = new Introducao();											
+				case "ControleIntroducao":			tela = new ControleIntroducao();											
 											break;
-				case "Login":				tela = new Login(this.socket);											
+				case "ControleLogin":				tela = new ControleLogin(this.socket);											
 											break;
-				case "Regras": 				tela = new Regras();
+				case "ControleRegras": 				tela = new ControleRegras();
 											break;
-				case "DistribuindoFrota": 	tela = new DistribuindoFrota(this.socket, this.id);
+				case "ControleDistribuindoFrota": 	tela = new ControleDistribuindoFrota(this.socket, this.id);
 											break;
-				case "ConvidandoOponente": 	tela = new ConvidandoOponente(this.socket, this.id);
+				case "ControleConvidandoOponente": 	tela = new ControleConvidandoOponente(this.socket, this.id);
 											break;
-				case "Jogo": 				tela = new Jogo();
+				//case "ControleJogo": 				tela = new ControleJogo();
+				//							break;
+				case "ControleGanhou": 				tela = new ControleGanhou();
 											break;
-				case "Ganhou": 				tela = new Ganhou();
-											break;
-				case "Perdeu": 				tela = new Perdeu();
+				case "ControlePerdeu": 				tela = new ControlePerdeu();
 											break;
 				default:					trace("Essa tela não existe.");
 			}

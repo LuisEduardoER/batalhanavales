@@ -9,13 +9,13 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Login extends MovieClip {
+	public class ControleLogin extends MovieClip {
 		
 		private var comunicacao:XMLSocket;
 		private var conexaoAceita_evt:Event;
 		private var _idCliente:int;
 		
-		public function Login(socket:XMLSocket) {
+		public function ControleLogin(socket:XMLSocket) {
 			this.configurar();
 			this.comunicacao = socket;
 			this.conexaoAceita_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONEXAOACEITA);

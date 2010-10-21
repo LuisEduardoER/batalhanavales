@@ -7,10 +7,10 @@ package {
 	 * ...
 	 * @author Saulo e Lorena
 	 */
-	public class Introducao extends MovieClip {
+	public class ControleIntroducao extends MovieClip {
 		
 		
-		public function Introducao() {
+		public function ControleIntroducao() {
 			this.verRegras_btn.addEventListener(MouseEvent.MOUSE_UP, this.verRegras);
 		}
 		
