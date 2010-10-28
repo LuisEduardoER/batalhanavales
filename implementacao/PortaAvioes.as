@@ -7,7 +7,7 @@
 	public class PortaAvioes extends Embarcacao {
 		
 		public function PortaAvioes() {
-			this.super();
+			super();
 		}
 	}
 	

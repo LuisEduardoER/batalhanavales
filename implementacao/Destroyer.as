@@ -7,7 +7,7 @@
 	public class Destroyer extends Embarcacao {
 		
 		public function Destroyer() {
-			this.super();
+			super();
 		}
 	}
 	

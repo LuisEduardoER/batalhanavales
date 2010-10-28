@@ -24,9 +24,9 @@
 		}
 		
 		//O computador não vai clicar em peca nenhuma.
-		/*private function clicar(e:MouseEvent):void {
+		public function clicar(e:MouseEvent = null):void {
 			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
-		}*/
+		}
 		
 		public function get estado():String { 
 			return _estado;
@@ -35,6 +35,12 @@
 		public function set estado(value:String):void {
 			_estado = value;
 			this.gotoAndStop(this.estado);
+			if (this.estado == EstadoPeca.PECAATINGIDA) {
+				this.dispatchEvent( new Event(EventosBatalhaNaval.ATINGIRPECA) );
+			}
+			else if (this.estado == EstadoPeca.PECAAGUA) {
+				this.dispatchEvent( new Event(EventosBatalhaNaval.ACERTARAGUA) );
+			}
 		}
 				
 		

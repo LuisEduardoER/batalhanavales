@@ -1,10 +1,11 @@
 ﻿package {
+	import flash.display.MovieClip;
 	
 	/**
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class DestroyerFigura extends Embarcacao {
+	public class DestroyerFigura extends MovieClip {
 		
 		public function DestroyerFigura() {
 			super();			

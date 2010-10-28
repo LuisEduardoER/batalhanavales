@@ -19,7 +19,12 @@ package {
 		public static const CAIXAGERALOK: String = "caixaGeralOk";
 		public static const CAIXACONFIRMACAOSIM: String = "caixaConfirmacaoSim";
 		public static const CAIXACONFIRMACAONAO: String = "caixaConfirmacaoNao";
+		
+		/*Jogo*/
 		public static const CLICARPECA: String = "clicarPeca";
+		public static const ATINGIRPECA: String = "atingirPeca"; //Peca dispara para Embarcacao escutar e Tabuleiro dispara para Computador escutar.
+		public static const ACERTARAGUA: String = "acertarAgua";		
+		/*Fim de Jogo*/
 		
 		
 		/* Passar telas */

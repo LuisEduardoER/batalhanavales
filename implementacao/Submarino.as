@@ -7,7 +7,7 @@
 	public class Submarino extends Embarcacao {
 		
 		public function Submarino() {
-			this.super();
+			super();
 		}
 	}
 	
