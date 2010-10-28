@@ -8,8 +8,10 @@
 	*/
 	public class Tabuleiro extends MovieClip {
 		private var pecas:Array;
+		private var ultimaPecaClicada:Peca;
 		
 		public function Tabuleiro() {
+			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
 		}
 		
@@ -24,9 +26,11 @@
 			}
 		}
 		
-		private function clicar(e:Event):void {
+		//O computador não vai clicar em peca nenhuma.
+		/*private function clicar(e:Event):void {
+			this.ultimaPecaClicada
 			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.CLICARPECA) );
-		}
+		}*/
 	}
 	
 }

@@ -10,7 +10,7 @@
 	public class Peca extends MovieClip {
 		private var linha:int;
 		private var coluna:int;
-		private var estado:String;
+		private var _estado:String;
 		
 		public function Peca() {
 			var nome:String = this.name;
@@ -20,12 +20,23 @@
 			//É isso o que eu faço com o estado???
 			//Se for ficar assim, tem que mudar o diagrama de classes pq lá diz que Peca tem um EstadoPeca.
 			
-			this.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
+			//this.addEventListener(MouseEvent.MOUSE_UP, this.clicar); O computador não vai clicar em peca nenhuma.
 		}
 		
-		private function clicar(e:MouseEvent):void {
+		//O computador não vai clicar em peca nenhuma.
+		/*private function clicar(e:MouseEvent):void {
 			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
+		}*/
+		
+		public function get estado():String { 
+			return _estado;
 		}
+		
+		public function set estado(value:String):void {
+			_estado = value;
+			this.gotoAndStop(this.estado);
+		}
+				
 		
 	}
 	
