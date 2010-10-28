@@ -1,6 +1,8 @@
 ﻿package {
+	import fl.controls.Button;
 	import flash.display.MovieClip;
 	import flash.events.Event;
+	import flash.events.MouseEvent;
 	
 	/**
 	* ...
@@ -10,18 +12,24 @@
 		
 		private var tabuleiro:Tabuleiro;
 		private var matrizConhecida:Array;
-		private var matrizDesconhecida:Array; //Matriz do usuário que está jogando contra o computador
-		private var frota:Frota;
+		private var matrizDesconhecida:Array; //Matriz do usuário que está jogando contra o computador	
+		private var jogar:Button;
+		private var ultimaLinhaEscolhida:int;
+		private var ultimaColunaEscolhida:int;
 		
 		public function Computador() {
 			this.tabuleiro =  tabuleiro_mc;
+			this.tabuleiro.addEventListener(EventosBatalhaNaval.ACERTARAGUA, acertarAgua);
+			this.tabuleiro.addEventListener(EventosBatalhaNaval.ATINGIRPECA, atingirPeca);
+			this.jogar = jogar_btn;
+			this.jogar.addEventListener(MouseEvent.MOUSE_UP, this.escolherJogada);
 			//O computador não vai clicar em peca nenhuma.
 			//this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
 			
-			this.inicializarMatrizes();
-			this.frota = new Frota();
+			this.inicializarMatrizes();			
 			this.distribuirPecas();
 		}
+				
 		
 		//O computador não vai clicar em peca nenhuma.
 		/*private function clicar(e:Event):void {
@@ -56,19 +64,6 @@
 			this.distribuirSubmarino();
 			
 			this.mostrarMatrizDesconhecida();			
-		}
-		
-		private function distribuirSubmarino():void {
-			var linha:int = Math.floor(Math.random()*this.matrizDesconhecida.length);
-			var coluna:int = Math.floor(Math.random() * this.matrizDesconhecida[0].length);
-			if ( this.posicaoLegal(linha, coluna, "S") ) {
-				this.matrizDesconhecida[linha][coluna] = "P";
-				this.frota.submarino.adicionarPeca(this.tabuleiro[linha][coluna]);
-			}
-			else {
-				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
-				this.distribuirSubmarino();
-			}
 		}
 		
 		private function posicaoLegal(linha:int, coluna:int, embarcacao:String, orientacao:int = undefined):Boolean {
@@ -172,6 +167,20 @@
 				}
 			}
 			return retorno;
+		}		
+		
+		private function distribuirSubmarino():void {
+			var linha:int = Math.floor(Math.random()*this.matrizDesconhecida.length);
+			var coluna:int = Math.floor(Math.random() * this.matrizDesconhecida[0].length);
+			if ( this.posicaoLegal(linha, coluna, "S") ) {
+				this.matrizDesconhecida[linha][coluna] = "P";
+				
+				this.tabuleiro.frota.submarino.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+			}
+			else {
+				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
+				this.distribuirSubmarino();
+			}
 		}
 		
 		private function distribuirPortaAvioes():void {
@@ -185,7 +194,12 @@
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha][coluna + 1] = "P";
 					this.matrizDesconhecida[linha][coluna + 2] = "P";
-					this.matrizDesconhecida[linha][coluna + 3] = "P";					
+					this.matrizDesconhecida[linha][coluna + 3] = "P";	
+					
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -198,7 +212,12 @@
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha + 1][coluna] = "P";
 					this.matrizDesconhecida[linha + 2][coluna] = "P";
-					this.matrizDesconhecida[linha + 3][coluna] = "P";					
+					this.matrizDesconhecida[linha + 3][coluna] = "P";			
+					
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -216,7 +235,11 @@
 				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha + 1][coluna + 1] = "P";
-					this.matrizDesconhecida[linha + 2][coluna] = "P";				
+					this.matrizDesconhecida[linha + 2][coluna] = "P";		
+					
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
 				}
 				else {
 					this.distribuirDestroyer();
@@ -228,7 +251,11 @@
 				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha][coluna + 2] = "P";
-					this.matrizDesconhecida[linha + 1][coluna + 1] = "P";				
+					this.matrizDesconhecida[linha + 1][coluna + 1] = "P";		
+					
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 				}
 				else {
 					this.distribuirDestroyer();
@@ -240,7 +267,11 @@
 				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha - 1][coluna + 1] = "P";
-					this.matrizDesconhecida[linha + 1][coluna + 1] = "P";				
+					this.matrizDesconhecida[linha + 1][coluna + 1] = "P";	
+					
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 				}
 				else {
 					this.distribuirDestroyer();
@@ -252,12 +283,38 @@
 				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
 					this.matrizDesconhecida[linha][coluna] = "P";
 					this.matrizDesconhecida[linha - 1][coluna + 1] = "P";
-					this.matrizDesconhecida[linha][coluna + 2] = "P";				
+					this.matrizDesconhecida[linha][coluna + 2] = "P";	
+					
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
 				}
 				else {
 					this.distribuirDestroyer();
 				}
 			}						
+		}
+		
+		private function escolherJogada(e:Event):void {
+			this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
+			this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
+			
+			if (this.matrizConhecida[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") {
+				//trace("Jogada escolhida: (" + this.ultimaLinhaEscolhida + ", " + this.ultimaColunaEscolhida + ")");
+				this.tabuleiro.pecas[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida].clicar();
+			}
+			else {
+				this.escolherJogada(e);
+			}
+						
+		}
+		
+		private function acertarAgua(e:Event):void {
+			this.matrizConhecida[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] = "A";
+		}
+		
+		private function atingirPeca(e:Event):void {
+			this.matrizConhecida[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] = "P";
 		}
 	}
 	

@@ -8,7 +8,7 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class PortaAvioesFigura extends Embarcacao {				
+	public class PortaAvioesFigura extends MovieClip {				
 		public var figura:MovieClip;
 		private var mais90:Button;
 		private var menos90:Button;
@@ -19,7 +19,7 @@
 			this.figura = this.figura_mc;
 			this.mais90 = this.mais90_mc;
 			this.menos90 = this.menos90_mc;
-			this.quantidadePartes = 4;
+			//this.quantidadePartes = 4;
 			this.terminarArrasto_evt = new Event("terminarArrasto");
 			
 			this.figura.addEventListener(MouseEvent.MOUSE_DOWN, this.iniciarArrasto);

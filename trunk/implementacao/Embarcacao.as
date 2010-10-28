@@ -1,5 +1,6 @@
 ﻿package {
 	import flash.display.MovieClip;
+	import flash.events.Event;
 	
 	/**
 	* ...
@@ -20,9 +21,13 @@
 		public function adicionarPeca(peca:Peca):void {
 			this.pecas.push(peca);
 			this.quantidadePecas = this.pecas.length;
+			peca.addEventListener(EventosBatalhaNaval.ATINGIRPECA, this.verificarEstado);
 		}
 		
-		public function verificarEstado():void {
+		public function verificarEstado(e:Event):void {
+			var peca:Peca = Peca(e.target);
+			peca.removeEventListener(EventosBatalhaNaval.ATINGIRPECA, this.verificarEstado);
+			
 			var contadorPecasAtingidas:int;
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				if (this.pecas[i].estado == EstadoPeca.PECAATINGIDA) {
@@ -31,14 +36,14 @@
 				}
 			}
 			if (contadorPecasAtingidas == this.pecas.length) {
-				this.abatar();
+				this.abater();
 			}
 			else if (contadorPecasAtingidas > 0) {
 				this.estado = EstadoEmbarcacao.EMBARCACAOATINGIDA;
 			}
 		}
 		
-		public function abatar():void {
+		public function abater():void {
 			this.estado = EstadoEmbarcacao.EMBARCACAOABATIDA;
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				this.pecas[i].estado = EstadoPeca.PECAABATIDA;
