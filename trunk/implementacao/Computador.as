@@ -19,6 +19,7 @@
 			//this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
 			
 			this.inicializarMatrizes();
+			this.frota = new Frota();
 			this.distribuirPecas();
 		}
 		
@@ -62,6 +63,7 @@
 			var coluna:int = Math.floor(Math.random() * this.matrizDesconhecida[0].length);
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
 				this.matrizDesconhecida[linha][coluna] = "P";
+				this.frota.submarino.adicionarPeca(this.tabuleiro[linha][coluna]);
 			}
 			else {
 				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
