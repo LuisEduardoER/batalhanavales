@@ -14,16 +14,18 @@
 		
 		public function Computador() {
 			this.tabuleiro =  tabuleiro_mc;
-			this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
+			//O computador não vai clicar em peca nenhuma.
+			//this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
 			
 			this.inicializarMatrizes();
 			this.distribuirPecas();
 		}
 		
-		private function clicar(e:Event):void {
+		//O computador não vai clicar em peca nenhuma.
+		/*private function clicar(e:Event):void {
 			var pecaClicada:Peca = Peca(e.target);
 			trace("pecaClicada.name = " + pecaClicada.name);
-		}
+		}*/
 		
 		private function inicializarMatrizes():void {
 			this.matrizConhecida = new Array(10);

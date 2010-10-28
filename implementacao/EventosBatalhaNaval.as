@@ -19,13 +19,16 @@ package {
 		public static const CAIXAGERALOK: String = "caixaGeralOk";
 		public static const CAIXACONFIRMACAOSIM: String = "caixaConfirmacaoSim";
 		public static const CAIXACONFIRMACAONAO: String = "caixaConfirmacaoNao";
+		public static const CLICARPECA: String = "clicarPeca";
 		
 		
-		/* Passar telas*/
+		/* Passar telas */
 		
 		public static const REGRASPASSARTELA: String = "regrasPassarTela";
 		public static const INTRODUCAOPASSARTELA: String = "introducaoPassarTela";
 		public static const CONVIDANDOOPONENTEPASSARTELA: String = "convidandoOponentePassarTela";
+		
+		/* Fim de Passar telas */
 		
 		public function EventosBatalhaNaval(type:String, bubbles:Boolean=false, cancelable:Boolean=false) { 
 			super(type, bubbles, cancelable);
