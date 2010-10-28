@@ -8,13 +8,13 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class PortaAvioes extends Embarcacao {				
+	public class PortaAvioesFigura extends Embarcacao {				
 		public var figura:MovieClip;
 		private var mais90:Button;
 		private var menos90:Button;
 		private var terminarArrasto_evt:Event;
 		
-		public function PortaAvioes() {
+		public function PortaAvioesFigura() {
 			super();			
 			this.figura = this.figura_mc;
 			this.mais90 = this.mais90_mc;

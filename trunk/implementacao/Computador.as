@@ -11,6 +11,7 @@
 		private var tabuleiro:Tabuleiro;
 		private var matrizConhecida:Array;
 		private var matrizDesconhecida:Array; //Matriz do usuário que está jogando contra o computador
+		private var frota:Frota;
 		
 		public function Computador() {
 			this.tabuleiro =  tabuleiro_mc;

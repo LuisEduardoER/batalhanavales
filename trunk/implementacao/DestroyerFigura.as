@@ -4,9 +4,9 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Destroyer extends Embarcacao {
+	public class DestroyerFigura extends Embarcacao {
 		
-		public function Destroyer() {
+		public function DestroyerFigura() {
 			super();			
 		}
 		

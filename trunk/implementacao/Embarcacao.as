@@ -7,9 +7,10 @@
 	*/
 	public class Embarcacao extends MovieClip {
 		
-		public var quantidadePartes:int;
-		public var quantidadePartesAtingidas:int;
+		public var quantidadePecas:int;
+		public var quantidadePecasAtingidas:int;
 		public var estado:String;
+		public var pecas:Array;
 		
 		public function Embarcacao() {
 			this.estado = "perfeito";
