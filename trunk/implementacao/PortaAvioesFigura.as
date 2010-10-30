@@ -12,8 +12,8 @@
 		public var figura:MovieClip;
 		private var mais90:Button;
 		private var menos90:Button;
-		private var terminarArrasto_evt:Event;
-		public var partes:Array;
+		//private var terminarArrasto_evt:Event;
+		public var pecas:Array;
 		private var xIni:Number;
 		private var yIni:Number;
 		
@@ -23,7 +23,7 @@
 			this.mais90 = this.mais90_mc;
 			this.menos90 = this.menos90_mc;
 			//this.quantidadePartes = 4;
-			this.partes = [this.figura.parte1_mc, this.figura.parte2_mc, this.figura.parte3_mc, this.figura.parte4_mc];
+			this.pecas = [this.figura.peca1_mc, this.figura.peca2_mc, this.figura.peca3_mc, this.figura.peca4_mc];
 			this.xIni = this.figura.x;
 			this.yIni = this.figura.y;
 			//this.terminarArrasto_evt = new Event(EventosBatalhaNaval.SOLTAREMBARCACAO);

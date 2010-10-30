@@ -8,14 +8,14 @@
 	* @author Lorena Tablada
 	*/
 	public class Peca extends MovieClip {
-		private var linha:int;
-		private var coluna:int;
+		private var _linha:int;
+		private var _coluna:int;
 		private var _estado:String;
 		
 		public function Peca() {
 			var nome:String = this.name;
-			this.linha = int(this.name.substr(4, 1));
-			this.coluna = int(this.name.substr(5, 1));
+			this._linha = int(this.name.substr(4, 1));
+			this._coluna = int(this.name.substr(5, 1));
 			this.estado = EstadoPeca.PECAOCULTA;
 			//É isso o que eu faço com o estado???
 			//Se for ficar assim, tem que mudar o diagrama de classes pq lá diz que Peca tem um EstadoPeca.
@@ -42,6 +42,20 @@
 				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ACERTARAGUA) );
 			}
 		}
+		
+		public function get linha():int { return _linha; }
+		
+		public function get coluna():int { return _coluna; }
+		
+		private function set coluna(value:int):void {
+			_coluna = value;
+		}
+		
+		private function set linha(value:int):void {
+			_linha = value;
+		}
+		
+		
 				
 		
 	}
