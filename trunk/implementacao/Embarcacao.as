@@ -6,7 +6,7 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Embarcacao{
+	public class Embarcacao {
 		
 		public var quantidadePecas:int;
 		public var quantidadePecasAtingidas:int;

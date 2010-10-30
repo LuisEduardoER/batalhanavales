@@ -35,6 +35,11 @@ package {
 		
 		/* Fim de Passar telas */
 		
+		/*Distrubuir Frota*/
+		public static const SOLTAREMBARCACAO: String = "soltarEmbarcacao";
+		public static const FORATABULEIRO: String = "foraTabuleiro";
+		
+		
 		public function EventosBatalhaNaval(type:String, bubbles:Boolean=false, cancelable:Boolean=false) { 
 			super(type, bubbles, cancelable);
 			

@@ -83,26 +83,68 @@
 			this.frota_mc.destroyerLinha_mc.visible =
 			this.frota_mc.portaAvioesLinha_mc.visible = false;
 			
-			this.portaAvioes.addEventListener("terminarArrasto", this.terminarArrasto);
+			/*this.submarino.addEventListener(MouseEvent.MOUSE_DOWN, arrastarEmbarcacao);
+			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);*/
+			
+			this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 		}
+		
+		private function soltarEmbarcacao(e:EventosBatalhaNaval):void {
+			var movie:MovieClip = MovieClip(e.currentTarget);
+			var posicoes:Array = this.localizarPosicoes(movie);
+			trace(posicoes)
+			if (movie.partes.length != posicoes.length) {//quando a embarcacao esta fora do tabuleiro ou parte fora
+				movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+			}
+			
+			
+			
+			
+		}
+		
+		private function localizarPosicoes(embarcacao:MovieClip):Array {
+			var retorno:Array = new Array();
+			var partes:Array = embarcacao.partes;
+			var parar_bool:Boolean = false;
+			for (var k:int = 0; k < partes.length ; k++) {
+				parar_bool = false;
+				for (var i:int = 0; i < 10; i++) {
+					for (var j:int = 0; j < 10 ; j++) {
+						if (partes[k].hitTestObject(this.tabuleiro["quad"+i+""+j+"_mc"])) {
+							parar_bool = true;
+							retorno.push([i, j]);
+							break;
+						}
+					}
+					if (parar_bool) break;
+					
+				}
+			}
+			return retorno;
+		}
+		
+		/*private function arrastarEmbarcacao(e:MouseEvent):void {
+			this.submarino.startDrag();
+			
+		}*/
 		
 		public function liberar():void {
 			this.log_txt.htmlText += "Posicione sua frota nos locais desejados e clique em \"Iniciar jogo\".";						
 		}
 		
-		private function terminarArrasto(e:Event):void {
+		/*private function terminarArrasto(e:Event):void {
 			var embarcacao:PortaAvioes = PortaAvioes(e.currentTarget);
 			this.estaDentroTabuleiro(embarcacao);
-		}
+		}*/
 		
 		private function estaDentroTabuleiro(embarcacao:PortaAvioes):Boolean {				
-			if (embarcacao.figura.x > this.tabuleiro.x - embarcacao.x - embarcacao.parent.x + embarcacao.figura.width / 2) {
+			/*if (embarcacao.figura.x > this.tabuleiro.x - embarcacao.x - embarcacao.parent.x + embarcacao.figura.width / 2) {
 				trace("está à direita do x mínimo");
 			}
 			else {
 				trace("está à esquerda do x mínimo");
 			}
-			
+			*/
 			return true;
 		}
 		
