@@ -20,6 +20,8 @@
 			//this.ultimaEmbarcacaoAbatida = new Embarcacao();
 		}
 		
+		
+		
 		public function get submarino():Embarcacao { 
 			return _submarino;
 		}

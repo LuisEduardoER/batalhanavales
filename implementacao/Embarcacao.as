@@ -50,6 +50,18 @@
 			}
 		}
 		
+		public function verificarPecaExistente(linha:uint, coluna:uint):Boolean {
+			var retorno:Boolean = false;
+			for (var i:int = 0; i < pecas.length; i++) {
+				if ((pecas[i].linha == linha) && (pecas[i].coluna == coluna)) {
+					retorno = true;
+					break;
+				}
+				
+			}
+			return retorno;
+		}
+		
 	}
 	
 }

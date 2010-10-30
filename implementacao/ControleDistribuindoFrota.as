@@ -31,6 +31,10 @@
 		private var idCliente:int;
 		/*Fim de Comunicacao*/
 		
+		/*Frota*/
+		private var frota:Array;
+		/*Fim frota*/
+		
 		public function ControleDistribuindoFrota(socket:XMLSocket, id:int) {
 			/*Comunicacao*/
 			this.comunicacao = socket;
@@ -50,6 +54,8 @@
 			/*Fim de Botoes*/
 			
 			this.fala = this.fala_txt;
+			
+			this.frota = new Array();
 			
 			
 			this.configurar();
@@ -87,14 +93,27 @@
 			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);*/
 			
 			this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
+			this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 		}
 		
 		private function soltarEmbarcacao(e:EventosBatalhaNaval):void {
 			var movie:MovieClip = MovieClip(e.currentTarget);
 			var posicoes:Array = this.localizarPosicoes(movie);
 			trace(posicoes)
-			if (movie.partes.length != posicoes.length) {//quando a embarcacao esta fora do tabuleiro ou parte fora
+			if (movie.pecas.length != posicoes.length) {//quando a embarcacao esta fora do tabuleiro ou parte fora
 				movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				
+			}else if(this.verificarPecas(posicoes)) {
+				movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				trace("colocou embarcacao em cima de outra embarcacao");
+				
+			}else {
+				var embarcacao:Embarcacao = new Embarcacao();
+				for (var i:int = 0; i < posicoes.length; i++) {
+					var peca:Peca = this.tabuleiro.pecas[posicoes[i][0]][posicoes[i][1]];
+					embarcacao.adicionarPeca(peca);
+				}
+				this.frota.push(embarcacao);
 			}
 			
 			
@@ -104,13 +123,13 @@
 		
 		private function localizarPosicoes(embarcacao:MovieClip):Array {
 			var retorno:Array = new Array();
-			var partes:Array = embarcacao.partes;
+			var pecas:Array = embarcacao.pecas;
 			var parar_bool:Boolean = false;
-			for (var k:int = 0; k < partes.length ; k++) {
+			for (var k:int = 0; k < pecas.length ; k++) {
 				parar_bool = false;
 				for (var i:int = 0; i < 10; i++) {
 					for (var j:int = 0; j < 10 ; j++) {
-						if (partes[k].hitTestObject(this.tabuleiro["quad"+i+""+j+"_mc"])) {
+						if (pecas[k].hitTestObject(this.tabuleiro["quad"+i+""+j+"_mc"])) {
 							parar_bool = true;
 							retorno.push([i, j]);
 							break;
@@ -119,6 +138,21 @@
 					if (parar_bool) break;
 					
 				}
+			}
+			return retorno;
+		}
+		
+		private function verificarPecas(posicoes:Array):Boolean {
+			var retorno:Boolean = false;
+			for (var i:int = 0; i < this.frota.length; i++) {
+				for (var j:int = 0; j <posicoes.length; j++) {
+					if (this.frota[i].verificarPecaExistente(posicoes[j][0],posicoes[j][1])) {
+						retorno = true;
+						break;
+					}
+				}
+				if (retorno) break;
+				
 			}
 			return retorno;
 		}
@@ -137,16 +171,16 @@
 			this.estaDentroTabuleiro(embarcacao);
 		}*/
 		
-		private function estaDentroTabuleiro(embarcacao:PortaAvioes):Boolean {				
-			/*if (embarcacao.figura.x > this.tabuleiro.x - embarcacao.x - embarcacao.parent.x + embarcacao.figura.width / 2) {
+		/*private function estaDentroTabuleiro(embarcacao:PortaAvioes):Boolean {				
+			if (embarcacao.figura.x > this.tabuleiro.x - embarcacao.x - embarcacao.parent.x + embarcacao.figura.width / 2) {
 				trace("está à direita do x mínimo");
 			}
 			else {
 				trace("está à esquerda do x mínimo");
 			}
-			*/
+			
 			return true;
-		}
+		}*/
 		
 	}
 	
