@@ -13,6 +13,9 @@
 		private var mais90:Button;
 		private var menos90:Button;
 		private var terminarArrasto_evt:Event;
+		public var partes:Array;
+		private var xIni:Number;
+		private var yIni:Number;
 		
 		public function PortaAvioesFigura() {
 			super();			
@@ -20,25 +23,37 @@
 			this.mais90 = this.mais90_mc;
 			this.menos90 = this.menos90_mc;
 			//this.quantidadePartes = 4;
-			this.terminarArrasto_evt = new Event("terminarArrasto");
+			this.partes = [this.figura.parte1_mc, this.figura.parte2_mc, this.figura.parte3_mc, this.figura.parte4_mc];
+			this.xIni = this.figura.x;
+			this.yIni = this.figura.y;
+			//this.terminarArrasto_evt = new Event(EventosBatalhaNaval.SOLTAREMBARCACAO);
 			
 			this.figura.addEventListener(MouseEvent.MOUSE_DOWN, this.iniciarArrasto);
 			this.figura.addEventListener(MouseEvent.MOUSE_UP, this.terminarArrasto);
 			
 			this.addEventListener(MouseEvent.ROLL_OVER, this.aparecer);
 			this.addEventListener(MouseEvent.ROLL_OUT, this.desaparecer);
+			this.addEventListener(EventosBatalhaNaval.FORATABULEIRO, voltarPosicaoInicial);
 			
 			this.mais90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
 			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
+			
 		}		
+		
+		private function voltarPosicaoInicial(e:EventosBatalhaNaval):void {
+			this.figura.x = this.xIni;
+			this.figura.y = this.yIni;
+		}
 		
 		private function iniciarArrasto(m:MouseEvent):void {
 			this.desaparecer();
 			this.figura.startDrag(true);
 		}
 				
-		private function terminarArrasto(m:MouseEvent):void{
-			this.dispatchEvent(this.terminarArrasto_evt);
+		private function terminarArrasto(m:Event):void {
+			this.figura.stopDrag();
+			this.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.SOLTAREMBARCACAO));
+			//this.dispatchEvent(new Event(EventosBatalhaNaval.SOLTAREMBARCACAO));
 		}
 		
 		public function configurar():void {

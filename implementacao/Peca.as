@@ -36,10 +36,10 @@
 			_estado = value;
 			this.gotoAndStop(this.estado);
 			if (this.estado == EstadoPeca.PECAATINGIDA) {
-				this.dispatchEvent( new Event(EventosBatalhaNaval.ATINGIRPECA) );
+				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ATINGIRPECA) );
 			}
 			else if (this.estado == EstadoPeca.PECAAGUA) {
-				this.dispatchEvent( new Event(EventosBatalhaNaval.ACERTARAGUA) );
+				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ACERTARAGUA) );
 			}
 		}
 				
