@@ -6,14 +6,16 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Embarcacao {
+	public class Embarcacao extends MovieClip {
 		
+		private var _nome:String;
 		public var quantidadePecas:int;
 		public var quantidadePecasAtingidas:int;
 		public var estado:String;
 		public var pecas:Array;
 		
-		public function Embarcacao() {
+		public function Embarcacao(nome) {
+			this._nome = nome;
 			this.estado = EstadoEmbarcacao.EMBARCACAOPERFEITA;
 			this.pecas = [];
 		}
@@ -48,6 +50,7 @@
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				this.pecas[i].estado = EstadoPeca.PECAABATIDA;
 			}
+			this.dispatchEvent( new Event(EventosBatalhaNaval.ABATEREMBARCACAO) );
 		}
 		
 		public function verificarPecaExistente(linha:uint, coluna:uint):Boolean {
@@ -60,6 +63,10 @@
 				
 			}
 			return retorno;
+		}
+		
+		public function get nome():String { 
+			return _nome;
 		}
 		
 	}

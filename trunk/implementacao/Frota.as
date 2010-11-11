@@ -1,23 +1,35 @@
 ﻿package {
 	
+	import flash.display.MovieClip;
+	import flash.events.Event;
+	
 	/**
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class Frota {
+	public class Frota extends MovieClip{
 		private var _submarino:Embarcacao;
 		private var _portaAvioes:Embarcacao;
 		private var _destroyer:Embarcacao;
 		private var _embarcacoes:Array;
 		
-		//private var ultimaEmbarcacaoAbatida:Embarcacao;
+		private var _ultimaEmbarcacaoAbatida:Embarcacao;
 		
 		public function Frota() {
-			this._submarino = new Embarcacao();
-			this._portaAvioes = new Embarcacao();
-			this._destroyer = new Embarcacao();
+			this._submarino = new Embarcacao("submarino");
+			this._portaAvioes = new Embarcacao("porta-aviões");
+			this._destroyer = new Embarcacao("destroyer");
 			this._embarcacoes = [this.submarino, this.portaAvioes, this.destroyer];
-			//this.ultimaEmbarcacaoAbatida = new Embarcacao();
+			
+			for (var i:int = 0; i < this.embarcacoes.length; i++) {
+				this.embarcacoes[i].addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
+			}
+			
+		}
+		
+		private function abaterEmbarcacao(e:Event):void {
+			this._ultimaEmbarcacaoAbatida = Embarcacao(e.target);
+			this.dispatchEvent(new Event(EventosBatalhaNaval.ABATEREMBARCACAO));
 		}
 		
 		
@@ -37,6 +49,10 @@
 		public function get embarcacoes():Array { 
 			return _embarcacoes;
 		}	
+		
+		public function get ultimaEmbarcacaoAbatida():Embarcacao { 
+			return _ultimaEmbarcacaoAbatida;
+		}
 		
 	}
 	
