@@ -28,7 +28,8 @@
 			
 			this.inicializarMatrizes();			
 			this.distribuirPecas();
-		}
+			this.tabuleiro.addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
+		}				
 				
 		
 		//O computador não vai clicar em peca nenhuma.
@@ -53,6 +54,12 @@
 		private function mostrarMatrizDesconhecida():void {
 			for (var i:int = 0; i < 10; i++) {
 				trace("this.matrizDesconhecida["+i+"] = "+ this.matrizDesconhecida[i]);
+			}
+		}
+		
+		private function mostrarMatrizConhecida():void {
+			for (var i:int = 0; i < 10; i++) {
+				trace("this.matrizConhecida["+i+"] = "+ this.matrizConhecida[i]);
 			}
 		}
 		
@@ -315,6 +322,14 @@
 		
 		private function atingirPeca(e:Event):void {
 			this.matrizConhecida[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] = "P";
+		}
+		
+		private function abaterEmbarcacao(e:Event):void {
+			var embarcacaoAbatida:Embarcacao = this.tabuleiro.ultimaEmbarcacaoAbatida;
+			for (var i:int = 0; i < embarcacaoAbatida.pecas.length; i++) {
+				this.matrizConhecida[embarcacaoAbatida.pecas[i].linha][embarcacaoAbatida.pecas[i].coluna] = "F";
+			}
+			this.mostrarMatrizConhecida();
 		}
 	}
 	

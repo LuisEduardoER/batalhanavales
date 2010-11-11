@@ -10,11 +10,19 @@
 		private var _pecas:Array;
 		private var ultimaPecaClicada:Peca;
 		private var _frota:Frota; //Por enquanto, é como se fosse a frota do oponente humano.
+		private var _ultimaEmbarcacaoAbatida:Embarcacao;
 		
 		public function Tabuleiro() {
 			this.frota = new Frota();
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
+			
+			this.frota.addEventListener("abaterEmbarcacao", this.abaterEmbarcacao);
+		}
+		
+		private function abaterEmbarcacao(e:Event):void {
+			this._ultimaEmbarcacaoAbatida = this.frota.ultimaEmbarcacaoAbatida;
+			this.dispatchEvent(new Event(EventosBatalhaNaval.ABATEREMBARCACAO));
 		}
 		
 		private function inicializarPecas():void {
@@ -43,6 +51,10 @@
 		
 		public function set frota(value:Frota):void {
 			_frota = value;
+		}
+		
+		public function get ultimaEmbarcacaoAbatida():Embarcacao { 
+			return _ultimaEmbarcacaoAbatida;
 		}
 		
 		//O computador não vai clicar em peca nenhuma.

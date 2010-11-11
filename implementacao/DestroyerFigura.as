@@ -19,7 +19,8 @@
 		
 		public function DestroyerFigura() {
 			super();
-			this.figura = this.figura_mc;
+			trace("Lorena comentou todo o construtor de DestroyerFigura.as");
+			/*this.figura = this.figura_mc;
 			this.mais90 = this.mais90_mc;
 			this.menos90 = this.menos90_mc;
 			this.pecas = [this.figura.peca1_mc, this.figura.peca2_mc, this.figura.peca3_mc];
@@ -35,7 +36,7 @@
 			this.addEventListener(EventosBatalhaNaval.FORATABULEIRO, voltarPosicaoInicial);
 			
 			this.mais90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
-			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
+			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);*/
 		}
 		
 		private function voltarPosicaoInicial(e:EventosBatalhaNaval):void {
