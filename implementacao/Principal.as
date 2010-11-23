@@ -29,10 +29,16 @@
 		
 		/*Comunicação*/
 		public var socket:XMLSocket;
-		
 		private var id:int;
 		private var nome:String;
 		private var caixaConfirmacao:CaixaConfirmacao;
+		
+		private var tipoOponente:String;
+		
+		/*Jogo*/
+		private var matrizTabuleiro:Array;
+		private var eu:Humano;
+		private var oponente:Jogador;
 		
 		/*Construtor da classe*/
 		public function Principal() {
@@ -54,7 +60,7 @@
 			//this.ganhou = this.attacharTela("Ganhou", true);
 			//this.ganhou.addEventListener("continuar", continuarJogando);
 			
-			
+			this.tipoOponente = "Humano";
 			
 		}
 		
@@ -186,8 +192,8 @@
 		//É preciso adicionar a linha de baixo qdo a tela de regras for criada.
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function irParaLogin(e:Event):void {
-			this.login = this.attacharTela("ControleLogin", true);
-			//this.login.addEventListener(EventosBatalhaNaval.CONEXAOACEITA, irParaConvidandoOponente);			
+			this.login = this.attacharTela("ControleLogin", true);			
+			this.login.addEventListener(EventosBatwalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
@@ -196,9 +202,22 @@
 			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
 		}
 		
-		private function irParaDistribuindoFrota(e:Event):void {		
+		private function setOponenteComputador(e:Event):void {
+			this.oponente = new Computador();
+			this.tipoOponente = "Computador";
+			this.irParaDistribuindoFrota();
+		}
+		
+		private function irParaDistribuindoFrota(e:Event = null):void {	
+			this.eu = new Humano(this.login.nome, this.login.senha);
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
+			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.INICIARJOGO, this.irParaJogo);
+		}
+		
+		private function irParaJogo(e:Event):void{
+			this.matrizTabuleiro = this.distribuindoFrota.matrizTabuleiro;
+			this.jogo = this.attacharTela("ControleJogo", true);
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -212,12 +231,12 @@
 											break;
 				case "ControleRegras": 				tela = new ControleRegras();
 											break;
-				case "ControleDistribuindoFrota": 	tela = new ControleDistribuindoFrota(this.socket, this.id);
+				case "ControleDistribuindoFrota": 	tela = new ControleDistribuindoFrota(this.socket, this.id, this.tipoOponente);
 											break;
 				case "ControleConvidandoOponente": 	tela = new ControleConvidandoOponente(this.socket, this.id);
 											break;
-				//case "ControleJogo": 				tela = new ControleJogo();
-				//							break;
+				case "ControleJogo": 				tela = new ControleJogo();
+											break;
 				case "ControleGanhou": 				tela = new ControleGanhou();
 											break;
 				case "ControlePerdeu": 				tela = new ControlePerdeu();

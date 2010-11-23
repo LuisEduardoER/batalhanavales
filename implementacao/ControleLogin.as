@@ -1,4 +1,6 @@
 ﻿package {
+	import fl.controls.TextArea;
+	import fl.controls.TextInput;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -15,6 +17,11 @@
 		private var conexaoAceita_evt:Event;
 		private var _idCliente:int;
 		
+		private var nomeCampo:TextArea;
+		private var senhaCampo:TextInput;
+		private var _nome:String;
+		private var _senha:String;
+		
 		public function ControleLogin(socket:XMLSocket) {
 			this.configurar();
 			this.comunicacao = socket;
@@ -22,7 +29,7 @@
 		}
 		
 		public function configurar():void {			
-			this.nome_txt.addEventListener(Event.CHANGE, this.modificar);						
+			this.nomeCampo.addEventListener(Event.CHANGE, this.modificar);						
 			this.humano_rb.addEventListener(Event.CHANGE, this.modificar);			
 			this.computador_rb.addEventListener(Event.CHANGE, this.modificar);
 			this.ok_btn.addEventListener(MouseEvent.MOUSE_UP, this.logar);
@@ -40,11 +47,19 @@
 		private function logar(e:Event):void {
 			this.ok_btn.removeEventListener(MouseEvent.MOUSE_UP, this.logar);
 			this.ok_btn.enabled = false;
-			this.log_txt.htmlText += "Conectando ao servidor...";
-			this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
-			this.comunicacao.connect("localhost", 8090);
-			this.enviarNome();
-		}
+			
+			this.nome = this.nomeCampo.text;
+			this.senha = this.senhaCampo.text;
+			if (this.humano_rb.selected) {
+				this.log_txt.htmlText += "Conectando ao servidor...";
+				this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
+				this.comunicacao.connect("localhost", 8090);
+				this.enviarNome();				
+			}
+			else {
+				this.dispatchEvent(new Event(EventosBatalhaNaval.LOGINPASSARTELA));
+			}
+		}				
 		
 		public function enviarNome():void {
 			var mensagem:Mensagem = new Mensagem();
@@ -66,6 +81,22 @@
 		
 		public function set idCliente(value:int):void {
 			_idCliente = value;
+		}
+		
+		public function get nome():String { 
+			return _nome;
+		}
+		
+		public function set nome(value:String):void {
+			_nome = value;
+		}
+		
+		public function get senha():String { 
+			return _senha;
+		}
+		
+		public function set senha(value:String):void {
+			_senha = value;
 		}
 		
 		
