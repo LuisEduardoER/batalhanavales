@@ -19,6 +19,7 @@ package {
 		public static const CAIXAGERALOK: String = "caixaGeralOk";
 		public static const CAIXACONFIRMACAOSIM: String = "caixaConfirmacaoSim";
 		public static const CAIXACONFIRMACAONAO: String = "caixaConfirmacaoNao";
+		public static const INICIARJOGO: String = "iniciarJogo";
 		
 		/*Jogo*/
 		public static const CLICARPECA: String = "clicarPeca";
@@ -33,6 +34,7 @@ package {
 		public static const REGRASPASSARTELA: String = "regrasPassarTela";
 		public static const INTRODUCAOPASSARTELA: String = "introducaoPassarTela";
 		public static const CONVIDANDOOPONENTEPASSARTELA: String = "convidandoOponentePassarTela";
+		public static const LOGINPASSARTELA: String = "loginPassarTela";
 		
 		/* Fim de Passar telas */
 		
