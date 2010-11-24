@@ -9,19 +9,31 @@
 	* @author Lorena Tablada
 	*/
 	public class Computador extends Jogador {	
-		private var _inteligencia:Inteligencia;
+		private var inteligencia:Inteligencia;
 		
 		public function Computador(nome:String) {
 			super(nome);			
 		}	
 		
-		public function criarInteligencia():void {
-			this.inteligencia = new Inteligencia();
+		public function criarInteligencia(tabuleiro:Tabuleiro):void {
+			this.inteligencia = new Inteligencia(tabuleiro);
+		}				
+		
+		public function escolherJogada():Jogada {
+			return( this.inteligencia.escolherJogada() );
 		}
 		
-		public function get inteligencia():Inteligencia { 
-			return _inteligencia;
-		}				
+		public function atingirPeca():void{
+			this.inteligencia.atingirPeca();
+		}
+		
+		public function acertarAgua():void {
+			this.inteligencia.acertarAgua();
+		}		
+		
+		public function abaterEmbarcacao(embarcacao:Embarcacao):void {
+			this.inteligencia.abaterEmbarcacao(embarcacao);
+		}
 								
 	}
 	

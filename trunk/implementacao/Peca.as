@@ -20,11 +20,11 @@
 			//É isso o que eu faço com o estado???
 			//Se for ficar assim, tem que mudar o diagrama de classes pq lá diz que Peca tem um EstadoPeca.
 			
-			//this.addEventListener(MouseEvent.MOUSE_UP, this.clicar); O computador não vai clicar em peca nenhuma.
+			this.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
 		}
 		
 		//O computador não vai clicar em peca nenhuma.
-		public function clicar(e:MouseEvent = null):void {
+		public function clicar(e:MouseEvent = null):void {			
 			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
 		}
 		
@@ -32,7 +32,7 @@
 			return _estado;
 		}
 		
-		public function set estado(value:String):void {
+		public function set estado(value:String):void {				
 			_estado = value;
 			this.gotoAndStop(this.estado);
 			if (this.estado == EstadoPeca.PECAATINGIDA) {
@@ -43,21 +43,22 @@
 			}
 		}
 		
-		public function get linha():int { return _linha; }
-		
-		public function get coluna():int { return _coluna; }
-		
-		private function set coluna(value:int):void {
-			_coluna = value;
+		public function get linha():int { 
+			return _linha;
 		}
 		
 		private function set linha(value:int):void {
 			_linha = value;
 		}
 		
+		public function get coluna():int {
+			return _coluna;
+		}
 		
-				
-		
+		private function set coluna(value:int):void {
+			_coluna = value;
+		}
+			
 	}
 	
 }
