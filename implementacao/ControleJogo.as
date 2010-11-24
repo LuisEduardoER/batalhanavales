@@ -16,15 +16,17 @@ package {
 		
 		private var vez:int;
 		private var jogadores:Array;
+		private var inteligencia:Inteligencia;
 		
-		private function ControleJogo() {
+		public function ControleJogo(eu:Humano, oponente:Jogador) {
+			this.jogadores = [eu, oponente];
 			this.meuTabuleiro = this.tabuleiro1_mc;
 			this.oponenteTabuleiro = this.tabuleiro2_mc;
 			this.frota = this.frota_mc;
-			this.log = this.log_txt;
+			this.log = this.log_txt;				
 			
 			this.iniciarJogo();
-		}
+		}				
 		
 		private function iniciarJogo():void{
 			this.vez = Math.floor(Math.random()*2);

@@ -32,8 +32,7 @@
 		private var id:int;
 		private var nome:String;
 		private var caixaConfirmacao:CaixaConfirmacao;
-		
-		private var tipoOponente:String;
+				
 		
 		/*Jogo*/
 		private var matrizTabuleiro:Array;
@@ -58,9 +57,7 @@
 
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);			
 			//this.ganhou = this.attacharTela("Ganhou", true);
-			//this.ganhou.addEventListener("continuar", continuarJogando);
-			
-			this.tipoOponente = "Humano";
+			//this.ganhou.addEventListener("continuar", continuarJogando);						
 			
 		}
 		
@@ -193,7 +190,7 @@
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function irParaLogin(e:Event):void {
 			this.login = this.attacharTela("ControleLogin", true);			
-			this.login.addEventListener(EventosBatwalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
+			this.login.addEventListener(EventosBatalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
@@ -203,13 +200,13 @@
 		}
 		
 		private function setOponenteComputador(e:Event):void {
-			this.oponente = new Computador();
-			this.tipoOponente = "Computador";
+			this.oponente = new Computador("Computador");
 			this.irParaDistribuindoFrota();
 		}
 		
 		private function irParaDistribuindoFrota(e:Event = null):void {	
 			this.eu = new Humano(this.login.nome, this.login.senha);
+			//this.eu.senha = this.login.senha;
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.INICIARJOGO, this.irParaJogo);
@@ -231,11 +228,11 @@
 											break;
 				case "ControleRegras": 				tela = new ControleRegras();
 											break;
-				case "ControleDistribuindoFrota": 	tela = new ControleDistribuindoFrota(this.socket, this.id, this.tipoOponente);
+				case "ControleDistribuindoFrota": 	tela = new ControleDistribuindoFrota(this.socket, this.id, this.oponente.nome);
 											break;
 				case "ControleConvidandoOponente": 	tela = new ControleConvidandoOponente(this.socket, this.id);
 											break;
-				case "ControleJogo": 				tela = new ControleJogo();
+				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente);
 											break;
 				case "ControleGanhou": 				tela = new ControleGanhou();
 											break;

@@ -23,9 +23,11 @@
 		private var _senha:String;
 		
 		public function ControleLogin(socket:XMLSocket) {
+			this.nomeCampo = this.nome_txt;
+			this.senhaCampo = this.senha_txt;
 			this.configurar();
 			this.comunicacao = socket;
-			this.conexaoAceita_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONEXAOACEITA);
+			this.conexaoAceita_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONEXAOACEITA);			
 		}
 		
 		public function configurar():void {			
