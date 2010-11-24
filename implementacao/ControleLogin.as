@@ -32,13 +32,14 @@
 		
 		public function configurar():void {			
 			this.nomeCampo.addEventListener(Event.CHANGE, this.modificar);						
+			this.senhaCampo.addEventListener(Event.CHANGE, this.modificar);						
 			this.humano_rb.addEventListener(Event.CHANGE, this.modificar);			
 			this.computador_rb.addEventListener(Event.CHANGE, this.modificar);
 			this.ok_btn.addEventListener(MouseEvent.MOUSE_UP, this.logar);
 		}	
 		
 		private function modificar(e:Event):void {			
-			if ( (this.nome_txt.text != "") && (this.humano_rb.selected || this.computador_rb.selected) ) {
+			if ( (this.nomeCampo.text != "") && (this.senhaCampo.text != "") && (this.humano_rb.selected || this.computador_rb.selected) ) {
 				this.ok_btn.enabled = true;
 			}
 			else {

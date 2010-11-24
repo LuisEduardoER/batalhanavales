@@ -15,7 +15,7 @@
 		private var submarino:MovieClip;
 		private var destroyer:MovieClip;
 		private var portaAvioes:MovieClip;
-		private var tabuleiro:MovieClip;
+		private var _tabuleiro:MovieClip;
 		private var _matrizTabuleiro:Array; //Matriz que auxilia na configuracao do tabuleiro.
 		
 		private var fala:TextArea;
@@ -51,7 +51,7 @@
 			this.submarino = this.frota_mc.submarino_mc;
 			this.destroyer = this.frota_mc.destroyer_mc;
 			this.portaAvioes = this.frota_mc.portaAvioes_mc;
-			this.tabuleiro = this.tabuleiro_mc;
+			this._tabuleiro = this.tabuleiro_mc;
 			
 			/*Botoes*/
 			this.sair = this.sair_btn;
@@ -439,6 +439,14 @@
 		
 		public function get matrizTabuleiro():Array { 
 			return _matrizTabuleiro;
+		}
+		
+		public function get tabuleiro():MovieClip { 
+			return _tabuleiro;
+		}
+		
+		public function set tabuleiro(value:MovieClip):void {
+			_tabuleiro = value;
 		}
 		
 		/*private function terminarArrasto(e:Event):void {

@@ -36,6 +36,7 @@
 		
 		/*Jogo*/
 		private var matrizTabuleiro:Array;
+		private var tabuleiro:Tabuleiro;
 		private var eu:Humano;
 		private var oponente:Jogador;
 		
@@ -214,6 +215,7 @@
 		
 		private function irParaJogo(e:Event):void{
 			this.matrizTabuleiro = this.distribuindoFrota.matrizTabuleiro;
+			this.tabuleiro = this.distribuindoFrota.tabuleiro;
 			this.jogo = this.attacharTela("ControleJogo", true);
 		}
 		
@@ -232,7 +234,7 @@
 											break;
 				case "ControleConvidandoOponente": 	tela = new ControleConvidandoOponente(this.socket, this.id);
 											break;
-				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente);
+				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente, this.tabuleiro);
 											break;
 				case "ControleGanhou": 				tela = new ControleGanhou();
 											break;
