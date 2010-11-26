@@ -24,8 +24,7 @@
 		private var convidandoOponente:MovieClip;
 		private var distribuindoFrota:MovieClip;
 		private var jogo:MovieClip;
-		private var ganhou:MovieClip;
-		private var perdeu:MovieClip;
+		private var resultado:MovieClip;
 		
 		/*Comunicação*/
 		public var socket:XMLSocket;
@@ -38,7 +37,7 @@
 		private var matrizTabuleiro:Array;
 		private var tabuleiro:Tabuleiro;
 		private var eu:Humano;
-		private var oponente:Jogador;
+		private var oponente:Jogador;		
 		
 		/*Construtor da classe*/
 		public function Principal() {
@@ -217,6 +216,7 @@
 			this.matrizTabuleiro = this.distribuindoFrota.matrizTabuleiro;
 			this.tabuleiro = this.distribuindoFrota.tabuleiro;
 			this.jogo = this.attacharTela("ControleJogo", true);
+			this.jogo.addEventListener(EventosBatalhaNaval.TERMINARJOGO, this.terminarJogo);
 		}
 		
 		/*Attacha a tela de acordo com o nome passado como parâmetro. A tela atual é removida se o segundo parâmetro for true.*/
@@ -236,9 +236,7 @@
 											break;
 				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente, this.tabuleiro);
 											break;
-				case "ControleGanhou": 				tela = new ControleGanhou();
-											break;
-				case "ControlePerdeu": 				tela = new ControlePerdeu();
+				case "Resultado": 			tela = new Resultado();
 											break;
 				default:					trace("Essa tela não existe.");
 			}
@@ -251,6 +249,14 @@
 				this.alvo.removeChildAt(0);
 			}
 		}
+		
+		private function terminarJogo(e:Event):void {
+			var tipo:String = this.jogo.tipoResultado;		
+			this.resultado = this.attacharTela("Resultado", true);			
+			this.resultado.configurar(tipo);			
+			this.resultado.addEventListener(EventosBatalhaNaval.CONTINUAR, this.continuarJogando);
+			this.resultado.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
+		}						
 				
 	}
 	

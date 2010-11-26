@@ -26,6 +26,7 @@ package {
 		public static const ATINGIRPECA: String = "atingirPeca"; //Peca dispara para Embarcacao escutar e Tabuleiro dispara para Computador escutar.
 		public static const ACERTARAGUA: String = "acertarAgua";		
 		public static const ABATEREMBARCACAO: String = "abaterEmbarcacao";		
+		public static const TERMINARJOGO: String = "terminarJogo";		
 		/*Fim de Jogo*/
 		
 		
