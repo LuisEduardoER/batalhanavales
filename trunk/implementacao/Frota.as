@@ -30,9 +30,22 @@
 		private function abaterEmbarcacao(e:Event):void {
 			this._ultimaEmbarcacaoAbatida = Embarcacao(e.target);
 			this.dispatchEvent(new Event(EventosBatalhaNaval.ABATEREMBARCACAO));
+			this.verificarFim();
 		}
 		
-		
+		private function verificarFim():void {			
+			var contador:int = 0;
+			for (var i:int = 0; i < this.embarcacoes.length; i++) {
+				if (this.embarcacoes[i].estado == EstadoEmbarcacao.EMBARCACAOABATIDA) {
+					contador++;
+				}
+			}
+			trace(contador + " == " + this.embarcacoes.length);
+			if (contador == this.embarcacoes.length) {
+				trace("Frota: disparou terminarJogo");
+				this.dispatchEvent( new Event(EventosBatalhaNaval.TERMINARJOGO) );
+			}
+		}
 		
 		public function get submarino():Embarcacao { 
 			return _submarino;

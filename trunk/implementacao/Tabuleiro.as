@@ -17,13 +17,16 @@
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
 			
-			this.frota.addEventListener("abaterEmbarcacao", this.abaterEmbarcacao);
+			this.frota.addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
+			this.frota.addEventListener(EventosBatalhaNaval.TERMINARJOGO, this.terminarJogo);
 		}
 		
 		public function copiar(tabuleiro:Tabuleiro):void {						
 			for (var i:int = 0; i < tabuleiro.frota.embarcacoes.length; i++) {
 				for (var j:int = 0; j < tabuleiro.frota.embarcacoes[i].pecas.length; j++) {
-					this.frota.embarcacoes[i].adicionarPeca(this.pecas[tabuleiro.frota.embarcacoes[i].pecas[j].linha][tabuleiro.frota.embarcacoes[i].pecas[j].coluna]);					
+					var peca:Peca = this.pecas[tabuleiro.frota.embarcacoes[i].pecas[j].linha][tabuleiro.frota.embarcacoes[i].pecas[j].coluna];
+					this.frota.embarcacoes[i].adicionarPeca(peca);
+					peca.estado = EstadoPeca.PECAEXPOSTA;
 				}
 			}
 		}
@@ -31,6 +34,11 @@
 		private function abaterEmbarcacao(e:Event):void {
 			this._ultimaEmbarcacaoAbatida = this.frota.ultimaEmbarcacaoAbatida;
 			this.dispatchEvent(new Event(EventosBatalhaNaval.ABATEREMBARCACAO));
+		}
+		
+		private function terminarJogo(e:Event):void {			
+			trace("Tabuleiro: disparou terminarJogo");
+			this.dispatchEvent(new Event(EventosBatalhaNaval.TERMINARJOGO));
 		}
 		
 		private function inicializarPecas():void {

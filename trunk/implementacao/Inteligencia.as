@@ -182,6 +182,8 @@ package {
 				this.minhaMatriz[linha][coluna] = "P";
 				
 				this.tabuleiro.frota.submarino.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+				
+				this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 			}
 			else {
 				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
@@ -206,6 +208,11 @@ package {
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+3].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -224,6 +231,11 @@ package {
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
 					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+2][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+3][coluna].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -246,6 +258,10 @@ package {
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+2][coluna].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirDestroyer();
@@ -262,6 +278,10 @@ package {
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirDestroyer();
@@ -278,6 +298,10 @@ package {
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha-1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirDestroyer();
@@ -294,6 +318,10 @@ package {
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
 					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha-1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
 				}
 				else {
 					this.distribuirDestroyer();
