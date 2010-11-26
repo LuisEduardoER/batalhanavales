@@ -30,7 +30,6 @@
 		private var caixaConviteEnviado:CaixaConviteEnviado;
 		private var caixaConviteRecebido:CaixaConviteRecebido;
 		private var caixaGeral:CaixaGeral;
-		private var _tipoOponente:String;
 		
 		public function ControleConvidandoOponente(socket:XMLSocket, id:int) {
 			this.jogadores = this.jogadores_dg;
@@ -43,7 +42,6 @@
 			this.fala = this.fala_txt;
 			this.enviar = this.enviar_btn;
 			this.convidar = this.convidar_btn;
-			this.tipoOponente = "Humano";
 			this.pedirJogadores();	
 			
 			this.fala.addEventListener(Event.CHANGE, this.habilitarEnviar);
@@ -287,7 +285,7 @@
 			this.caixaConviteEnviado.mudarEstado("respostaNegativa");
 		}
 		
-		private function aceitarConvite(e:Event):void {			
+		private function aceitarConvite(e:Event):void{
 			var msg:Mensagem = new Mensagem();
 			msg.tipo = "aceitacaoConvite";
 			msg.idDestinatario = this.idConvidador;
@@ -340,14 +338,6 @@
 		
 		public function receberCancelamentoConvite():void {
 			this.caixaConviteRecebido.receberCancelamento();
-		}
-				
-		public function get tipoOponente():String { 
-			return _tipoOponente;
-		}
-		
-		public function set tipoOponente(value:String):void {
-			_tipoOponente = value;
 		}
 	}
 	

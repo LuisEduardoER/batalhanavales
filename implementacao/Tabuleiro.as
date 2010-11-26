@@ -17,7 +17,7 @@
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
 			
-			this.frota.addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
+			this.frota.addEventListener("abaterEmbarcacao", this.abaterEmbarcacao);
 		}
 		
 		public function copiar(tabuleiro:Tabuleiro):void {						
@@ -81,7 +81,7 @@
 		//O computador não vai clicar em peca nenhuma.
 		private function clicar(e:Event):void {	
 			this.ultimaPecaClicada = Peca(e.target);
-			this.dispatchEvent(new Event(EventosBatalhaNaval.CLICARPECA));		
+			this.dispatchEvent(new Event(EventosBatalhaNaval.CLICARPECA));			
 			this.procurarPecaNaFrota();
 		}
 		
@@ -90,7 +90,7 @@
 			for (var i:int = 0; i < this.frota.embarcacoes.length; i++) {
 				for (var j:int = 0; j < this.frota.embarcacoes[i].pecas.length; j++) {
 					if (this.frota.embarcacoes[i].pecas[j] == this.ultimaPecaClicada) {						
-						this.dispatchEvent( new Event(EventosBatalhaNaval.ATINGIRPECA) ); //tah mandando o atingiu peça sem saber se abateu
+						this.dispatchEvent( new Event(EventosBatalhaNaval.ATINGIRPECA) );
 						this.ultimaPecaClicada.estado = EstadoPeca.PECAATINGIDA;
 						encontrou = true;
 						break;
@@ -99,7 +99,6 @@
 			}			
 			if (!encontrou) {
 				this.ultimaPecaClicada.estado = EstadoPeca.PECAAGUA;
-				
 			}			
 		}
 		
