@@ -123,10 +123,10 @@
 			}
 			
 			/*this.submarino.addEventListener(MouseEvent.MOUSE_DOWN, arrastarEmbarcacao);
-			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);*/
+			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);
 			
 			this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
-			this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
+			this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);*/
 		}
 		
 		//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.

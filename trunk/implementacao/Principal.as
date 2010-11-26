@@ -191,23 +191,39 @@
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function irParaLogin(e:Event):void {
 			this.login = this.attacharTela("ControleLogin", true);			
-			this.login.addEventListener(EventosBatalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
+			this.login.addEventListener(EventosBatalhaNaval.LOGINPASSARTELA, this.criarOponente);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
 		private function irParaConvidandoOponente(e:Event = null):void {			
 			this.convidandoOponente = this.attacharTela("ControleConvidandoOponente", true);
-			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
+			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.criarOponente);			
 		}
 		
-		private function setOponenteComputador(e:Event):void {
+		private function setOponenteComputador():void {
 			this.oponente = new Computador("Computador");
+			trace("foi setado oponente computador");
+		}
+		
+		private function setOponenteHumano(nome:String):void {
+			this.oponente = new Humano(nome);
+			trace("foi setado oponente humano");
+		}
+		
+		private function criarOponente(e:Event):void {
+			var tela:MovieClip = MovieClip(e.target);
+			if (tela == this.login) {
+				this.setOponenteComputador();
+			}
+			else {
+				this.setOponenteHumano(tela.tipoOponente);
+			}
 			this.irParaDistribuindoFrota();
 		}
 		
-		private function irParaDistribuindoFrota(e:Event = null):void {	
-			this.eu = new Humano(this.login.nome, this.login.senha);
-			//this.eu.senha = this.login.senha;
+		private function irParaDistribuindoFrota():void {	
+			this.eu = new Humano(this.login.nome, this.login.senha);			
+			
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.INICIARJOGO, this.irParaJogo);

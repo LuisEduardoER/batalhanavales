@@ -22,6 +22,8 @@
 		private var _nome:String;
 		private var _senha:String;
 		
+		private var _tipoOponente:String;
+		
 		public function ControleLogin(socket:XMLSocket) {
 			this.nomeCampo = this.nome_txt;
 			this.senhaCampo = this.senha_txt;
@@ -54,12 +56,14 @@
 			this.nome = this.nomeCampo.text;
 			this.senha = this.senhaCampo.text;
 			if (this.humano_rb.selected) {
+				this.tipoOponente = "Humano";
 				this.log_txt.htmlText += "Conectando ao servidor...";
 				this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
 				this.comunicacao.connect("localhost", 8090);
 				this.enviarNome();				
 			}
 			else {
+				this.tipoOponente = "Computador";				
 				this.dispatchEvent(new Event(EventosBatalhaNaval.LOGINPASSARTELA));
 			}
 		}				
@@ -100,6 +104,14 @@
 		
 		public function set senha(value:String):void {
 			_senha = value;
+		}
+		
+		public function get tipoOponente():String { 
+			return _tipoOponente;
+		}
+		
+		public function set tipoOponente(value:String):void {
+			_tipoOponente = value;
 		}
 		
 		
