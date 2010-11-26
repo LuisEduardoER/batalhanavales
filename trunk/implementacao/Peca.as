@@ -33,7 +33,7 @@
 		}
 		
 		public function set estado(value:String):void {				
-			this.estado = value;
+			_estado = value;
 			this.gotoAndStop(this.estado);
 			if (this.estado == EstadoPeca.PECAATINGIDA) {
 				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ATINGIRPECA) );
