@@ -1,0 +1,14 @@
+<root>
+    <usuario>
+        <nome>Saulo</nome>
+        <senha>123</senha>
+    </usuario>
+    <usuario>
+        <nome>Lorena</nome>
+        <senha>456</senha>
+    </usuario>
+    <usuario>
+        <nome>Havana</nome>
+        <senha>789</senha>
+    </usuario>
+</root>

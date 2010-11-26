@@ -48,7 +48,7 @@
 		}
 				
 		private function logar(e:Event):void {
-			this.ok_btn.removeEventListener(MouseEvent.MOUSE_UP, this.logar);
+			//this.ok_btn.removeEventListener(MouseEvent.MOUSE_UP, this.logar);
 			this.ok_btn.enabled = false;
 			
 			this.nome = this.nomeCampo.text;
@@ -69,6 +69,7 @@
 			mensagem.tipo = "envioNome";
 			//mensagem.idCliente = this.idCliente;
 			mensagem.texto = this.nome_txt.text;
+			mensagem.senha = this.senha;
 			this.comunicacao.send(mensagem.criarXML());
 		}
 		
