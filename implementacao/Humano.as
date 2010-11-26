@@ -8,8 +8,9 @@ package {
 		private var _senha:String;
 		private var _id:String;
 		
-		public function Humano(nome:String, senha:String) {
+		public function Humano(nome:String, senha:String = null) {
 			super(nome);
+			this.senha = senha;
 		}
 		
 		public function get senha():String { 

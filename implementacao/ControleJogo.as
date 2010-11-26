@@ -51,8 +51,9 @@ package {
 			this.tabuleiros = [this.meuTabuleiro, this.oponenteTabuleiro];									
 			
 			this.frota = this.frota_mc;
-			this.log = this.log_txt;	
-			this.log.addEventListener (Event.CHANGE, scrollLog);
+			this.log = this.log_txt;
+			
+			this.log.addEventListener (Event.CHANGE, reposicionarScroll);
 			
 			this.delay = new Timer(1000);
 			
@@ -61,7 +62,7 @@ package {
 						
 		}	
 		
-		private function scrollLog (e:Event){
+		private function reposicionarScroll(e:Event){
 			this.log.verticalScrollPosition = this.log.maxVerticalScrollPosition;
 		}
 		
@@ -72,7 +73,7 @@ package {
 		
 		private function informarJogada(e:Event):void {
 			var tabuleiro:Tabuleiro = Tabuleiro(e.target);
-			this.log.text += "\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ").";
+			this.log.appendText( "\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");
 		}
 		
 		private function verificarTipoOponente():void{
@@ -83,12 +84,12 @@ package {
 		
 		private function iniciarJogo():void{
 			this.vez = Math.floor(Math.random() * 2);
-			this.log.text += "Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.";
+			this.log.appendText("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
 			this.liberarJogada();	
 		}
 		
 		private function continuarVez():void {
-			this.log.text += "\n" + this.jogadores[this.vez].nome + " deve jogar novamente.";
+			this.log.appendText("\n" + this.jogadores[this.vez].nome + " deve jogar novamente.");
 			if (this.jogadores[this.vez].nome == "Computador") {
 				this.revalorarDelay();
 				this.delay.start();
@@ -98,7 +99,7 @@ package {
 		
 		private function passarVez(e:Event = null):void {
 			this.vez = (1 - this.vez);			
-			this.log.text += "\nAgora eh a vez de " + this.jogadores[this.vez].nome + " jogar.";
+			this.log.appendText("\nAgora eh a vez de " + this.jogadores[this.vez].nome + " jogar.");
 			this.liberarJogada();
 		}				
 		
@@ -106,11 +107,11 @@ package {
 			if (this.vez == 0) {				
 				this.oponenteTabuleiro.liberarClique(true);
 			}			
-			else {				
+			else {
 				this.oponenteTabuleiro.liberarClique(false);
 				this.revalorarDelay();
 				this.delay.start();
-				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);				
+				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);
 			}			
 		}
 		
@@ -124,7 +125,7 @@ package {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).acertarAgua();
 			}
-			this.log.text += "\n" + this.jogadores[this.vez].nome + " não atingiu nenhuma peça de nenhuma embarcação.";
+			this.log.appendText("e não atingiu nenhuma peça de nenhuma embarcação.");
 			this.passarVez();
 		}
 		
@@ -132,7 +133,7 @@ package {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).atingirPeca();
 			}
-			this.log.text += "\n" + this.jogadores[this.vez].nome + " atingiu uma peça de uma embarcação.";
+			this.log.appendText("e atingiu uma peça de uma embarcação.");
 			this.continuarVez();
 		}
 		
@@ -140,7 +141,7 @@ package {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {				
 				Computador(this.oponente).abaterEmbarcacao(this.meuTabuleiro.ultimaEmbarcacaoAbatida);				
 			}
-			this.log.text += "\n" + this.jogadores[this.vez].nome + " abateu um " + this.tabuleiros[(1-this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1-this.vez)].nome + ".";
+			this.log.appendText("e abateu um " + this.tabuleiros[(1-this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1-this.vez)].nome + ".");
 		}
 				
 	}
