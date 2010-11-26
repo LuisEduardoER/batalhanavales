@@ -16,6 +16,15 @@ public class Mensagem {
     private String tipo;
     private String texto;
     private int idDestinatario;
+    private String senha;
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 
 
     public void Mensagem(){

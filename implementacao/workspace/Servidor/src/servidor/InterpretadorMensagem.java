@@ -40,8 +40,20 @@ public class InterpretadorMensagem {
                break;
 
            case 2://envioNome
-               this.cliente.setNome(this.mensagem.getTexto());
-               this.servidor.writeActivity(this.cliente.getIdCliente() + " => " + this.cliente.getNome() + " conectado ao servidor.");
+                Mensagem validacao = new Mensagem();
+               if(this.servidor.validarUsuario(this.mensagem.getTexto(), this.mensagem.getSenha())){
+                   this.cliente.setNome(this.mensagem.getTexto());
+                   this.servidor.writeActivity(this.cliente.getIdCliente() + " => " + this.cliente.getNome() + " conectado ao servidor.");
+                  
+                   validacao.setTipo("usuarioValido");
+                   this.servidor.enviarMensagem(validacao, cliente);
+               }else{
+                   this.servidor.removeClient(cliente);
+                   this.servidor.writeActivity(this.cliente.getIdCliente() + " => " + this.cliente.getNome() + " erro no login.");
+                   validacao.setTipo("usuarioInvalido");
+                   this.servidor.enviarMensagem(validacao, cliente);
+               }
+               
                break;
 
            case 3://conversaPublica

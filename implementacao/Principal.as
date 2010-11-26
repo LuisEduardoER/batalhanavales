@@ -69,7 +69,8 @@
 												break;
 									
 				case "respostaConecta": 		this.id = int(xml.idCliente);
-												this.irParaConvidandoOponente();
+												//this.irParaConvidandoOponente();
+												
 												break;
 									
 				case "respostaPedidoJogadores": this.preencherDataGrid(xml.texto);
@@ -106,7 +107,13 @@
 												this.alvo.addChild(caixaGeral);
 												caixaGeral.addEventListener(EventosBatalhaNaval.CAIXAGERALOK, this.irParaConvidandoOponente);
 												break;
-				
+												
+				case "usuarioValido":			this.irParaConvidandoOponente();
+												break;
+				case "usuarioInvalido":			trace("Avisar ao usiario que o login é invalido!!!");
+												this.login.log_txt.text += "\nFalha na autenticação do login!";
+												this.login.ok_btn.enabled = true;
+												break;
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}

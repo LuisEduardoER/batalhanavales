@@ -7,6 +7,9 @@ import com.thoughtworks.xstream.io.xml.DomDriver;
 import java.util.*;
 import java.io.*;
 import java.net.*;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import org.xml.sax.SAXException;
 
 
 public class Servidor {
@@ -16,10 +19,23 @@ public class Servidor {
     private int port;
     private GuiServidor gui;
 
+    private ArrayList<Usuario> usuarios;
+    private CarregadorUsuarios carregador;
     public Servidor(int port, GuiServidor gui) {
         this.port = port;
         //startServer(port);
-        this.gui = gui;        
+        this.gui = gui;
+        this.carregador = new CarregadorUsuarios();
+        try {
+            //this.usuarios = this.carregador.listarUsuarios("F:\\faculdade\\Mestrado\\ES\\Projeto_svn\\implementacao\\workspace\\Servidor\\src\\teste\\Usuarios.xml");
+            this.usuarios = this.carregador.listarUsuarios("Usuarios.xml");
+        } catch (IOException ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SAXException ex) {
+            Logger.getLogger(Servidor.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        
+        //System.out.println("validar: "+this.validarUsuario("Lorena", "456"));
     }
 
     public void startServer() {
@@ -212,6 +228,19 @@ public class Servidor {
            }
         }
        return retorno;
+    }
+
+    protected Boolean validarUsuario(String nome, String senha){
+        boolean retorno = false;
+        Usuario teste = new Usuario(nome, senha);
+        for (int i = 0; i < this.usuarios.size(); i++) {
+            if(teste.equals(this.usuarios.get(i))){
+                retorno = true;
+                break;
+            }
+         }
+
+        return retorno;
     }
     
     /*public static void main(String args[]) {
