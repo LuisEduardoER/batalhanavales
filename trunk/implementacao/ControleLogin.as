@@ -55,7 +55,7 @@
 			this.senha = this.senhaCampo.text;
 			if (this.humano_rb.selected) {
 				this.log_txt.htmlText += "Conectando ao servidor...";
-				this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
+				//this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
 				this.comunicacao.connect("localhost", 8090);
 				this.enviarNome();				
 			}
