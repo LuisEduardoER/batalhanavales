@@ -1,5 +1,6 @@
 package {
 	import fl.controls.Button;
+	import fl.controls.progressBarClasses.IndeterminateBar;
 	import flash.display.MovieClip;
 	import flash.events.Event;
 	import flash.events.MouseEvent;
@@ -330,18 +331,74 @@ package {
 		}
 		
 		public function escolherJogada():Jogada {	
-			var jogada:Jogada;
-			this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
-			this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
+			var jogada:Jogada;			
 			
-			if (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") { //Se ainda n tiver atirado nessa posicao,
-				//this.tabuleiro.pecas[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida].clicar(); //Atirar.
-				jogada = new Jogada(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida);				
+			var peca:Array = this.procurarEmbarcacaoAtingida();
+			if ( (peca[0] == -1) && (peca[1] == -1) ) {
+				this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
+				this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
+				if (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") { //Se ainda n tiver atirado nessa posicao,
+					//this.tabuleiro.pecas[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida].clicar(); //Atirar.
+					jogada = new Jogada(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida);				
+				}
+				else {
+					jogada = this.escolherJogada(); //Se já tiver atirado nessa posicao, escolher outra.
+				}
 			}
 			else {
-				jogada = this.escolherJogada(); //Se já tiver atirado nessa posicao, escolher outra.
+				
 			}
+			
+			
 			return jogada;
+		}
+		
+		private function procurarOutraPeca(peca:Array):Array {
+			var tipoEmbarcacao:String = this.darVolta(peca);
+			if (tipoEmbarcacao == "portaAvioes") {
+				var linha:int = peca[0];
+				var coluna:int = peca[1];
+				while (this.matrizOponente[linha][coluna] == "P") {
+					
+				}
+			}
+		}
+		
+		private function darVolta(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			for (var i:int = (peca[0] - 1); i < (peca[0] + 1); i++) {
+				for (var j:int = (peca[1] - 1); j < (peca[1] + 1); j++) {
+					if ( (i != peca[0]) && (j != peca[1]) && (i >= 0) && (i <= this.matrizOponente.length) && (j >= 0) && (j <= this.matrizOponente[0].length) ) {
+						if (this.matrizOponente[i][j] == "P") {
+							if ( (i == peca[0]) || (j == peca[1]) ) {
+								retorno[0] = "portaAvioes";
+								retorno[1] == "vertical";
+								if ( (i == peca[0]) && ( (j == (peca[1]-1) ) || (j == (peca[1]+1) ) )) { //porta-avioes horizontal
+									retorno[1] == "horizontal";
+								}
+							}
+							break;
+						}
+					}
+				}
+				if (retorno == "portaAvioes") {
+					break;
+				}
+			}
+			return retorno;
+		}
+		
+		private function procurarEmbarcacaoAtingida():Array {
+			var peca:Array = [ -1, -1];
+			for (var i:int = 0; i < this.matrizOponente.length; i++) {
+				for (var j:int = 0; j < this.matrizOponente[i].length; j++) {
+					if (this.matrizOponente[i][j] == "P") {
+						peca = [i, j];
+						break;
+					}
+				}
+			}
+			return peca;
 		}
 		
 		public function acertarAgua():void {
