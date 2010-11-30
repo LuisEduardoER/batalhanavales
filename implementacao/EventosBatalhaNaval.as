@@ -36,6 +36,7 @@ package {
 		public static const INTRODUCAOPASSARTELA: String = "introducaoPassarTela";
 		public static const CONVIDANDOOPONENTEPASSARTELA: String = "convidandoOponentePassarTela";
 		public static const LOGINPASSARTELA: String = "loginPassarTela";
+		public static const CONVIDANDOPCPASSARTELA: String = "condidandoPcPassarTela";
 		
 		/* Fim de Passar telas */
 		

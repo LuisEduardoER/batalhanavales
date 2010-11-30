@@ -19,6 +19,7 @@
 		private var _matrizTabuleiro:Array; //Matriz que auxilia na configuracao do tabuleiro.
 		
 		private var fala:TextArea;
+		private var log:TextArea;
 		
 		
 		/*Botoes*/
@@ -59,15 +60,40 @@
 			this.enviar = this.enviar_btn;
 			this.iniciarJogo = this.iniciarJogo_btn;
 			this.iniciarJogo.addEventListener(MouseEvent.MOUSE_UP, pressionarIniciarJogo);
+			this.enviar.addEventListener(MouseEvent.MOUSE_UP, this.enviarTexto);
 			/*Fim de Botoes*/
 			
+			this.log = this.log_txt;
 			this.fala = this.fala_txt;
+			this.fala.addEventListener(Event.CHANGE, this.habilitarEnviar);
 			
 			this.frota = new Array();
 			
 			this.inicializarMatriz();
 			this.configurar();
 			this.liberar();
+		}
+		
+		private function habilitarEnviar(e:Event):void{
+			if (this.fala.text != "") {
+				this.enviar.enabled = true;
+			}
+			else {
+				this.enviar.enabled = false;
+			}
+		}
+		
+		private function enviarTexto(e:MouseEvent):void{
+			var msg:Mensagem = new Mensagem();			
+			msg.texto = this.fala.text;
+			msg.tipo = "conversaJogo";
+			this.comunicacao.send( msg.criarXML() );
+			this.fala.text = "";
+			this.enviar.enabled = false;
+		}
+		
+		public function receberFala(remetente:String, fala:String):void {
+			this.log_txt.text += (remetente + " falou: " + fala + "\n");
 		}
 		
 		private function inicializarMatriz():void {
@@ -87,7 +113,16 @@
 		}
 		
 		private function pressionarIniciarJogo(e:Event):void {
-			this.dispatchEvent(new Event(EventosBatalhaNaval.INICIARJOGO));
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "frotaDistribuida";
+			this.comunicacao.send(msg.criarXML());
+			if (this.tipoOponente == "Computador") {
+				this.dispatchEvent(new Event(EventosBatalhaNaval.INICIARJOGO));
+			}else {
+				habilitar(false);
+				this.log.text += "\nAguardando confirmação";
+			}
+			
 		}
 		
 		private function clicarSair(e:MouseEvent):void {
@@ -118,6 +153,9 @@
 			this.frota_mc.portaAvioesLinha_mc.visible = false;
 			
 			if (this.tipoOponente == "Computador") {
+				this.distribuirPecas();
+				this.habilitar(true);
+			}else {
 				this.distribuirPecas();
 				this.habilitar(true);
 			}

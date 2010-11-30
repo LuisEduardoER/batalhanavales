@@ -108,9 +108,11 @@ package {
 			}			
 			else {				
 				this.oponenteTabuleiro.liberarClique(false);
-				this.revalorarDelay();
-				this.delay.start();
-				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);				
+				if (this.jogadores[this.vez].nome == "Computador") {
+					this.revalorarDelay();
+					this.delay.start();
+					this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);
+				}
 			}			
 		}
 		

@@ -110,10 +110,15 @@
 												
 				case "usuarioValido":			this.irParaConvidandoOponente();
 												break;
-				case "usuarioInvalido":			trace("Avisar ao usiario que o login é invalido!!!");
+				case "usuarioInvalido":			//trace("Avisar ao usiario que o login é invalido!!!");
 												this.login.log_txt.text += "\nFalha na autenticação do login!";
 												this.login.ok_btn.enabled = true;
 												break;
+				case "conversaJogo":			//FAZER A CONVERSA SER ESCRITA NA TELA DO USUARIO
+												break;
+				case "iniciaJogo":				this.irParaJogo();
+												break;
+				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
 			}
@@ -122,8 +127,11 @@
 		private function atualizarEstadosJogadores(xml:XML):void{
 			var id1:String = xml.idDestinatario;
 			var id2:String = xml.idCliente;
+			var lista:Array = new Array;
+			if (id1 != "0") lista.push(id1);
+			if (id2 != "0") lista.push(id2);
 			var novoEstado:String = xml.texto;
-			this.convidandoOponente.atualizarEstados(id1, id2, novoEstado);
+			this.convidandoOponente.atualizarEstados(lista, novoEstado);
 		}
 		
 		private function falarChat(xml:XML, reservado:Boolean = false):void {
@@ -197,13 +205,14 @@
 		//this.regras.addEventListener("Regras_clicarOK", this.clicarOKRegras);
 		private function irParaLogin(e:Event):void {
 			this.login = this.attacharTela("ControleLogin", true);			
-			this.login.addEventListener(EventosBatalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
+			//this.login.addEventListener(EventosBatalhaNaval.LOGINPASSARTELA, this.setOponenteComputador);			
 			//this.distribuindoFrota = this.attacharTela("DistribuindoFrota", true);		
 		}
 		
 		private function irParaConvidandoOponente(e:Event = null):void {			
 			this.convidandoOponente = this.attacharTela("ControleConvidandoOponente", true);
-			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);			
+			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOOPONENTEPASSARTELA, this.irParaDistribuindoFrota);
+			this.convidandoOponente.addEventListener(EventosBatalhaNaval.CONVIDANDOPCPASSARTELA, this.setOponenteComputador);
 		}
 		
 		private function setOponenteComputador(e:Event):void {
@@ -213,13 +222,14 @@
 		
 		private function irParaDistribuindoFrota(e:Event = null):void {	
 			this.eu = new Humano(this.login.nome, this.login.senha);
+			this.oponente = new Jogador("Humano");//VERIFICAR ISTO DEPOIS;
 			//this.eu.senha = this.login.senha;
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.INICIARJOGO, this.irParaJogo);
 		}
 		
-		private function irParaJogo(e:Event):void{
+		private function irParaJogo(e:Event = null):void{
 			this.matrizTabuleiro = this.distribuindoFrota.matrizTabuleiro;
 			this.tabuleiro = this.distribuindoFrota.tabuleiro;
 			this.jogo = this.attacharTela("ControleJogo", true);
@@ -243,7 +253,7 @@
 											break;
 				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente, this.tabuleiro);
 											break;
-				case "Resultado": 			tela = new Resultado();
+				case "Resultado": 					tela = new Resultado();
 											break;
 				default:					trace("Essa tela não existe.");
 			}
