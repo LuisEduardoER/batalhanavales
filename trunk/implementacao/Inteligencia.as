@@ -354,37 +354,77 @@ package {
 		}
 		
 		private function procurarOutraPeca(peca:Array):Array {
-			var tipoEmbarcacao:String = this.darVolta(peca);
+			var peca:Array = this.darVolta(peca);
+			var tipoEmbarcacao:String = peca[0];
+			var orientacao:String = peca[1];
+			
 			if (tipoEmbarcacao == "portaAvioes") {
 				var linha:int = peca[0];
 				var coluna:int = peca[1];
+				var i:int;
+				var j:int;
+				if (orientacao == 0) {
+					//procurar para cima
+					i = linha - 1;
+					j = coluna;
+					
+				}
 				while (this.matrizOponente[linha][coluna] == "P") {
 					
 				}
 			}
 		}
 		
+		private function procurarCima(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			var linha:int = peca[0];
+			var coluna:int = peca[1];
+			var i:int = linha - 1;
+			var j:int = coluna;
+			while (i >= 0) {
+				if (this.matrizOponente[i][j] == "X") {
+					retorno[0] = i;
+					retorno[1] = j;
+					break;
+				}
+			}
+			return retorno;
+		}
+		
 		private function darVolta(peca:Array):Array {
 			var retorno:Array = new Array(2);
+			retorno[0] = "nada";
 			for (var i:int = (peca[0] - 1); i < (peca[0] + 1); i++) {
 				for (var j:int = (peca[1] - 1); j < (peca[1] + 1); j++) {
 					if ( (i != peca[0]) && (j != peca[1]) && (i >= 0) && (i <= this.matrizOponente.length) && (j >= 0) && (j <= this.matrizOponente[0].length) ) {
-						if (this.matrizOponente[i][j] == "P") { //Porta-avioes
-							if ( (i == peca[0]) || (j == peca[1]) ) {
+						if (this.matrizOponente[i][j] == "P") { 
+							if ( (i == peca[0]) || (j == peca[1]) ) {//Porta-avioes
 								retorno[0] = "portaAvioes";
-								retorno[1] == "vertical";
+								retorno[1] = 0; //vertical
 								if ( (i == peca[0]) && ( (j == (peca[1]-1) ) || (j == (peca[1]+1) ) )) { //porta-avioes horizontal
-									retorno[1] == "horizontal";
+									retorno[1] = 1; //horizontal
+								}
+							}
+							else { //destroyer
+								retorno[0] = "destroyer";
+								if ( (i == peca[0]-1) && (j == peca[1]+1) ) {
+									retorno[1] = 1;
+								}
+								else if( (i == peca[0]-1) && (j == peca[1]-1) ){
+									retorno[1] = 2;
+								}
+								else if( (i == peca[0]+1) && (j == peca[1]-1) ){
+									retorno[1] = 3;
+								}
+								else if( (i == peca[0]+1) && (j == peca[1]+1) ){
+									retorno[1] = 4;
 								}
 							}
 							break;
-						}
-						else { //destroyer
-							
-						}
+						}						
 					}
 				}
-				if (retorno == "portaAvioes") {
+				if (retorno[0] == "nada") {
 					break;
 				}
 			}
