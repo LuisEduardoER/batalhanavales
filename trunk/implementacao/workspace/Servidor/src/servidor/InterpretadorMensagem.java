@@ -118,6 +118,33 @@ public class InterpretadorMensagem {
 
                break;
 
+           case 10://jogarXPC
+               this.cliente.setEstado("Jogando");
+               Mensagem msgMudancaEstado3 = new Mensagem();
+               msgMudancaEstado3.setTipo("mudancaEstado");
+               msgMudancaEstado3.setIdCliente(this.cliente.getIdCliente());
+               msgMudancaEstado3.setTexto("Jogando");
+               this.servidor.broadcastMessage(msgMudancaEstado3);
+               break;
+           case 11://conversaJogo
+               this.mensagem.setNomeCliente(this.cliente.getNome());
+               Cliente dupla = this.servidor.getOponente(cliente);
+               this.servidor.enviarMensagem(this.mensagem, dupla);
+               this.servidor.enviarMensagem(this.mensagem, this.cliente);
+               break;
+           case 12://frotaDistribuida
+               this.cliente.setFrotaDistribuida(true);
+               Cliente dupla2 = this.servidor.getOponente(this.cliente);
+               if(dupla2 != null){
+                   if(dupla2.isFrotaDistribuida()){
+                       Mensagem iniciaJogo = new Mensagem();
+                       iniciaJogo.setTipo("iniciaJogo");
+                       this.servidor.enviarMensagem(iniciaJogo, this.cliente);
+                       this.servidor.enviarMensagem(iniciaJogo, dupla2);
+                   }
+               }
+               break;
+
        }
         
     }
@@ -133,6 +160,9 @@ public class InterpretadorMensagem {
         else if(tipo.equals("aceitacaoConvite"))retorno = 7;
         else if(tipo.equals("recusaConvite"))retorno = 8;
         else if(tipo.equals("saida"))retorno = 9;
+        else if(tipo.equals("jogarXPC")) retorno = 10;
+        else if(tipo.equals("conversaJogo")) retorno = 11;
+        else if(tipo.equals("frotaDistribuida")) retorno = 12;
 
         return retorno;
     }

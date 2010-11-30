@@ -22,9 +22,12 @@
 		private var _nome:String;
 		private var _senha:String;
 		
+		private var ipCampo:TextInput;
+		
 		public function ControleLogin(socket:XMLSocket) {
 			this.nomeCampo = this.nome_txt;
 			this.senhaCampo = this.senha_txt;
+			this.ipCampo = this.ip_txt;
 			this.configurar();
 			this.comunicacao = socket;
 			this.conexaoAceita_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONEXAOACEITA);			
@@ -32,14 +35,15 @@
 		
 		public function configurar():void {			
 			this.nomeCampo.addEventListener(Event.CHANGE, this.modificar);						
-			this.senhaCampo.addEventListener(Event.CHANGE, this.modificar);						
-			this.humano_rb.addEventListener(Event.CHANGE, this.modificar);			
-			this.computador_rb.addEventListener(Event.CHANGE, this.modificar);
+			this.senhaCampo.addEventListener(Event.CHANGE, this.modificar);	
+			this.ipCampo.addEventListener(Event.CHANGE, this.modificar);
+			//this.humano_rb.addEventListener(Event.CHANGE, this.modificar);			
+			//this.computador_rb.addEventListener(Event.CHANGE, this.modificar);
 			this.ok_btn.addEventListener(MouseEvent.MOUSE_UP, this.logar);
 		}	
 		
 		private function modificar(e:Event):void {			
-			if ( (this.nomeCampo.text != "") && (this.senhaCampo.text != "") && (this.humano_rb.selected || this.computador_rb.selected) ) {
+			if ( (this.nomeCampo.text != "") && (this.senhaCampo.text != "")  && (this.ipCampo.text != "")/*&& (this.humano_rb.selected || this.computador_rb.selected)*/ ) {
 				this.ok_btn.enabled = true;
 			}
 			else {
@@ -53,15 +57,16 @@
 			
 			this.nome = this.nomeCampo.text;
 			this.senha = this.senhaCampo.text;
-			if (this.humano_rb.selected) {
+			//if (this.humano_rb.selected) {
 				this.log_txt.htmlText += "Conectando ao servidor...";
 				//this.comunicacao.addEventListener(Event.CONNECT, confirmarConexao);
-				this.comunicacao.connect("localhost", 8090);
+				//this.comunicacao.connect("localhost", 8090);
+				this.comunicacao.connect(this.ipCampo.text, 8090);
 				this.enviarNome();				
-			}
+			/*}
 			else {
 				this.dispatchEvent(new Event(EventosBatalhaNaval.LOGINPASSARTELA));
-			}
+			}*/
 		}				
 		
 		public function enviarNome():void {

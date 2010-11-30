@@ -23,6 +23,7 @@
 		private var enviar:Button;
 		private var convidar:Button;
 		private var alvo:MovieClip;
+		private var jogarPc:Button;
 		
 		/*Caixas*/
 		private var idConvidado:int;
@@ -42,12 +43,23 @@
 			this.fala = this.fala_txt;
 			this.enviar = this.enviar_btn;
 			this.convidar = this.convidar_btn;
+			this.jogarPc = this.pc_btn;
 			this.pedirJogadores();	
 			
 			this.fala.addEventListener(Event.CHANGE, this.habilitarEnviar);
 			this.enviar.addEventListener(MouseEvent.MOUSE_UP, this.enviarTexto);
 			this.jogadores.addEventListener(Event.CHANGE, this.habilitarConvidar);
 			this.convidar.addEventListener(MouseEvent.MOUSE_UP, this.convidarOponente);
+			this.jogarPc.addEventListener(MouseEvent.MOUSE_UP, this.jogarContraPC);
+		}
+		
+		private function jogarContraPC(e:MouseEvent):void {
+			this.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.CONVIDANDOPCPASSARTELA));
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "jogarXPC";
+			//msg.idDestinatario = this.jogadores.selectedItem.Id;
+			//this.idConvidado = msg.idDestinatario;
+			this.comunicacao.send( msg.criarXML() );
 		}
 		
 		private function convidarOponente(e:MouseEvent):void {
@@ -79,10 +91,38 @@
 			this.habilitar(true);
 		}
 		
-		public function atualizarEstados(id1:String, id2:String, novoEstado:String):void {
-			trace("Atualizou estados de " + id1 + " e " + id2);
+		public function atualizarEstados(/*id1:String, id2:String*/lista:Array, novoEstado:String):void {
+			
+			for (var k:int = 0; k < lista.length; k++) {
+				var item:Object = { Id:lista[k], Nome:"", Estado:novoEstado };
+				for (var i:int = 0; i < this.jogadores.length; i++) {
+					if (this.jogadores.getItemAt(i).Id == item.Id) {
+						this.jogadores.editField(i, "Estado", novoEstado);
+						this.log_txt.text += "-> " + this.jogadores.getItemAt(i).Nome + " mudou o estado para " + novoEstado + ".\n" ;
+						item.Nome = this.jogadores.getItemAt(i).Nome;
+						break;
+					}
+				}
+				//-------------------------------------------//
+				if (novoEstado == "Jogando") {
+					
+					for (var j:int = 0; j < this.destinatarios.length; j++) {
+						if ( (this.destinatarios.getItemAt(j).data == item.Id) ) {
+							this.destinatarios.removeItemAt(j);
+							j--;
+							break;
+						}
+					}
+				}
+				else {
+					this.destinatarios.addItem(item);
+				}
+				
+			}
+			/*trace("Atualizou estados de " + id1 + " e " + id2);
 			var cont:int = 0;
 			var item1:Object = { Id: id1, Nome: "", Estado: novoEstado };
+			
 			var item2:Object = { Id: id2, Nome: "", Estado: novoEstado };
 			for (var i:int = 0; i < this.jogadores.length; i++) {
 				if ( (this.jogadores.getItemAt(i).Id == id1) || (this.jogadores.getItemAt(i).Id == id2) ) {								
@@ -112,7 +152,7 @@
 			else {
 				this.destinatarios.addItem(item1);
 				this.destinatarios.addItem(item2);
-			}
+			}*/
 		}
 		
 		private function habilitar(estadoFinal:Boolean):void {
@@ -132,6 +172,8 @@
 				this.enviar.enabled =
 				this.enviar.mouseEnabled = false;
 			}
+			this.jogarPc.enabled = 
+			this.jogarPc.mouseEnabled = 
 			this.fala.editable =
 			this.jogadores.selectable =
 			this.destinatarios.enabled = estadoFinal;

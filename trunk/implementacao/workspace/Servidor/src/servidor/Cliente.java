@@ -19,6 +19,7 @@ public class Cliente extends Thread {
 
     private String nome;
     private String estado;
+    private boolean frotaDistribuida;
 
     public Cliente(Servidor server, Socket socket) {
     	this.idCliente = Cliente.count++;
@@ -28,6 +29,7 @@ public class Cliente extends Thread {
         this.socket = socket;
         this.ip = socket.getInetAddress().getHostAddress();
         this.estado = "Livre";
+        this.frotaDistribuida = false;
 
         try {
             in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -128,4 +130,13 @@ public class Cliente extends Thread {
     public void setEstado(String estado) {
         this.estado = estado;
     }
+
+    public boolean isFrotaDistribuida() {
+        return frotaDistribuida;
+    }
+
+    public void setFrotaDistribuida(boolean frotaDistribuida) {
+        this.frotaDistribuida = frotaDistribuida;
+    }
+    
 }
