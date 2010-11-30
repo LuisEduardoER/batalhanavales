@@ -369,7 +369,7 @@ package {
 			for (var i:int = (peca[0] - 1); i < (peca[0] + 1); i++) {
 				for (var j:int = (peca[1] - 1); j < (peca[1] + 1); j++) {
 					if ( (i != peca[0]) && (j != peca[1]) && (i >= 0) && (i <= this.matrizOponente.length) && (j >= 0) && (j <= this.matrizOponente[0].length) ) {
-						if (this.matrizOponente[i][j] == "P") {
+						if (this.matrizOponente[i][j] == "P") { //Porta-avioes
 							if ( (i == peca[0]) || (j == peca[1]) ) {
 								retorno[0] = "portaAvioes";
 								retorno[1] == "vertical";
@@ -378,6 +378,9 @@ package {
 								}
 							}
 							break;
+						}
+						else { //destroyer
+							
 						}
 					}
 				}
