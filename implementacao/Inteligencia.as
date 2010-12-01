@@ -19,8 +19,11 @@ package {
 		private var ultimaLinhaEscolhida:int;
 		private var ultimaColunaEscolhida:int;
 		
+		private var tiposEmbarcacao:Array;
+		
 		public function Inteligencia(tabuleiro:Tabuleiro) {
-			this.tabuleiro =  tabuleiro;			
+			this.tabuleiro =  tabuleiro;	
+			this.tiposEmbarcacao = ["portaAvioes", "destroyer"];
 			
 			//this.jogar = jogar_btn;
 			//this.jogar.addEventListener(MouseEvent.MOUSE_UP, this.escolherJogada);
@@ -330,11 +333,11 @@ package {
 			}						
 		}
 		
-		public function escolherJogada():Jogada {	
-			var jogada:Jogada;			
-			
+		public function escolherJogada():Jogada {				
+			var jogada:Jogada;						
 			var peca:Array = this.procurarEmbarcacaoAtingida();
-			if ( (peca[0] == -1) && (peca[1] == -1) ) {
+			trace("procurarEmbarcacaoAtingida = " + peca[0] + ", " + peca[1]);
+			if ( (peca[0] == -1) && (peca[1] == -1) ) { // nao existe nenhuma peca atingida, entao escolhe qualquer peca
 				this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
 				this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
 				if (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") { //Se ainda n tiver atirado nessa posicao,
@@ -345,8 +348,12 @@ package {
 					jogada = this.escolherJogada(); //Se já tiver atirado nessa posicao, escolher outra.
 				}
 			}
-			else {
-				
+			else { //existe uma peca atingida, entao procura com inteligencia
+				trace("Existe peça atingida");
+				var pecaAtingida:Array = this.procurarOutraPeca(peca);
+				this.ultimaLinhaEscolhida = pecaAtingida[0];
+				this.ultimaColunaEscolhida = pecaAtingida[1];
+				jogada = new Jogada(pecaAtingida[0], pecaAtingida[1]);
 			}
 			
 			
@@ -354,29 +361,288 @@ package {
 		}
 		
 		private function procurarOutraPeca(peca:Array):Array {
-			var peca:Array = this.darVolta(peca);
-			var tipoEmbarcacao:String = peca[0];
-			var orientacao:String = peca[1];
-			
-			if (tipoEmbarcacao == "portaAvioes") {
-				var linha:int = peca[0];
-				var coluna:int = peca[1];
-				var i:int;
-				var j:int;
-				if (orientacao == 0) {
-					//procurar para cima
-					i = linha - 1;
-					j = coluna;
-					
+			var resultado:Array = this.darVolta(peca);
+			var novaPeca:Array;			
+			if(resultado[0] != "nada"){
+				var tipoEmbarcacao:String = resultado[0];
+				var orientacao:int = resultado[1];				
+				
+				if (tipoEmbarcacao == "portaAvioes") {				
+					if (orientacao == 0) { //vertical					
+						novaPeca = this.procurarVertical(peca);
+					}
+					else {
+						novaPeca = this.procurarHorizontal(peca);
+					}
 				}
-				while (this.matrizOponente[linha][coluna] == "P") {
-					
+				else { //destroyer
+					if (orientacao == 0) {
+						novaPeca = this.procurar0(peca);
+					}
+					else if (orientacao == 1) {
+						novaPeca = this.procurar1(peca);
+					}
+					else if (orientacao == 2) {
+						novaPeca = this.procurar2(peca);
+					}
+					else if (orientacao == 3) {
+						novaPeca = this.procurar3(peca);
+					}				
 				}
 			}
+			else { //só achou uma peça solitaria de uma embarcacao. procurar algo ao redor dela!
+				if (this.tiposEmbarcacao.length == 1) {
+					if (this.tiposEmbarcacao[0] == "portaAvioes") {
+						novaPeca = this.procurarVertical(peca);
+						if (novaPeca[0] == "nada") {
+							novaPeca = this.procurarHorizontal(peca);
+						}
+					}
+					else { //destroyer
+						novaPeca = this.procurar0(peca);
+						if (!this.iValido(novaPeca[0], novaPeca[1])) {
+							novaPeca = this.procurar1(peca);
+							if (!this.iValido(novaPeca[0], novaPeca[1])) {
+								novaPeca = this.procurar2(peca);
+								if (!this.iValido(novaPeca[0], novaPeca[1])) {
+									novaPeca = this.procurar3(peca);
+								}
+							}
+						}
+					}
+				}
+				else {
+					novaPeca = this.procurarAoRedor(peca);
+				}				
+			}
+			return novaPeca;
+		}
+		
+		private function procurarAoRedor(peca:Array):Array {
+			var retorno:Array = [-1, -1];
+			var linha:int = peca[0] + Math.floor(Math.random() * 3) - 1;
+			var coluna:int = peca[1] + Math.floor(Math.random() * 3) - 1;
+			
+			if ( (linha >= 0) && (linha < this.matrizOponente.length) && (coluna >= 0) && (coluna < this.matrizOponente[0].length) ) {
+				if (this.matrizOponente[linha][coluna] == "X") {
+					retorno = [linha, coluna];
+				}
+				else {
+					retorno = this.procurarAoRedor(peca);
+				}
+			}
+			trace("procurarAoRedor: " + retorno[0] + ", " + retorno[1]);
+			return retorno;
+		}
+		
+		private function procurarPortaAvioes(peca:Array):Array {
+			var retorno:Array = [ -1, -1];
+			var orientacao:int = Math.floor(Math.random() * 2);
+			var linha:int;
+			var coluna:int;
+			if (orientacao == 0) { //horizontal
+				linha = peca[0] + Math.floor(Math.random() * 3) - 1;
+				while (linha == peca[0]) {
+					linha = peca[0] + Math.floor(Math.random() * 3) - 1;
+				}
+				coluna = peca[1];
+			}
+			else { //vertical
+				linha = peca[0];				
+				coluna = peca[1] + Math.floor(Math.random() * 3) - 1;
+				while (coluna == peca[1]) {
+					coluna = peca[1] + Math.floor(Math.random() * 3) - 1;
+				}
+			}
+			
+			if ( (linha >= 0) && (linha < this.matrizOponente.length) && (coluna >= 0) && (coluna < this.matrizOponente[0].length) ) {
+				if (this.matrizOponente[linha][coluna] == "X") {
+					retorno = [linha, coluna];
+				}
+				else {
+					retorno = this.procurarPortaAvioes(peca);
+				}
+			}
+			return retorno;
+		}
+		
+		private function procurar0(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			var i:int;
+			var j:int;
+			var achou:Boolean = false;
+			
+			i = peca[0];
+			j = peca[1] + 2;
+			if ( this.iValido(i,j) ) {
+				achou = true;
+			}
+			
+			if (!achou) {
+				i = peca[0] + 1;
+				j = peca[1] + 1;			
+				if ( this.iValido(i,j) ) {
+					achou = true;
+				}
+			}
+			
+			if (!achou) {
+				i = peca[0] - 1;
+				j = peca[1] - 1;
+				if ( this.iValido(i,j) ) {
+					achou = true;
+				}
+			}
+						
+			if (!achou) {
+				i = peca[0] - 2;
+				j = peca[1];
+				if ( this.iValido(i,j) ) {
+					achou = true;
+				}
+			}			
+			retorno = [i, j];
+			return retorno;
+		}
+		
+		private function iValido(i:int, j:int):Boolean {
+			var retorno:Boolean = false;
+			if( (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length)  && (this.matrizOponente[i][j] == "X") ) {
+				retorno = true;
+			}
+			return retorno;
+		}
+		
+		private function procurar1(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			var i:int;
+			var j:int;
+			var achou:Boolean = false;
+			
+			i = peca[0] + 1;
+			j = peca[1] - 1;
+			if ( this.iValido(i, j) ) {
+				achou = true;
+			}
+			
+			if (!achou) {
+				i = peca[0] - 1;
+				j = peca[1] + 1;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}			
+			
+			if (!achou) {
+				i = peca[0] - 2;
+				j = peca[1];
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}			
+			
+			if (!achou) {
+				i = peca[0];
+				j = peca[1] - 2;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+						
+			retorno = [i, j];
+			return retorno;
+		}
+		
+		private function procurar2(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			var i:int;
+			var j:int;
+			var achou:Boolean = false;
+			
+			i = peca[0] + 1;
+			j = peca[1] + 1;
+			if (this.iValido(i,j)) {
+				achou = true;
+			}
+			
+			if (!achou) {
+				i = peca[0] - 1;
+				j = peca[1] - 1;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+			
+			if (!achou) {
+				i = peca[0];
+				j = peca[1] - 2;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+			
+			if (!achou) {
+				i = peca[0] + 2;
+				j = peca[1];
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+							
+			retorno = [i, j];
+			return retorno;
+		}
+		
+		private function procurar3(peca:Array):Array {
+			var retorno:Array = new Array(2);
+			var i:int;
+			var j:int;
+			var achou:Boolean = false;
+			
+			i = peca[0] - 1;
+			j = peca[1] + 1;			
+			if (this.iValido(i,j) ) {
+				achou = true;
+			}
+			
+			if (!achou) {
+				i = peca[0] - 1;
+				j = peca[1] - 1;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+			
+			if (!achou) {
+				i = peca[0] + 1;
+				j = peca[1] - 1;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+			
+			if (!achou) {
+				i = peca[0];
+				j = peca[1] + 2;
+				if (this.iValido(i,j)) {
+					achou = true;
+				}
+			}
+					
+			retorno = [i, j];
+			return retorno;
+		}
+		
+		private function procurarVertical(peca:Array):Array {
+			var retorno:Array = this.procurarCima(peca);
+			if (retorno[0] == "nada") {
+				retorno = this.procurarBaixo(peca);
+			}
+			return retorno;
 		}
 		
 		private function procurarCima(peca:Array):Array {
-			var retorno:Array = new Array(2);
+			var retorno:Array = ["nada", "nada"];
 			var linha:int = peca[0];
 			var coluna:int = peca[1];
 			var i:int = linha - 1;
@@ -387,6 +653,72 @@ package {
 					retorno[1] = j;
 					break;
 				}
+				else if (this.matrizOponente[i][j] == "A") {
+					break;
+				}
+				i--;
+			}
+			return retorno;
+		}
+		
+		private function procurarBaixo(peca:Array):Array {
+			var retorno:Array = ["nada", "nada"];
+			var linha:int = peca[0];
+			var coluna:int = peca[1];
+			var i:int = linha + 1;
+			var j:int = coluna;
+			while (i < this.matrizOponente.length) {
+				if (this.matrizOponente[i][j] == "X") {
+					retorno[0] = i;
+					retorno[1] = j;
+					break;
+				}
+				else if (this.matrizOponente[i][j] == "A") {
+					break;
+				}
+				i++;
+			}
+			return retorno;
+		}
+		
+		private function procurarHorizontal(peca:Array):Array {
+			var retorno:Array = this.procurarDireita(peca);
+			if (retorno[0] == "nada") {
+				retorno = this.procurarEsquerda(peca);
+			}
+			return retorno;
+		}
+		
+		private function procurarDireita(peca:Array):Array {
+			var retorno:Array = ["nada", "nada"];
+			var linha:int = peca[0];
+			var coluna:int = peca[1];
+			var i:int = linha;
+			var j:int = coluna + 1;
+			while (j < this.matrizOponente[i].length) {
+				if (this.matrizOponente[i][j] == "X") {
+					retorno[0] = i;
+					retorno[1] = j;
+					break;
+				}
+				j++;
+			}
+			return retorno;
+		}
+		
+		private function procurarEsquerda(peca:Array):Array {
+			var retorno:Array = ["nada", "nada"];
+			var linha:int = peca[0];
+			var coluna:int = peca[1];
+			var i:int = linha;
+			var j:int = coluna - 1;
+			while (j >= 0) {
+				if (this.matrizOponente[i][j] == "X") {
+					retorno[0] = i;
+					retorno[1] = j;
+					break;
+				}
+				j--;
 			}
 			return retorno;
 		}
@@ -394,9 +726,10 @@ package {
 		private function darVolta(peca:Array):Array {
 			var retorno:Array = new Array(2);
 			retorno[0] = "nada";
-			for (var i:int = (peca[0] - 1); i < (peca[0] + 1); i++) {
-				for (var j:int = (peca[1] - 1); j < (peca[1] + 1); j++) {
-					if ( (i != peca[0]) && (j != peca[1]) && (i >= 0) && (i <= this.matrizOponente.length) && (j >= 0) && (j <= this.matrizOponente[0].length) ) {
+			for (var i:int = (peca[0] - 1); i <= (peca[0] + 1); i++) {
+				for (var j:int = (peca[1] - 1); j <= (peca[1] + 1); j++) {
+					if ( ( (i != peca[0]) || (j != peca[1]) ) && (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length) ) {
+						trace("(" + i + ", " + j + ") = " + this.matrizOponente[i][j]);
 						if (this.matrizOponente[i][j] == "P") { 
 							if ( (i == peca[0]) || (j == peca[1]) ) {//Porta-avioes
 								retorno[0] = "portaAvioes";
@@ -408,23 +741,23 @@ package {
 							else { //destroyer
 								retorno[0] = "destroyer";
 								if ( (i == peca[0]-1) && (j == peca[1]+1) ) {
-									retorno[1] = 1;
+									retorno[1] = 0;
 								}
 								else if( (i == peca[0]-1) && (j == peca[1]-1) ){
-									retorno[1] = 2;
+									retorno[1] = 1;
 								}
 								else if( (i == peca[0]+1) && (j == peca[1]-1) ){
-									retorno[1] = 3;
+									retorno[1] = 2;
 								}
 								else if( (i == peca[0]+1) && (j == peca[1]+1) ){
-									retorno[1] = 4;
+									retorno[1] = 3;
 								}
 							}
 							break;
 						}						
 					}
 				}
-				if (retorno[0] == "nada") {
+				if (retorno[0] != "nada") {
 					break;
 				}
 			}
@@ -456,7 +789,12 @@ package {
 			for (var i:int = 0; i < embarcacaoAbatida.pecas.length; i++) {
 				this.matrizOponente[embarcacaoAbatida.pecas[i].linha][embarcacaoAbatida.pecas[i].coluna] = "F";
 			}
-			this.mostrarMatrizOponente();
+			if (embarcacaoAbatida.nome == "porta-aviões") {
+				this.tiposEmbarcacao.splice(0,1)
+			}
+			else if(embarcacaoAbatida.nome == "destroyer"){
+				this.tiposEmbarcacao.splice(1, 1);
+			}			
 		}
 	}
 	
