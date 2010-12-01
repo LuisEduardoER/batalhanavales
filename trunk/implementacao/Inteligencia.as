@@ -430,6 +430,9 @@ package {
 				else {
 					retorno = this.procurarAoRedor(peca);
 				}
+			}			
+			if (retorno[0] == -1) {
+				retorno = this.procurarAoRedor(peca);
 			}
 			trace("procurarAoRedor: " + retorno[0] + ", " + retorno[1]);
 			return retorno;
