@@ -701,6 +701,9 @@ package {
 					retorno[1] = j;
 					break;
 				}
+				else if (this.matrizOponente[i][j] == "A") {
+					break;
+				}
 				j++;
 			}
 			return retorno;
@@ -716,6 +719,9 @@ package {
 				if (this.matrizOponente[i][j] == "X") {
 					retorno[0] = i;
 					retorno[1] = j;
+					break;
+				}
+				else if (this.matrizOponente[i][j] == "A") {
 					break;
 				}
 				j--;
