@@ -120,7 +120,7 @@
 												break;
 				case "jogada":					this.jogo.executarJogadaOponente(xml.linha, xml.coluna);
 												break;
-				case "resultadoJogada":			
+				case "resultadoJogada":			this.jogo.receberResultadoJogada(xml.texto);
 												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");

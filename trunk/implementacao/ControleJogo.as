@@ -203,8 +203,8 @@ package {
 			this.meuTabuleiro.pecas[linha][coluna].clicar();
 		}
 		
-		public function receberResultadoJogada():void {
-			
+		public function receberResultadoJogada(tipo:String):void {
+			this.meuTabuleiro.ultimaPecaClicada.estado = tipo;
 		}
 		
 		private function retornarJogada(tipo:String):void {
