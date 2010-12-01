@@ -11,6 +11,8 @@
 		private var _texto:String;
 		private var _idDestinatario:int;
 		private var _senha:String;
+		private var _linha:int;
+		private var _coluna:int;
 		
 		public function Mensagem() {
 			this.texto = "";
@@ -63,6 +65,18 @@
 			_senha = value;
 		}
 		
+		public function get linha():int { return _linha; }
+		
+		public function set linha(value:int):void {
+			_linha = value;
+		}
+		
+		public function get coluna():int { return _coluna; }
+		
+		public function set coluna(value:int):void {
+			_coluna = value;
+		}
+		
 		
 		public function criarXML():String {
 			var retorno_str:String = new String();
@@ -73,6 +87,8 @@
 			retorno_str += "<nomeCliente>" + this.nomeCliente+ "</nomeCliente>";			
 			retorno_str += "<idDestinatario>" + this.idDestinatario + "</idDestinatario>";	
 			retorno_str += "<senha>" + this.senha + "</senha>";
+			retorno_str += "<linha>" + this.linha + "</linha>";
+			retorno_str += "<coluna>" + this.coluna + "</coluna>";
 			retorno_str += "</servidor.Mensagem>";
 			return retorno_str;
 		}

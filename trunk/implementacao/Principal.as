@@ -118,6 +118,10 @@
 												break;
 				case "iniciaJogo":				this.irParaJogo();
 												break;
+				case "jogada":					this.jogo.executarJogadaOponente(xml.linha, xml.coluna);
+												break;
+				case "resultadoJogada":			
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;
@@ -222,7 +226,7 @@
 		
 		private function irParaDistribuindoFrota(e:Event = null):void {	
 			this.eu = new Humano(this.login.nome, this.login.senha);
-			this.oponente = new Jogador("Humano");//VERIFICAR ISTO DEPOIS;
+			if(this.oponente == null)this.oponente = new Jogador("Humano");//VERIFICAR ISTO DEPOIS;
 			//this.eu.senha = this.login.senha;
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
@@ -251,7 +255,7 @@
 											break;
 				case "ControleConvidandoOponente": 	tela = new ControleConvidandoOponente(this.socket, this.id);
 											break;
-				case "ControleJogo": 				tela = new ControleJogo(this.eu, this.oponente, this.tabuleiro);
+				case "ControleJogo": 				tela = new ControleJogo(this.socket,this.eu, this.oponente, this.tabuleiro);
 											break;
 				case "Resultado": 					tela = new Resultado();
 											break;

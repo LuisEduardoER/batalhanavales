@@ -4,6 +4,7 @@ package {
 	import flash.display.MovieClip;
 	import flash.events.MouseEvent;
 	import flash.events.Event;
+	import flash.net.XMLSocket;
 	import flash.utils.Timer;
 	import flash.events.TimerEvent;
 	
@@ -27,11 +28,14 @@ package {
 		private var delay:Timer;
 		private var resultado:Resultado;
 		private var _tipoResultado:String;
+		private var comunicacao:XMLSocket;
 		
-		public function ControleJogo(eu:Humano, oponente:Jogador, tabuleiro:Tabuleiro) {
+		public function ControleJogo(socket:XMLSocket,eu:Humano, oponente:Jogador, tabuleiro:Tabuleiro) {
 			this.eu = eu;
 			this.oponente = oponente;
 			this.jogadores = [this.eu, this.oponente];
+			
+			this.comunicacao = socket;
 			
 			this.meuTabuleiro = this.tabuleiro1_mc;
 			this.meuTabuleiro.copiar(tabuleiro);
@@ -56,7 +60,7 @@ package {
 			this.delay = new Timer(1000);
 			
 			this.verificarTipoOponente();			
-			this.iniciarJogo();			
+			//this.iniciarJogo();			
 						
 		}	
 		
@@ -73,21 +77,33 @@ package {
 		private function informarJogada(e:Event):void {
 			var tabuleiro:Tabuleiro = Tabuleiro(e.target);
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");
+			if (this.oponente.nome != "Computador") {
+				var msg:Mensagem = new Mensagem();
+				msg.tipo = "jogada";
+				msg.linha = tabuleiro.ultimaPecaClicada.linha;
+				msg.coluna = tabuleiro.ultimaPecaClicada.coluna;
+				this.comunicacao.send(msg.criarXML());
+			}
+			
 		}
 		
 		private function verificarTipoOponente():void{
 			if (this.oponente.nome == "Computador") {
 				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);
+				//------//
+				this.vez = Math.floor(Math.random() * 2);
+				this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
+				this.liberarJogada();
 			}
 		}
 		
-		private function iniciarJogo():void{
-			this.vez = Math.floor(Math.random() * 2);
-			this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
+		public function iniciarJogo():void{
+			/*this.vez = Math.floor(Math.random() * 2);
+			this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");*/
 			this.liberarJogada();	
 		}
 		
-		private function continuarVez():void {
+		public function continuarVez():void {
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " deve jogar novamente.");
 			if (this.jogadores[this.vez].nome == "Computador") {
 				this.revalorarDelay();
@@ -96,7 +112,7 @@ package {
 			}
 		}
 		
-		private function passarVez(e:Event = null):void {
+		public function passarVez(e:Event = null):void {
 			this.vez = (1 - this.vez);			
 			this.escreverLog("\nAgora eh a vez de " + this.jogadores[this.vez].nome + " jogar.");
 			this.liberarJogada();
@@ -126,6 +142,9 @@ package {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).acertarAgua();
 			}
+			if (this.vez == 1 && this.oponente.nome != "Computador") {
+				this.retornarJogada(EstadoPeca.PECAAGUA);
+			}
 			this.escreverLog("e não atingiu nenhuma peça de nenhuma embarcação de " + this.jogadores[(1-this.vez)].nome + ".");
 			this.passarVez();
 		}
@@ -134,6 +153,9 @@ package {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).atingirPeca();
 			}
+			if (this.vez == 1 && this.oponente.nome != "Computador") {
+				this.retornarJogada(EstadoPeca.PECAATINGIDA);
+			}
 			this.escreverLog("e atingiu uma peça de uma embarcação de " + this.jogadores[(1-this.vez)].nome + ".");
 			this.continuarVez();
 		}
@@ -141,6 +163,9 @@ package {
 		private function abaterEmbarcacao(e:Event):void {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {				
 				Computador(this.oponente).abaterEmbarcacao(this.meuTabuleiro.ultimaEmbarcacaoAbatida);				
+			}
+			if (this.vez == 1 && this.oponente.nome != "Computador") {
+				this.retornarJogada(EstadoPeca.PECAABATIDA);
 			}
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu um " + this.tabuleiros[(1 - this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1 - this.vez)].nome + ".");			
 		}
@@ -171,6 +196,22 @@ package {
 		
 		public function set tipoResultado(value:String):void {
 			_tipoResultado = value;
+		}
+		
+		
+		public function executarJogadaOponente(linha:int, coluna:int):void {
+			this.meuTabuleiro.pecas[linha][coluna].clicar();
+		}
+		
+		public function receberResultadoJogada():void {
+			
+		}
+		
+		private function retornarJogada(tipo:String):void {
+			var msg:Mensagem = new Mensagem();
+			msg.tipo = "resultadoJogada";
+			msg.texto = tipo;
+			this.comunicacao.send(msg.criarXML());
 		}
 				
 	}

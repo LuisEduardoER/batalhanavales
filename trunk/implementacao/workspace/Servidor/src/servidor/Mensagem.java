@@ -17,6 +17,8 @@ public class Mensagem {
     private String texto;
     private int idDestinatario;
     private String senha;
+    private int linha;
+    private int coluna;
 
     public String getSenha() {
         return senha;
@@ -88,4 +90,22 @@ public class Mensagem {
     public void setDestinatario(int destinatario) {
         this.idDestinatario = destinatario;
     }
+
+    public int getColuna() {
+        return coluna;
+    }
+
+    public void setColuna(int coluna) {
+        this.coluna = coluna;
+    }
+
+    public int getLinha() {
+        return linha;
+    }
+
+    public void setLinha(int linha) {
+        this.linha = linha;
+    }
+
+    
 }
