@@ -140,6 +140,11 @@ public class InterpretadorMensagem {
                         iniciaJogo.setTipo("iniciaJogo");
                         this.servidor.enviarMensagem(iniciaJogo, this.cliente);
                         this.servidor.enviarMensagem(iniciaJogo, dupla2);
+                        Mensagem vez = new Mensagem();
+                        vez.setTipo("joga");//MUDAR ESTE TIPO DEPOIS
+                        this.servidor.enviarMensagem(vez, dupla2);//Por enquanto o jogo inicia com o primeiro jogador
+                        vez.setTipo("espera");
+                        this.servidor.enviarMensagem(vez, this.cliente);
                     }
                 }
                 break;

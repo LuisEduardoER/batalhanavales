@@ -13,15 +13,19 @@
 		private var _ultimaEmbarcacaoAbatida:Embarcacao;
 		
 		public function Tabuleiro() {
-			this.frota = new Frota();
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
-			
+		}
+		
+		/*Tentativa para funcionar sem computador*/
+		public function inicializarFrota():void {
+			this.frota = new Frota();
 			this.frota.addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
 			this.frota.addEventListener(EventosBatalhaNaval.TERMINARJOGO, this.terminarJogo);
 		}
 		
-		public function copiar(tabuleiro:Tabuleiro):void {						
+		public function copiar(tabuleiro:Tabuleiro):void {
+			this.inicializarFrota();
 			for (var i:int = 0; i < tabuleiro.frota.embarcacoes.length; i++) {
 				for (var j:int = 0; j < tabuleiro.frota.embarcacoes[i].pecas.length; j++) {
 					var peca:Peca = this.pecas[tabuleiro.frota.embarcacoes[i].pecas[j].linha][tabuleiro.frota.embarcacoes[i].pecas[j].coluna];
@@ -90,7 +94,7 @@
 		private function clicar(e:Event):void {	
 			this.ultimaPecaClicada = Peca(e.target);
 			this.dispatchEvent(new Event(EventosBatalhaNaval.CLICARPECA));			
-			this.procurarPecaNaFrota();
+			if(this.frota != null)this.procurarPecaNaFrota();
 		}
 		
 		private function procurarPecaNaFrota():void {

@@ -28,6 +28,10 @@
 			this.nomeCampo = this.nome_txt;
 			this.senhaCampo = this.senha_txt;
 			this.ipCampo = this.ip_txt;
+			this.nomeCampo.tabIndex = 1;
+			this.senhaCampo.tabIndex = 2;
+			this.ipCampo.tabIndex = 3;
+			this.log_txt.tabEnabled = false;
 			this.configurar();
 			this.comunicacao = socket;
 			this.conexaoAceita_evt = new EventosBatalhaNaval(EventosBatalhaNaval.CONEXAOACEITA);			
