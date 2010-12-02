@@ -122,6 +122,10 @@
 												break;
 				case "resultadoJogada":			this.jogo.receberResultadoJogada(xml.texto);
 												break;
+				case "joga":					this.jogo.liberarMinhaJogada();
+												break;
+				case "espera":					this.jogo.liberarOponenteJogada();
+												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
 										break;

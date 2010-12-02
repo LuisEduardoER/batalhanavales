@@ -30,6 +30,8 @@ package {
 		private var _tipoResultado:String;
 		private var comunicacao:XMLSocket;
 		
+		private var jogadaEnviada:Boolean;
+		
 		public function ControleJogo(socket:XMLSocket,eu:Humano, oponente:Jogador, tabuleiro:Tabuleiro) {
 			this.eu = eu;
 			this.oponente = oponente;
@@ -59,10 +61,28 @@ package {
 			
 			this.delay = new Timer(1000);
 			
-			this.verificarTipoOponente();			
+			this.verificarTipoOponente();	
+			//-----------------------------//
+			this.meuTabuleiro.liberarClique(false);
+			this.oponenteTabuleiro.liberarClique(false);
+			this.vez = -1;
+			this.jogadaEnviada = false;
+			//----------------------------//
 			//this.iniciarJogo();			
 						
-		}	
+		}
+		
+		public function liberarMinhaJogada():void {
+			this.vez = 0;
+			this.escreverLog("Vez de " + this.jogadores[this.vez].nome + " jogar.");
+			this.liberarJogada();
+		}
+		
+		public function liberarOponenteJogada():void {
+			this.vez = 1;
+			this.escreverLog("Vez de " + this.jogadores[this.vez].nome + " jogar.");
+			this.liberarJogada();
+		}
 		
 		private function escreverLog (texto:String) {
 			this.log.appendText(texto);
@@ -75,15 +95,20 @@ package {
 		}
 		
 		private function informarJogada(e:Event):void {
+			
 			var tabuleiro:Tabuleiro = Tabuleiro(e.target);
+			this.oponenteTabuleiro.liberarClique(false);
+			this.meuTabuleiro.liberarClique(false);
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");
-			if (this.oponente.nome != "Computador") {
+			if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
 				var msg:Mensagem = new Mensagem();
 				msg.tipo = "jogada";
 				msg.linha = tabuleiro.ultimaPecaClicada.linha;
 				msg.coluna = tabuleiro.ultimaPecaClicada.coluna;
 				this.comunicacao.send(msg.criarXML());
+				this.jogadaEnviada = true;
 			}
+			
 			
 		}
 		
@@ -92,14 +117,14 @@ package {
 				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);
 				//------//
 				this.vez = Math.floor(Math.random() * 2);
-				this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
+				
 				this.liberarJogada();
 			}
 		}
 		
 		public function iniciarJogo():void{
-			/*this.vez = Math.floor(Math.random() * 2);
-			this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");*/
+			/*this.vez = Math.floor(Math.random() * 2);*/
+			this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
 			this.liberarJogada();	
 		}
 		
@@ -109,6 +134,9 @@ package {
 				this.revalorarDelay();
 				this.delay.start();
 				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);
+			}else {
+				//this.vez = 0;
+				this.liberarJogada();
 			}
 		}
 		
@@ -119,11 +147,14 @@ package {
 		}				
 		
 		private function liberarJogada():void {
+			this.jogadaEnviada = false;
 			if (this.vez == 0) {				
 				this.oponenteTabuleiro.liberarClique(true);
+				this.meuTabuleiro.liberarClique(false);
 			}			
 			else {				
 				this.oponenteTabuleiro.liberarClique(false);
+				this.meuTabuleiro.liberarClique(true);
 				if (this.jogadores[this.vez].nome == "Computador") {
 					this.revalorarDelay();
 					this.delay.start();
@@ -141,11 +172,15 @@ package {
 		private function acertarAgua(e:Event):void {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).acertarAgua();
+				//
+				
 			}
-			if (this.vez == 1 && this.oponente.nome != "Computador") {
+			if (this.vez == 1 && this.oponente.nome != "Computador" && !this.jogadaEnviada) {
 				this.retornarJogada(EstadoPeca.PECAAGUA);
+				
 			}
-			this.escreverLog("e não atingiu nenhuma peça de nenhuma embarcação de " + this.jogadores[(1-this.vez)].nome + ".");
+			
+			this.escreverLog("e nÃ£o atingiu nenhuma peÃ§a de nenhuma embarcaÃ§Ã£o de " + this.jogadores[(1 - this.vez)].nome + ".");
 			this.passarVez();
 		}
 		
@@ -156,7 +191,7 @@ package {
 			if (this.vez == 1 && this.oponente.nome != "Computador") {
 				this.retornarJogada(EstadoPeca.PECAATINGIDA);
 			}
-			this.escreverLog("e atingiu uma peça de uma embarcação de " + this.jogadores[(1-this.vez)].nome + ".");
+			this.escreverLog("e atingiu uma peÃ§a de uma embarcaÃ§Ã£o de " + this.jogadores[(1-this.vez)].nome + ".");
 			this.continuarVez();
 		}
 		
@@ -172,7 +207,7 @@ package {
 		
 		private function terminarJogo(e:Event):void {
 			this.oponenteTabuleiro.liberarClique(false);
-			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu todas as embarcações de " + this.jogadores[(1 - this.vez)].nome + ".");			
+			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu todas as embarcaÃ§Ãµes de " + this.jogadores[(1 - this.vez)].nome + ".");			
 			if (this.vez == 0) {
 				this.tipoResultado = TipoResultado.GANHOU;
 			}
@@ -204,7 +239,8 @@ package {
 		}
 		
 		public function receberResultadoJogada(tipo:String):void {
-			this.meuTabuleiro.ultimaPecaClicada.estado = tipo;
+			trace("this.meuTabuleiro.ultimaPecaClicada: " + this.meuTabuleiro.ultimaPecaClicada);
+			this.oponenteTabuleiro.ultimaPecaClicada.estado = tipo;
 		}
 		
 		private function retornarJogada(tipo:String):void {

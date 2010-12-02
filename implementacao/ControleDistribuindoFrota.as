@@ -168,7 +168,8 @@
 		}
 		
 		//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.
-		private function distribuirPecas():void {			
+		private function distribuirPecas():void {
+			this.tabuleiro.inicializarFrota();
 			this.distribuirDestroyer();
 			this.distribuirPortaAvioes();
 			this.distribuirSubmarino();
