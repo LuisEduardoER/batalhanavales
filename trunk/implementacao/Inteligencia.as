@@ -13,7 +13,7 @@ package {
 		
 		private var tabuleiro:Tabuleiro; //Tabuleiro da inteligencia
 		private var matrizOponente:Array; // Essa eh a matriz que representa o que a inteligencia conhece da matriz de seu oponente (o humano).
-		private var minhaMatriz:Array; //Matriz do usuário que está jogando contra o computador	
+		private var minhaMatriz:Array; //Matriz do usu?rio que est? jogando contra o computador	
 		
 		//private var jogar:Button;
 		private var ultimaLinhaEscolhida:int;
@@ -27,7 +27,7 @@ package {
 			
 			//this.jogar = jogar_btn;
 			//this.jogar.addEventListener(MouseEvent.MOUSE_UP, this.escolherJogada);
-			//O computador não vai clicar em peca nenhuma.
+			//O computador n?o vai clicar em peca nenhuma.
 			//this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
 			
 			this.inicializarMatrizes();			
@@ -35,7 +35,7 @@ package {
 		}				
 				
 		
-		//O computador não vai clicar em peca nenhuma.
+		//O computador n?o vai clicar em peca nenhuma.
 		/*private function clicar(e:Event):void {
 			var pecaClicada:Peca = Peca(e.target);
 			trace("pecaClicada.name = " + pecaClicada.name);
@@ -66,7 +66,7 @@ package {
 			}
 		}
 		
-		//Esse método será usado para o computador distribuir as peças dele, mas, por enquanto, é como se fosse a distribuição do usuário que está jogando
+		//Esse m?todo ser? usado para o computador distribuir as pe?as dele, mas, por enquanto, ? como se fosse a distribui??o do usu?rio que est? jogando
 		//contra o computador
 		private function distribuirPecas():void {			
 			this.distribuirDestroyer();
@@ -185,12 +185,12 @@ package {
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
 				this.minhaMatriz[linha][coluna] = "P";
 				
-				this.tabuleiro.frota.submarino.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+				this.tabuleiro.frota[2].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 				
-				this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+				//this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 			}
 			else {
-				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
+				//trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
 				this.distribuirSubmarino();
 			}
 		}
@@ -208,15 +208,15 @@ package {
 					this.minhaMatriz[linha][coluna + 2] = "P";
 					this.minhaMatriz[linha][coluna + 3] = "P";	
 					
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha][coluna+3].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+3].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -231,15 +231,15 @@ package {
 					this.minhaMatriz[linha + 2][coluna] = "P";
 					this.minhaMatriz[linha + 3][coluna] = "P";			
 					
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha+1][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha+2][coluna].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha+3][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+3][coluna].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -259,13 +259,13 @@ package {
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";
 					this.minhaMatriz[linha + 2][coluna] = "P";		
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha+2][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+2][coluna].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirDestroyer();
@@ -279,13 +279,13 @@ package {
 					this.minhaMatriz[linha][coluna + 2] = "P";
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";		
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirDestroyer();
@@ -299,13 +299,13 @@ package {
 					this.minhaMatriz[linha - 1][coluna + 1] = "P";
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";	
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha-1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha+1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirDestroyer();
@@ -319,13 +319,13 @@ package {
 					this.minhaMatriz[linha - 1][coluna + 1] = "P";
 					this.minhaMatriz[linha][coluna + 2] = "P";	
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
 					
-					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					/*this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
 					this.tabuleiro.pecas[linha-1][coluna+1].estado = EstadoPeca.PECAEXPOSTA;
-					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna+2].estado = EstadoPeca.PECAEXPOSTA;*/
 				}
 				else {
 					this.distribuirDestroyer();
@@ -335,12 +335,11 @@ package {
 		
 		public function escolherJogada():Jogada {				
 			var jogada:Jogada;						
-			var peca:Array = this.procurarEmbarcacaoAtingida();
-			trace("procurarEmbarcacaoAtingida = " + peca[0] + ", " + peca[1]);
+			var peca:Array = this.procurarEmbarcacaoAtingida();			
 			if ( (peca[0] == -1) && (peca[1] == -1) ) { // nao existe nenhuma peca atingida, entao escolhe qualquer peca
 				this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
 				this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
-				if (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") { //Se ainda n tiver atirado nessa posicao,
+				if ( (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") && (!this.temAbatidoAoRedor(new Array(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida)))) { //Se ainda n tiver atirado nessa posicao,
 					//this.tabuleiro.pecas[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida].clicar(); //Atirar.
 					jogada = new Jogada(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida);				
 				}
@@ -348,8 +347,7 @@ package {
 					jogada = this.escolherJogada(); //Se já tiver atirado nessa posicao, escolher outra.
 				}
 			}
-			else { //existe uma peca atingida, entao procura com inteligencia
-				trace("Existe peça atingida");
+			else { //existe uma peca atingida, entao procura com inteligencia				
 				var pecaAtingida:Array = this.procurarOutraPeca(peca);
 				this.ultimaLinhaEscolhida = pecaAtingida[0];
 				this.ultimaColunaEscolhida = pecaAtingida[1];
@@ -358,6 +356,24 @@ package {
 			
 			
 			return jogada;
+		}
+		
+		private function temAbatidoAoRedor(peca:Array):Boolean {
+			var retorno:Boolean = false;
+			for (var i:int = (peca[0] - 1); i <= (peca[0] + 1); i++) {
+				for (var j:int = (peca[1] - 1); j <= (peca[1] + 1); j++) {
+					if ( ( (i != peca[0]) || (j != peca[1]) ) && (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length) ) {
+						if (this.matrizOponente[i][j] == "P") {
+							retorno = true;
+							break;
+						}
+					}
+				}
+				if (retorno) {
+					break;
+				}
+			}
+			return retorno;
 		}
 		
 		private function procurarOutraPeca(peca:Array):Array {
@@ -390,7 +406,7 @@ package {
 					}				
 				}
 			}
-			else { //só achou uma peça solitaria de uma embarcacao. procurar algo ao redor dela!
+			else { //só achou uma peça solitaria de uma embarcacao. procurar algo ao redor dela!				
 				if (this.tiposEmbarcacao.length == 1) {
 					if (this.tiposEmbarcacao[0] == "portaAvioes") {
 						novaPeca = this.procurarVertical(peca);
@@ -399,16 +415,7 @@ package {
 						}
 					}
 					else { //destroyer
-						novaPeca = this.procurar0(peca);
-						if (!this.iValido(novaPeca[0], novaPeca[1])) {
-							novaPeca = this.procurar1(peca);
-							if (!this.iValido(novaPeca[0], novaPeca[1])) {
-								novaPeca = this.procurar2(peca);
-								if (!this.iValido(novaPeca[0], novaPeca[1])) {
-									novaPeca = this.procurar3(peca);
-								}
-							}
-						}
+						novaPeca = this.procurarDiagonal(peca);
 					}
 				}
 				else {
@@ -418,6 +425,24 @@ package {
 			return novaPeca;
 		}
 		
+		private function procurarDiagonal(peca:Array):Array {
+			var retorno:Array;
+			var linhas:Array = [-1, 1];
+			var colunas:Array = [ -1, 1];
+			var sorteio1:int = Math.floor(Math.random()*linhas.length);
+			var sorteio2:int = Math.floor(Math.random() * colunas.length);
+			var linha:int = peca[0] + linhas[sorteio1];
+			var coluna:int = peca[1] + colunas[sorteio2];		
+			
+			if (this.matrizOponente[linha][coluna] == "X") {
+				retorno = [linha, coluna];
+			}
+			else {
+				retorno = this.procurarDiagonal(peca);
+			}
+			return retorno;
+		}
+
 		private function procurarAoRedor(peca:Array):Array {
 			var retorno:Array = [-1, -1];
 			var linha:int = peca[0] + Math.floor(Math.random() * 3) - 1;
@@ -433,8 +458,7 @@ package {
 			}			
 			if (retorno[0] == -1) {
 				retorno = this.procurarAoRedor(peca);
-			}
-			trace("procurarAoRedor: " + retorno[0] + ", " + retorno[1]);
+			}			
 			return retorno;
 		}
 		
@@ -637,9 +661,42 @@ package {
 		}
 		
 		private function procurarVertical(peca:Array):Array {
-			var retorno:Array = this.procurarCima(peca);
-			if (retorno[0] == "nada") {
-				retorno = this.procurarBaixo(peca);
+			var retorno:Array = ["nada", "nada"];
+			if (this.cabeVertical(peca)) {
+				retorno = this.procurarCima(peca);
+				if (retorno[0] == "nada") {
+					retorno = this.procurarBaixo(peca);
+				}	
+			}			
+			return retorno;
+		}
+		
+		private function cabeVertical(peca:Array):Boolean {
+			var retorno:Boolean = false;
+			var linha:int = peca[0] - 1; //contando para cima
+			var coluna:int = peca[1];
+			var contador:int = 0;
+			
+			while ( this.iCabe(linha, coluna) ) {
+				contador++;
+				linha--;
+			}
+			
+			linha = peca[0] + 1; //contando para baixo.
+			while ( this.iCabe(linha, coluna) ) {
+				contador++;
+				linha++;
+			}
+			if (contador >= 4) {
+				retorno = true;
+			}
+			return retorno;
+		}
+		
+		private function iCabe(i:int, j:int):Boolean {
+			var retorno:Boolean = false;
+			if( (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length)  && ( (this.matrizOponente[i][j] == "X") || (this.matrizOponente[i][j] == "P") ) ) {
+				retorno = true;
 			}
 			return retorno;
 		}
@@ -685,9 +742,34 @@ package {
 		}
 		
 		private function procurarHorizontal(peca:Array):Array {
-			var retorno:Array = this.procurarDireita(peca);
-			if (retorno[0] == "nada") {
-				retorno = this.procurarEsquerda(peca);
+			var retorno:Array = ["nada", "nada"];
+			if (this.cabeHorizontal(peca)) {
+				retorno = this.procurarDireita(peca);
+				if (retorno[0] == "nada") {
+					retorno = this.procurarEsquerda(peca);
+				}	
+			}			
+			return retorno;
+		}
+		
+		
+		private function cabeHorizontal(peca:Array):Boolean {
+			var retorno:Boolean = false;
+			var linha:int = peca[0];
+			var coluna:int = peca[1] + 1; //contando para direita
+			var contador:int = 0;
+			
+			while ( this.iCabe(linha, coluna) ) {
+				contador++;
+				coluna++;
+			}
+			coluna = peca[1] - 1; //contando para esquerda.
+			while ( this.iCabe(linha, coluna) ) {
+				contador++;
+				coluna--;
+			}
+			if (contador >= 4) {
+				retorno = true;
 			}
 			return retorno;
 		}
@@ -737,8 +819,7 @@ package {
 			retorno[0] = "nada";
 			for (var i:int = (peca[0] - 1); i <= (peca[0] + 1); i++) {
 				for (var j:int = (peca[1] - 1); j <= (peca[1] + 1); j++) {
-					if ( ( (i != peca[0]) || (j != peca[1]) ) && (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length) ) {
-						trace("(" + i + ", " + j + ") = " + this.matrizOponente[i][j]);
+					if ( ( (i != peca[0]) || (j != peca[1]) ) && (i >= 0) && (i < this.matrizOponente.length) && (j >= 0) && (j < this.matrizOponente[0].length) ) {						
 						if (this.matrizOponente[i][j] == "P") { 
 							if ( (i == peca[0]) || (j == peca[1]) ) {//Porta-avioes
 								retorno[0] = "portaAvioes";
@@ -797,13 +878,13 @@ package {
 		public function abaterEmbarcacao(embarcacaoAbatida:Embarcacao):void {			
 			for (var i:int = 0; i < embarcacaoAbatida.pecas.length; i++) {
 				this.matrizOponente[embarcacaoAbatida.pecas[i].linha][embarcacaoAbatida.pecas[i].coluna] = "F";
-			}
-			if (embarcacaoAbatida.nome == "porta-aviões") {
-				this.tiposEmbarcacao.splice(0,1)
-			}
-			else if(embarcacaoAbatida.nome == "destroyer"){
-				this.tiposEmbarcacao.splice(1, 1);
 			}			
+			if (embarcacaoAbatida.nome == "porta-aviões") {				
+				this.tiposEmbarcacao = new Array(this.tiposEmbarcacao[1]);
+			}
+			else if (embarcacaoAbatida.nome == "destroyer") {
+				this.tiposEmbarcacao = new Array(this.tiposEmbarcacao[0]);
+			}	
 		}
 	}
 	

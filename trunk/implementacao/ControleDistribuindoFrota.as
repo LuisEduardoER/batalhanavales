@@ -169,7 +169,7 @@
 		
 		//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.
 		private function distribuirPecas():void {
-			this.tabuleiro.inicializarFrota();
+			//this.tabuleiro.inicializarFrota();
 			this.distribuirDestroyer();
 			this.distribuirPortaAvioes();
 			this.distribuirSubmarino();
@@ -286,7 +286,7 @@
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
 				this._matrizTabuleiro[linha][coluna] = "P";
 				
-				this.tabuleiro.frota.submarino.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+				this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 			}
 			else {
 				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);
@@ -307,10 +307,10 @@
 					this._matrizTabuleiro[linha][coluna + 2] = "P";
 					this._matrizTabuleiro[linha][coluna + 3] = "P";	
 					
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -325,10 +325,10 @@
 					this._matrizTabuleiro[linha + 2][coluna] = "P";
 					this._matrizTabuleiro[linha + 3][coluna] = "P";			
 					
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
-					this.tabuleiro.frota.portaAvioes.adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
 				}
 				else {
 					this.distribuirPortaAvioes();
@@ -337,20 +337,20 @@
 		}
 		
 		private function distribuirDestroyer():void {
-			var orientacao:int = Math.floor(Math.random() * 4);
+			var orientacao:int = 0//Math.floor(Math.random() * 4);
 			var linha:int;
 			var coluna:int;
-			if (orientacao == 0) {
+			if (orientacao == 0) {				
 				linha = Math.floor(Math.random() * (this._matrizTabuleiro.length - 2) );
-				coluna = Math.floor( Math.random() * (this._matrizTabuleiro[0].length - 1) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				coluna = Math.floor( Math.random() * (this._matrizTabuleiro[0].length - 1) );				
+				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {					
 					this._matrizTabuleiro[linha][coluna] = "P";
 					this._matrizTabuleiro[linha + 1][coluna + 1] = "P";
 					this._matrizTabuleiro[linha + 2][coluna] = "P";		
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);					
 				}
 				else {
 					this.distribuirDestroyer();
@@ -364,9 +364,9 @@
 					this._matrizTabuleiro[linha][coluna + 2] = "P";
 					this._matrizTabuleiro[linha + 1][coluna + 1] = "P";		
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 				}
 				else {
 					this.distribuirDestroyer();
@@ -380,9 +380,9 @@
 					this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
 					this._matrizTabuleiro[linha + 1][coluna + 1] = "P";	
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
 				}
 				else {
 					this.distribuirDestroyer();
@@ -396,9 +396,9 @@
 					this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
 					this._matrizTabuleiro[linha][coluna + 2] = "P";	
 					
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
-					this.tabuleiro.frota.destroyer.adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+					this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
 				}
 				else {
 					this.distribuirDestroyer();

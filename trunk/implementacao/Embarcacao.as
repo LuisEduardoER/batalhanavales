@@ -13,6 +13,8 @@
 		public var quantidadePecasAtingidas:int;
 		public var estado:String;
 		public var pecas:Array;
+		private var _observadores:Array;
+		private var _ultimaPecaClicada:Peca;
 		
 		public function Embarcacao(nome) {
 			this._nome = nome;
@@ -22,26 +24,34 @@
 		
 		public function adicionarPeca(peca:Peca):void {
 			this.pecas.push(peca);
-			this.quantidadePecas = this.pecas.length;
-			peca.addEventListener(EventosBatalhaNaval.ATINGIRPECA, this.verificarEstado);
+			peca.observadores = new Array(this);
+			this.quantidadePecas = this.pecas.length;			
 		}
 		
-		public function verificarEstado(e:Event):void {
-			var peca:Peca = Peca(e.target);
-			peca.removeEventListener(EventosBatalhaNaval.ATINGIRPECA, this.verificarEstado);
+		public function atualizar(tipo:String, peca:Peca):void {						
+			peca.estado = EstadoPeca.PECAATINGIDA;
+			this.ultimaPecaClicada = peca;
 			
-			var contadorPecasAtingidas:int;
+			var contadorPecasAtingidas:int = 0;
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				if (this.pecas[i].estado == EstadoPeca.PECAATINGIDA) {
-					contadorPecasAtingidas++;
-					this.pecas[i].estado = EstadoPeca.PECAATINGIDA;
+					contadorPecasAtingidas++;					
 				}
 			}
-			if (contadorPecasAtingidas == this.pecas.length) {
+			if (contadorPecasAtingidas == this.pecas.length) { //Se todas as pecas foram atingidas, abater embarcacao
 				this.abater();
+				this.estado = EstadoEmbarcacao.EMBARCACAOABATIDA;				
 			}
-			else if (contadorPecasAtingidas > 0) {
+			else if (contadorPecasAtingidas == 1) {
 				this.estado = EstadoEmbarcacao.EMBARCACAOATINGIDA;
+			}
+			
+			this.notificar();
+		}
+		
+		private function notificar():void{
+			for (var i:int = 0; i < this.observadores.length; i++) {
+				this.observadores[i].atualizar("embarcacao", this);
 			}
 		}
 		
@@ -53,7 +63,7 @@
 			this.dispatchEvent( new Event(EventosBatalhaNaval.ABATEREMBARCACAO) );
 		}
 		
-		public function verificarPecaExistente(linha:uint, coluna:uint):Boolean {
+		/*public function verificarPecaExistente(linha:uint, coluna:uint):Boolean {
 			var retorno:Boolean = false;
 			for (var i:int = 0; i < pecas.length; i++) {
 				if ((pecas[i].linha == linha) && (pecas[i].coluna == coluna)) {
@@ -63,10 +73,26 @@
 				
 			}
 			return retorno;
-		}
+		}*/
 		
 		public function get nome():String { 
 			return _nome;
+		}
+		
+		public function get observadores():Array { 
+			return _observadores;
+		}
+		
+		public function set observadores(value:Array):void {
+			_observadores = value;
+		}
+		
+		public function get ultimaPecaClicada():Peca { 
+			return _ultimaPecaClicada;
+		}
+		
+		public function set ultimaPecaClicada(value:Peca):void {
+			_ultimaPecaClicada = value;
 		}
 		
 	}
