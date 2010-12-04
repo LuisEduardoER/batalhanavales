@@ -9,39 +9,49 @@
 	public class Tabuleiro extends MovieClip {
 		private var _pecas:Array;
 		private var _ultimaPecaClicada:Peca;
-		private var _frota:Frota; //Por enquanto, é como se fosse a frota do oponente humano.
+		private var _frota:Array; //Por enquanto, é como se fosse a frota do oponente humano.
 		private var _ultimaEmbarcacaoAbatida:Embarcacao;
+		private var contadorAbatidos:int;
+		private const QTDEMBARCACOES:int = 3
 		
 		public function Tabuleiro() {
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
-		}
-		
-		/*Tentativa para funcionar sem computador*/
-		public function inicializarFrota():void {
-			this.frota = new Frota();
-			this.frota.addEventListener(EventosBatalhaNaval.ABATEREMBARCACAO, this.abaterEmbarcacao);
-			this.frota.addEventListener(EventosBatalhaNaval.TERMINARJOGO, this.terminarJogo);
-		}
-		
-		public function copiar(tabuleiro:Tabuleiro):void {
+			this.contadorAbatidos = 0;
 			this.inicializarFrota();
-			for (var i:int = 0; i < tabuleiro.frota.embarcacoes.length; i++) {
-				for (var j:int = 0; j < tabuleiro.frota.embarcacoes[i].pecas.length; j++) {
-					var peca:Peca = this.pecas[tabuleiro.frota.embarcacoes[i].pecas[j].linha][tabuleiro.frota.embarcacoes[i].pecas[j].coluna];
-					this.frota.embarcacoes[i].adicionarPeca(peca);
+		}		
+		
+		private  function inicializarFrota():void {
+			var destroyer:Embarcacao = new Embarcacao("destroyer");
+			destroyer.observadores = [this];
+			var portaAvioes:Embarcacao = new Embarcacao("porta-aviões");
+			portaAvioes.observadores = [this];
+			var submarino:Embarcacao = new Embarcacao("submarino");
+			submarino.observadores = [this];
+			this.frota = [destroyer, portaAvioes, submarino];
+		}
+		
+		public function copiar(tabuleiro:Tabuleiro):void {			
+			for (var i:int = 0; i < tabuleiro.frota.length; i++) {
+				for (var j:int = 0; j < tabuleiro.frota[i].pecas.length; j++) {
+					var peca:Peca = this.pecas[tabuleiro.frota[i].pecas[j].linha][tabuleiro.frota[i].pecas[j].coluna];
+					this.frota[i].adicionarPeca(peca);
 					peca.estado = EstadoPeca.PECAEXPOSTA;
 				}
 			}
+		}			
+		
+		
+		
+		private function atingirEmbarcacao():void {
+			this.dispatchEvent(new Event(EventosBatalhaNaval.ATINGIRPECA));
 		}
 		
-		private function abaterEmbarcacao(e:Event):void {
-			this._ultimaEmbarcacaoAbatida = this.frota.ultimaEmbarcacaoAbatida;
+		private function abaterEmbarcacao():void {
 			this.dispatchEvent(new Event(EventosBatalhaNaval.ABATEREMBARCACAO));
 		}
-		
-		private function terminarJogo(e:Event):void {			
-			trace("Tabuleiro: disparou terminarJogo");
+				
+		private function terminarJogo():void {
 			this.dispatchEvent(new Event(EventosBatalhaNaval.TERMINARJOGO));
 		}
 		
@@ -52,27 +62,58 @@
 				for (var j:int = 0; j < this.pecas[i].length; j++) {
 					this._pecas[i][j] = this.getChildByName("quad" + i + j + "_mc");
 					this._pecas[i][j].buttonMode = true;
-					this._pecas[i][j].addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
-					this._pecas[i][j].addEventListener(EventosBatalhaNaval.ACERTARAGUA, dispararAcertarAgua);
+					//this._pecas[i][j].addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
+					//this._pecas[i][j].addEventListener(EventosBatalhaNaval.ACERTARAGUA, dispararAcertarAgua);
+					this._pecas[i][j].observadores = new Array(this);
 				}					
+			}
+		}				
+		
+		public function liberarClique(liberado:Boolean):void {
+			for (var i:int = 0; i < this.pecas.length; i++) {
+				for (var j:int = 0; j < this.pecas[i].length; j++) {
+					this.pecas[i][j].mouseEnabled = liberado;
+				}	
 			}
 		}
 		
-		private function dispararAcertarAgua(e:Event):void {
+		private function dispararEventoClicarPeca(peca:Peca):void {
+			this.ultimaPecaClicada = peca;
+			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
+		}
+		
+		public function atualizar(tipo:String, objeto:Object):void {								
+			if (tipo == "peca") {	
+				var peca:Peca = Peca(objeto);
+				this.dispararEventoClicarPeca(peca);
+				peca.estado = EstadoPeca.PECAAGUA;
+				this.dispararAcertarAgua();
+			}
+			else { //tipo = Embarcacao			
+				var embarcacao:Embarcacao = Embarcacao(objeto);				
+				this.dispararEventoClicarPeca(embarcacao.ultimaPecaClicada);
+				if (embarcacao.estado == EstadoEmbarcacao.EMBARCACAOATINGIDA) {
+					this.atingirEmbarcacao();
+				}
+				else {
+					this._ultimaEmbarcacaoAbatida = embarcacao;
+					this.abaterEmbarcacao();
+					if (++this.contadorAbatidos == this.QTDEMBARCACOES) {
+						this.terminarJogo();
+					}
+				}
+				
+			}
+			
+		}												
+		
+		private function dispararAcertarAgua():void {
 			this.dispatchEvent(new Event(EventosBatalhaNaval.ACERTARAGUA));
 		}
 		
 		public function get pecas():Array { 
 			return _pecas;
-		}
-		
-		public function get frota():Frota { 
-			return _frota;
-		}
-		
-		public function set frota(value:Frota):void {
-			_frota = value;
-		}
+		}				
 		
 		public function get ultimaEmbarcacaoAbatida():Embarcacao { 
 			return _ultimaEmbarcacaoAbatida;
@@ -88,39 +129,16 @@
 		
 		public function set ultimaPecaClicada(value:Peca):void {
 			_ultimaPecaClicada = value;
+		}							
+		
+		public function get frota():Array { 
+			return _frota;
 		}
 		
-		//O computador não vai clicar em peca nenhuma.
-		private function clicar(e:Event):void {	
-			this.ultimaPecaClicada = Peca(e.target);
-			this.dispatchEvent(new Event(EventosBatalhaNaval.CLICARPECA));			
-			if(this.frota != null)this.procurarPecaNaFrota();
+		public function set frota(value:Array):void {
+			_frota = value;
 		}
-		
-		private function procurarPecaNaFrota():void {
-			var encontrou:Boolean = false;
-			for (var i:int = 0; i < this.frota.embarcacoes.length; i++) {
-				for (var j:int = 0; j < this.frota.embarcacoes[i].pecas.length; j++) {
-					if (this.frota.embarcacoes[i].pecas[j] == this.ultimaPecaClicada) {						
-						this.dispatchEvent( new Event(EventosBatalhaNaval.ATINGIRPECA) );
-						this.ultimaPecaClicada.estado = EstadoPeca.PECAATINGIDA;
-						encontrou = true;
-						break;
-					}
-				}				
-			}			
-			if (!encontrou) {
-				this.ultimaPecaClicada.estado = EstadoPeca.PECAAGUA;
-			}			
-		}
-		
-		public function liberarClique(liberado:Boolean):void {
-			for (var i:int = 0; i < this.pecas.length; i++) {
-				for (var j:int = 0; j < this.pecas[i].length; j++) {
-					this.pecas[i][j].mouseEnabled = liberado;
-				}	
-			}
-		}
+				
 	}
 	
 }

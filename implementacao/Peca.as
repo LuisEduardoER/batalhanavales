@@ -11,20 +11,22 @@
 		private var _linha:int;
 		private var _coluna:int;
 		private var _estado:String;
+		private var _observadores:Array;
 		
 		public function Peca() {
 			var nome:String = this.name;
 			this._linha = int(this.name.substr(4, 1));
 			this._coluna = int(this.name.substr(5, 1));
 			this.estado = EstadoPeca.PECAOCULTA;
+			this.observadores = new Array();
 			//É isso o que eu faço com o estado???
 			//Se for ficar assim, tem que mudar o diagrama de classes pq lá diz que Peca tem um EstadoPeca.
 			
 			this.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
 		}
-		
-		//O computador não vai clicar em peca nenhuma.
-		public function clicar(e:MouseEvent = null):void {			
+				
+		public function clicar(e:Event = null):void {			
+			this.notificar();
 			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
 		}
 		
@@ -34,12 +36,18 @@
 		
 		public function set estado(value:String):void {				
 			_estado = value;
-			this.gotoAndStop(this.estado);
+			this.gotoAndStop(this.estado);/*
 			if (this.estado == EstadoPeca.PECAATINGIDA) {
 				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ATINGIRPECA) );
 			}
 			else if (this.estado == EstadoPeca.PECAAGUA) {
 				this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.ACERTARAGUA) );
+			}*/
+		}
+		
+		private function notificar():void {
+			for (var i:int = 0; i < this.observadores.length; i++) {
+				this.observadores[i].atualizar("peca", this);
 			}
 		}
 		
@@ -57,6 +65,14 @@
 		
 		private function set coluna(value:int):void {
 			_coluna = value;
+		}
+		
+		public function get observadores():Array { 
+			return _observadores;
+		}
+		
+		public function set observadores(value:Array):void {
+			_observadores = value;
 		}
 			
 	}

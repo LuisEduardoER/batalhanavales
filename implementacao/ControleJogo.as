@@ -1,4 +1,4 @@
-package {
+﻿package {
 	import fl.controls.Button;
 	import fl.controls.TextArea;
 	import flash.display.MovieClip;
@@ -61,14 +61,15 @@ package {
 			
 			this.delay = new Timer(1000);
 			
-			this.verificarTipoOponente();	
+			
 			//-----------------------------//
 			this.meuTabuleiro.liberarClique(false);
 			this.oponenteTabuleiro.liberarClique(false);
 			this.vez = -1;
 			this.jogadaEnviada = false;
+			this.verificarTipoOponente();	
 			//----------------------------//
-			//this.iniciarJogo();			
+						
 						
 		}
 		
@@ -94,42 +95,38 @@ package {
 			this.delay.delay = numero;
 		}
 		
-		private function informarJogada(e:Event):void {
-			
-			var tabuleiro:Tabuleiro = Tabuleiro(e.target);
-			this.oponenteTabuleiro.liberarClique(false);
-			this.meuTabuleiro.liberarClique(false);
-			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");
-			if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
+		private function informarJogada(e:Event):void {			
+			var tabuleiro:Tabuleiro = Tabuleiro(e.target);			
+			this.oponenteTabuleiro.liberarClique(false);			
+			this.meuTabuleiro.liberarClique(false);		
+			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");			
+		/*	if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
 				var msg:Mensagem = new Mensagem();
 				msg.tipo = "jogada";
 				msg.linha = tabuleiro.ultimaPecaClicada.linha;
 				msg.coluna = tabuleiro.ultimaPecaClicada.coluna;
 				this.comunicacao.send(msg.criarXML());
 				this.jogadaEnviada = true;
-			}
+			}*/
 			
 			
 		}
 		
 		private function verificarTipoOponente():void{
 			if (this.oponente.nome == "Computador") {
-				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);
-				//------//
-				this.vez = Math.floor(Math.random() * 2);
-				
-				this.liberarJogada();
+				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);				
+				this.iniciarJogo();
 			}
 		}
 		
 		public function iniciarJogo():void{
-			/*this.vez = Math.floor(Math.random() * 2);*/
+			this.vez = Math.floor(Math.random() * 2);
 			this.escreverLog("Definido por sorteio: " + this.jogadores[this.vez].nome + " inicia jogando.");
 			this.liberarJogada();	
 		}
 		
 		public function continuarVez():void {
-			this.escreverLog("\n" + this.jogadores[this.vez].nome + " deve jogar novamente.");
+			this.escreverLog("\n\n" + this.jogadores[this.vez].nome + " deve jogar novamente.");
 			if (this.jogadores[this.vez].nome == "Computador") {
 				this.revalorarDelay();
 				this.delay.start();
@@ -142,7 +139,7 @@ package {
 		
 		public function passarVez(e:Event = null):void {
 			this.vez = (1 - this.vez);			
-			this.escreverLog("\nAgora eh a vez de " + this.jogadores[this.vez].nome + " jogar.");
+			this.escreverLog("\n\nAgora eh a vez de " + this.jogadores[this.vez].nome + " jogar.");
 			this.liberarJogada();
 		}				
 		
@@ -171,9 +168,7 @@ package {
 		
 		private function acertarAgua(e:Event):void {
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
-				Computador(this.oponente).acertarAgua();
-				//
-				
+				Computador(this.oponente).acertarAgua();				
 			}
 			if (this.vez == 1 && this.oponente.nome != "Computador" && !this.jogadaEnviada) {
 				this.retornarJogada(EstadoPeca.PECAAGUA);
@@ -202,7 +197,8 @@ package {
 			if (this.vez == 1 && this.oponente.nome != "Computador") {
 				this.retornarJogada(EstadoPeca.PECAABATIDA);
 			}
-			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu um " + this.tabuleiros[(1 - this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1 - this.vez)].nome + ".");			
+			this.escreverLog(" e abateu um " + this.tabuleiros[(1 - this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1 - this.vez)].nome + ".");			
+			this.continuarVez();
 		}
 		
 		private function terminarJogo(e:Event):void {
