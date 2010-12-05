@@ -153,10 +153,16 @@ public class InterpretadorMensagem {
                 Cliente dupla3 = this.servidor.getOponente(cliente);
                 this.servidor.enviarMensagem(this.mensagem, dupla3);
                 break;
-            case 14://resultadoJogada
+//            case 14://resultadoJogada
+//                this.mensagem.setNomeCliente(this.cliente.getNome());
+//                Cliente dupla4 = this.servidor.getOponente(cliente);
+//                this.servidor.enviarMensagem(this.mensagem, dupla4);
+//                break;
+            case 14://frota
                 this.mensagem.setNomeCliente(this.cliente.getNome());
-                Cliente dupla4 = this.servidor.getOponente(cliente);
-                this.servidor.enviarMensagem(this.mensagem, dupla4);
+                Cliente dupla5 = this.servidor.getOponente(cliente);
+                this.servidor.enviarMensagem(this.mensagem, dupla5);
+                System.out.println("mensagem.embarcacoes = "+this.mensagem.getEmbarcacoes());
                 break;
 
         }
@@ -191,7 +197,10 @@ public class InterpretadorMensagem {
             retorno = 12;
         } else if (tipo.equals("jogada")) {
             retorno = 13;
-        }else if (tipo.equals("resultadoJogada")) {
+//        }else if (tipo.equals("resultadoJogada")) {
+//            retorno = 14;
+//        }
+        } else if (tipo.equals("frota")) {
             retorno = 14;
         }
 
