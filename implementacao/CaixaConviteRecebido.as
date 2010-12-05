@@ -10,7 +10,7 @@ package {
 	 */
 	public class CaixaConviteRecebido extends MovieClip {
 		
-		private var nome:String;
+		private var _nome:String;
 		private var texto:String;
 		private var campo:TextArea;
 		private var aceitar:Button;
@@ -60,6 +60,12 @@ package {
 		
 		public function enviarRecusa():void {
 			this.campo.text += "\nVocê recusou o convite."			
+		}
+		
+		public function get nome():String { return _nome; }
+		
+		public function set nome(value:String):void {
+			_nome = value;
 		}
 	}
 	

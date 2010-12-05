@@ -10,7 +10,7 @@ package {
 	 */
 	public class CaixaConviteEnviado extends MovieClip {
 		
-		private var nome:String;
+		private var _nome:String;
 		private var texto:String;
 		private var campo:TextArea;
 		private var botao:Button;
@@ -58,6 +58,12 @@ package {
 			}
 			
 		}				
+		
+		public function get nome():String { return _nome; }
+		
+		public function set nome(value:String):void {
+			_nome = value;
+		}
 		
 	}
 	

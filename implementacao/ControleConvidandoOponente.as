@@ -32,6 +32,8 @@
 		private var caixaConviteRecebido:CaixaConviteRecebido;
 		private var caixaGeral:CaixaGeral;
 		
+		private var _nomeOponente:String;
+		
 		public function ControleConvidandoOponente(socket:XMLSocket, id:int) {
 			this.jogadores = this.jogadores_dg;
 			this.destinatarios = this.destinatarios_cb;
@@ -311,6 +313,7 @@
 		public function mostrarCaixaConviteRecebido(nome:String, id:String):void {
 			this.idConvidador = int(id);
 			this.habilitar(false);
+			this.nomeOponente = nome;
 			this.caixaConviteRecebido = new CaixaConviteRecebido(nome);
 			this.alvo.addChild(this.caixaConviteRecebido);
 			this.caixaConviteRecebido.addEventListener(EventosBatalhaNaval.ACEITARCONVITE, this.aceitarConvite);
@@ -356,6 +359,7 @@
 		
 		public function mostrarCaixaConviteEnviado(nome:String):void {
 			this.habilitar(false);
+			this.nomeOponente = nome;
 			this.caixaConviteEnviado = new CaixaConviteEnviado(nome);
 			this.alvo.addChild(this.caixaConviteEnviado);
 			this.caixaConviteEnviado.addEventListener(EventosBatalhaNaval.CANCELARCONVITE, this.cancelarConvite);
@@ -380,6 +384,12 @@
 		
 		public function receberCancelamentoConvite():void {
 			this.caixaConviteRecebido.receberCancelamento();
+		}
+		
+		public function get nomeOponente():String { return _nomeOponente; }
+		
+		public function set nomeOponente(value:String):void {
+			_nomeOponente = value;
 		}
 	}
 	

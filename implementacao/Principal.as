@@ -95,6 +95,7 @@
 												break;
 												
 				case "aceitacaoConvite":		this.convidandoOponente.receberAceitacao();
+												
 												break;
 												
 				case "recusaConvite":			this.convidandoOponente.receberRecusa();												
@@ -127,7 +128,6 @@
 				case "espera":					this.jogo.liberarOponenteJogada();
 												break;
 				case "frota":					this.jogo.adicionarFrota(xml.embarcacoes);
-												trace("xml.embarcacoes = " + xml.embarcacoes);
 												break;
 				
 				default:				trace("Principal -> receberMensagem -> não entrou em case nenhum.");
@@ -233,7 +233,7 @@
 		
 		private function irParaDistribuindoFrota(e:Event = null):void {	
 			this.eu = new Humano(this.login.nome, this.login.senha);
-			if(this.oponente == null)this.oponente = new Jogador("Humano");//VERIFICAR ISTO DEPOIS;
+			if(this.oponente == null)this.oponente = new Jogador(this.convidandoOponente.nomeOponente);//VERIFICAR ISTO DEPOIS;
 			//this.eu.senha = this.login.senha;
 			this.distribuindoFrota = this.attacharTela("ControleDistribuindoFrota", true);
 			this.distribuindoFrota.addEventListener(EventosBatalhaNaval.SAIR, this.sair);
