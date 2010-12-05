@@ -286,7 +286,7 @@
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
 				this._matrizTabuleiro[linha][coluna] = "P";
 				
-				this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+				this.tabuleiro.frota[2].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
 			}
 			else {
 				trace("Submarino nao pode ficar na posicao: " + linha + ", " + coluna);

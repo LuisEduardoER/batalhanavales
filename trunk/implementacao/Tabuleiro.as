@@ -13,11 +13,13 @@
 		private var _ultimaEmbarcacaoAbatida:Embarcacao;
 		private var contadorAbatidos:int;
 		private const QTDEMBARCACOES:int = 3
+		private var _terminou:Boolean;
 		
 		public function Tabuleiro() {
 			this.ultimaPecaClicada = undefined;
 			this.inicializarPecas();
 			this.contadorAbatidos = 0;
+			this.terminou = false;
 			this.inicializarFrota();
 		}		
 		
@@ -72,7 +74,9 @@
 		public function liberarClique(liberado:Boolean):void {
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				for (var j:int = 0; j < this.pecas[i].length; j++) {
-					this.pecas[i][j].mouseEnabled = liberado;
+					if (this.pecas[i][j].estado == EstadoPeca.PECAOCULTA) {
+						this.pecas[i][j].mouseEnabled = liberado;
+					}					
 				}	
 			}
 		}
@@ -96,10 +100,14 @@
 					this.atingirEmbarcacao();
 				}
 				else {
-					this._ultimaEmbarcacaoAbatida = embarcacao;
-					this.abaterEmbarcacao();
+					this._ultimaEmbarcacaoAbatida = embarcacao;					
 					if (++this.contadorAbatidos == this.QTDEMBARCACOES) {
+						this.terminou = true;
+						this.abaterEmbarcacao();
 						this.terminarJogo();
+					}					
+					else {
+						this.abaterEmbarcacao();
 					}
 				}
 				
@@ -137,6 +145,14 @@
 		
 		public function set frota(value:Array):void {
 			_frota = value;
+		}
+		
+		public function get terminou():Boolean { 
+			return _terminou;
+		}
+		
+		public function set terminou(value:Boolean):void {
+			_terminou = value;
 		}
 				
 	}
