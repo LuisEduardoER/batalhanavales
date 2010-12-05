@@ -100,14 +100,14 @@
 			this.oponenteTabuleiro.liberarClique(false);			
 			this.meuTabuleiro.liberarClique(false);		
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");			
-		/*	if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
+			if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
 				var msg:Mensagem = new Mensagem();
 				msg.tipo = "jogada";
 				msg.linha = tabuleiro.ultimaPecaClicada.linha;
 				msg.coluna = tabuleiro.ultimaPecaClicada.coluna;
 				this.comunicacao.send(msg.criarXML());
 				this.jogadaEnviada = true;
-			}*/
+			}
 			
 			
 		}
@@ -132,7 +132,6 @@
 				this.delay.start();
 				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);
 			}else {
-				//this.vez = 0;
 				this.liberarJogada();
 			}
 		}
@@ -198,19 +197,29 @@
 				this.retornarJogada(EstadoPeca.PECAABATIDA);
 			}
 			this.escreverLog(" e abateu um " + this.tabuleiros[(1 - this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1 - this.vez)].nome + ".");			
-			this.continuarVez();
+			if(!this.tabuleiros[(1 - this.vez)].terminou) {
+				this.continuarVez();
+			}
 		}
 		
 		private function terminarJogo(e:Event):void {
 			this.oponenteTabuleiro.liberarClique(false);
-			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu todas as embarcações de " + this.jogadores[(1 - this.vez)].nome + ".");			
+			this.escreverLog("\n" + this.jogadores[this.vez].nome + " abateu todas as embarcações de " + this.jogadores[(1 - this.vez)].nome + ".");						
 			if (this.vez == 0) {
 				this.tipoResultado = TipoResultado.GANHOU;
+				this.escreverLog("\n\n**** VOCÊ VENCEU!!! ****");
 			}
 			else {
 				this.tipoResultado = TipoResultado.PERDEU;
+				this.escreverLog("\n\n**** VOCÊ PERDEU... ****");
 			}
-			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.TERMINARJOGO ) );
+			this.delay.delay = 5000;
+			this.delay.start();
+			this.delay.addEventListener(TimerEvent.TIMER, this.dispararEventoTerminarJogo);			
+		}
+		
+		private function dispararEventoTerminarJogo(e:Event):void{
+			//this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.TERMINARJOGO ) );
 		}
 		
 		private function sair(e:Event):void{

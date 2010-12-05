@@ -31,7 +31,7 @@ package {
 			//this.tabuleiro.addEventListener(EventosBatalhaNaval.CLICARPECA, clicar);
 			
 			this.inicializarMatrizes();			
-			this.distribuirPecas();
+			this.distribuirEmbarcacoes();
 		}				
 				
 		
@@ -68,7 +68,7 @@ package {
 		
 		//Esse m?todo ser? usado para o computador distribuir as pe?as dele, mas, por enquanto, ? como se fosse a distribui??o do usu?rio que est? jogando
 		//contra o computador
-		private function distribuirPecas():void {			
+		private function distribuirEmbarcacoes():void {			
 			this.distribuirDestroyer();
 			this.distribuirPortaAvioes();
 			this.distribuirSubmarino();
@@ -408,6 +408,7 @@ package {
 			}
 			else { //só achou uma peça solitaria de uma embarcacao. procurar algo ao redor dela!				
 				if (this.tiposEmbarcacao.length == 1) {
+					trace("Só existe um tipo de embarcação e é do tipo " + this.tiposEmbarcacao[0]);
 					if (this.tiposEmbarcacao[0] == "portaAvioes") {
 						novaPeca = this.procurarVertical(peca);
 						if (novaPeca[0] == "nada") {
@@ -673,7 +674,7 @@ package {
 		
 		private function cabeVertical(peca:Array):Boolean {
 			var retorno:Boolean = false;
-			var linha:int = peca[0] - 1; //contando para cima
+			var linha:int = peca[0]; //contando para cima
 			var coluna:int = peca[1];
 			var contador:int = 0;
 			
@@ -756,7 +757,7 @@ package {
 		private function cabeHorizontal(peca:Array):Boolean {
 			var retorno:Boolean = false;
 			var linha:int = peca[0];
-			var coluna:int = peca[1] + 1; //contando para direita
+			var coluna:int = peca[1]; //contando para direita
 			var contador:int = 0;
 			
 			while ( this.iCabe(linha, coluna) ) {
@@ -885,6 +886,7 @@ package {
 			else if (embarcacaoAbatida.nome == "destroyer") {
 				this.tiposEmbarcacao = new Array(this.tiposEmbarcacao[0]);
 			}	
+			trace("Abateu embarcação " + embarcacaoAbatida.nome + ". Agora só sobrou " + this.tiposEmbarcacao + ".");
 		}
 	}
 	

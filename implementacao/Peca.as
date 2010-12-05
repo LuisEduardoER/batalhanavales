@@ -25,9 +25,9 @@
 			this.addEventListener(MouseEvent.MOUSE_UP, this.clicar);
 		}
 				
-		public function clicar(e:Event = null):void {			
-			this.notificar();
-			this.dispatchEvent( new Event(EventosBatalhaNaval.CLICARPECA) );
+		public function clicar(e:Event = null):void {	
+			this.mouseEnabled = false;
+			this.notificar();			
 		}
 		
 		public function get estado():String { 
