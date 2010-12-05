@@ -205,12 +205,15 @@ public class Servidor {
     protected Cliente getOponente(Cliente cliente){
         Cliente oponente = null;
         int linha = this.procurarLinhaCliente(cliente);
-        for (int i = 0; i < this.duplas.get(linha).size(); i++) {
-            if( ((Cliente)(this.duplas.get(linha).get(i))).getIdCliente() != cliente.getIdCliente() ){
-                oponente = (Cliente)(this.duplas.get(linha).get(i));
-                break;
+        if(linha != -1){
+            for (int i = 0; i < this.duplas.get(linha).size(); i++) {
+                if( ((Cliente)(this.duplas.get(linha).get(i))).getIdCliente() != cliente.getIdCliente() ){
+                    oponente = (Cliente)(this.duplas.get(linha).get(i));
+                    break;
+                }
             }
         }
+        
         return oponente;
     }
 
