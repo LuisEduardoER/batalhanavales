@@ -82,7 +82,7 @@ public class InterpretadorMensagem {
                 Cliente convidador = this.servidor.procurarCliente(this.mensagem.getDestinatario());
                 this.servidor.enviarMensagem(this.mensagem, convidador);
                 this.servidor.adicionarDupla(this.cliente, convidador);
-                System.out.println("convidador.getNome() = " + convidador.getNome());
+               // System.out.println("convidador.getNome() = " + convidador.getNome());
 
                 Mensagem msgMudancaEstado = new Mensagem();
                 msgMudancaEstado.setTipo("mudancaEstado");

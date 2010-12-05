@@ -17,7 +17,7 @@
 		private var meuTabuleiro:Tabuleiro;
 		private var oponenteTabuleiro:Tabuleiro;
 		private var tabuleiros:Array;
-		private var frota:Frota;
+		//private var frota:Frota;
 		private var log:TextArea;
 		/*Fim de elementos do palco*/
 		
@@ -32,9 +32,11 @@
 		
 		private var jogadaEnviada:Boolean;
 		
+		
 		public function ControleJogo(socket:XMLSocket,eu:Humano, oponente:Jogador, tabuleiro:Tabuleiro) {
 			this.eu = eu;
 			this.oponente = oponente;
+			this.oponente_txt.text = this.oponente.nome;
 			this.jogadores = [this.eu, this.oponente];
 			
 			this.comunicacao = socket;
@@ -56,7 +58,7 @@
 			
 			this.tabuleiros = [this.meuTabuleiro, this.oponenteTabuleiro];									
 			
-			this.frota = this.frota_mc;
+			//this.frota = this.frota_mc;
 			this.log = this.log_txt;				
 			
 			this.delay = new Timer(1000);
