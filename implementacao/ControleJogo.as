@@ -126,12 +126,14 @@
 		}
 		
 		public function continuarVez():void {
+			trace("continuarVez");
 			this.escreverLog("\n\n" + this.jogadores[this.vez].nome + " deve jogar novamente.");
 			if (this.jogadores[this.vez].nome == "Computador") {
 				this.revalorarDelay();
 				this.delay.start();
 				this.delay.addEventListener(TimerEvent.TIMER, this.jogarComputador);
 			}else {
+				trace("else");
 				this.liberarJogada();
 			}
 		}
@@ -143,8 +145,10 @@
 		}				
 		
 		private function liberarJogada():void {
+			trace("metodo liberarJogada");
 			this.jogadaEnviada = false;
 			if (this.vez == 0) {				
+				trace("liberou meu clique");
 				this.oponenteTabuleiro.liberarClique(true);
 				//this.meuTabuleiro.liberarClique(false);
 			}			
@@ -166,6 +170,7 @@
 		}
 		
 		private function acertarAgua(e:Event):void {
+			trace("método acertarAgua");
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).acertarAgua();				
 			}
@@ -179,6 +184,7 @@
 		}
 		
 		private function atingirPeca(e:Event):void {
+			trace("método atingirPeca");
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).atingirPeca();
 			}
@@ -190,6 +196,7 @@
 		}
 		
 		private function abaterEmbarcacao(e:Event):void {
+			trace("método abaterEmbarcacao");
 			if (this.vez == 1 && this.oponente.nome == "Computador") {				
 				Computador(this.oponente).abaterEmbarcacao(this.meuTabuleiro.ultimaEmbarcacaoAbatida);				
 			}
