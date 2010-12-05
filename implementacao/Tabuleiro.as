@@ -26,7 +26,7 @@
 		private  function inicializarFrota():void {
 			var destroyer:Embarcacao = new Embarcacao("destroyer");
 			destroyer.observadores = [this];
-			var portaAvioes:Embarcacao = new Embarcacao("porta-aviões");
+			var portaAvioes:Embarcacao = new Embarcacao("porta-avioes");
 			portaAvioes.observadores = [this];
 			var submarino:Embarcacao = new Embarcacao("submarino");
 			submarino.observadores = [this];

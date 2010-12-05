@@ -1,4 +1,4 @@
-package {
+Ôªøpackage {
 	import fl.controls.Button;
 	import fl.controls.progressBarClasses.IndeterminateBar;
 	import flash.display.MovieClip;
@@ -344,7 +344,7 @@ package {
 					jogada = new Jogada(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida);				
 				}
 				else {
-					jogada = this.escolherJogada(); //Se j· tiver atirado nessa posicao, escolher outra.
+					jogada = this.escolherJogada(); //Se j√° tiver atirado nessa posicao, escolher outra.
 				}
 			}
 			else { //existe uma peca atingida, entao procura com inteligencia				
@@ -406,9 +406,9 @@ package {
 					}				
 				}
 			}
-			else { //sÛ achou uma peÁa solitaria de uma embarcacao. procurar algo ao redor dela!				
+			else { //s√≥ achou uma pe√ßa solitaria de uma embarcacao. procurar algo ao redor dela!				
 				if (this.tiposEmbarcacao.length == 1) {
-					trace("SÛ existe um tipo de embarcaÁ„o e È do tipo " + this.tiposEmbarcacao[0]);
+					trace("S√≥ existe um tipo de embarca√ß√£o e √© do tipo " + this.tiposEmbarcacao[0]);
 					if (this.tiposEmbarcacao[0] == "portaAvioes") {
 						novaPeca = this.procurarVertical(peca);
 						if (novaPeca[0] == "nada") {
@@ -880,13 +880,15 @@ package {
 			for (var i:int = 0; i < embarcacaoAbatida.pecas.length; i++) {
 				this.matrizOponente[embarcacaoAbatida.pecas[i].linha][embarcacaoAbatida.pecas[i].coluna] = "F";
 			}			
-			if (embarcacaoAbatida.nome == "porta-aviıes") {				
+			if (embarcacaoAbatida.nome == "porta-avioes") {			
+				trace("entrou em embarcacao abatida porta-avioes");
 				this.tiposEmbarcacao = new Array(this.tiposEmbarcacao[1]);
+				trace("this.tiposEmbarcacao = " + this.tiposEmbarcacao);
 			}
 			else if (embarcacaoAbatida.nome == "destroyer") {
 				this.tiposEmbarcacao = new Array(this.tiposEmbarcacao[0]);
 			}	
-			trace("Abateu embarcaÁ„o " + embarcacaoAbatida.nome + ". Agora sÛ sobrou " + this.tiposEmbarcacao + ".");
+			trace("Abateu embarca√ß√£o " + embarcacaoAbatida.nome + ". Agora s√≥ sobrou " + this.tiposEmbarcacao + ".");
 		}
 	}
 	
