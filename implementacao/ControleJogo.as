@@ -73,6 +73,10 @@
 						
 		}
 		
+		public function adicionarFrota(frota:String):void {
+			this.oponenteTabuleiro.adicionarFrota(frota);
+		}
+		
 		public function liberarMinhaJogada():void {
 			this.vez = 0;
 			this.escreverLog("Vez de " + this.jogadores[this.vez].nome + " jogar.");
@@ -116,6 +120,25 @@
 			if (this.oponente.nome == "Computador") {
 				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);				
 				this.iniciarJogo();
+			}else {
+				var frota:Mensagem = new Mensagem();
+				frota.tipo = "frota";
+				for (var i:int = 0; i < this.meuTabuleiro.frota.length; i++) {
+					var pecas:String = "";
+					for (var j:int = 0; j < this.meuTabuleiro.frota[i].pecas.length; j++) {
+						pecas += (this.meuTabuleiro.frota[i].pecas[j].linha + "," + this.meuTabuleiro.frota[i].pecas[j].coluna);
+						if ( (j + 1) < this.meuTabuleiro.frota[i].pecas.length) {
+							pecas += "#";
+						}
+					}
+					if ( (i + 1) < this.meuTabuleiro.frota.length ) {
+						pecas += "%";
+					}
+					frota.embarcacoes += (pecas);
+				}
+					
+							
+				this.comunicacao.send(frota.criarXML());
 			}
 		}
 		
@@ -174,10 +197,10 @@
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).acertarAgua();				
 			}
-			if (this.vez == 1 && this.oponente.nome != "Computador" && !this.jogadaEnviada) {
+			/*if (this.vez == 1 && this.oponente.nome != "Computador" && !this.jogadaEnviada) {
 				this.retornarJogada(EstadoPeca.PECAAGUA);
 				
-			}
+			}*/
 			
 			this.escreverLog("e não atingiu nenhuma peça de nenhuma embarcação de " + this.jogadores[(1 - this.vez)].nome + ".");
 			this.passarVez();
@@ -188,9 +211,9 @@
 			if (this.vez == 1 && this.oponente.nome == "Computador") {
 				Computador(this.oponente).atingirPeca();
 			}
-			if (this.vez == 1 && this.oponente.nome != "Computador") {
+			/*if (this.vez == 1 && this.oponente.nome != "Computador") {
 				this.retornarJogada(EstadoPeca.PECAATINGIDA);
-			}
+			}*/
 			this.escreverLog("e atingiu uma peça de uma embarcação de " + this.jogadores[(1-this.vez)].nome + ".");
 			this.continuarVez();
 		}
@@ -200,9 +223,9 @@
 			if (this.vez == 1 && this.oponente.nome == "Computador") {				
 				Computador(this.oponente).abaterEmbarcacao(this.meuTabuleiro.ultimaEmbarcacaoAbatida);				
 			}
-			if (this.vez == 1 && this.oponente.nome != "Computador") {
+			/*if (this.vez == 1 && this.oponente.nome != "Computador") {
 				this.retornarJogada(EstadoPeca.PECAABATIDA);
-			}
+			}*/
 			this.escreverLog(" e abateu um " + this.tabuleiros[(1 - this.vez)].ultimaEmbarcacaoAbatida.nome + " de " + this.jogadores[(1 - this.vez)].nome + ".");			
 			if(!this.tabuleiros[(1 - this.vez)].terminou) {
 				this.continuarVez();
@@ -250,8 +273,7 @@
 			this.meuTabuleiro.pecas[linha][coluna].clicar();
 		}
 		
-		public function receberResultadoJogada(tipo:String):void {
-			trace("this.meuTabuleiro.ultimaPecaClicada: " + this.meuTabuleiro.ultimaPecaClicada);
+		/*public function receberResultadoJogada(tipo:String):void {
 			this.oponenteTabuleiro.ultimaPecaClicada.estado = tipo;
 		}
 		
@@ -260,7 +282,7 @@
 			msg.tipo = "resultadoJogada";
 			msg.texto = tipo;
 			this.comunicacao.send(msg.criarXML());
-		}
+		}*/
 				
 	}
 	

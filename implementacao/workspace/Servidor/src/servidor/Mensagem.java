@@ -5,6 +5,8 @@
 
 package servidor;
 
+import java.util.ArrayList;
+
 /**
  *
  * @author Lorena Tablada
@@ -19,6 +21,15 @@ public class Mensagem {
     private String senha;
     private int linha;
     private int coluna;
+    private String embarcacoes;
+
+    public String getEmbarcacoes() {
+        return embarcacoes;
+    }
+
+    public void setEmbarcacoes(String embarcacoes) {
+        this.embarcacoes = embarcacoes;
+    }
 
     public String getSenha() {
         return senha;

@@ -41,7 +41,31 @@
 					peca.estado = EstadoPeca.PECAEXPOSTA;
 				}
 			}
-		}			
+		}	
+		
+		public function adicionarFrota(frota:String):void { // frota = "0,0#0,2#1,1%3,3#3,4#3,5#3,6%8,8"
+			var embarcacoes:Array = new Array();
+			embarcacoes = frota.split("%"); //embarcacoes = ["0,0#0,2#1,1", "3,3#3,4#3,5#3,6", "8,8"];			
+			for (var t:int = 0; t < embarcacoes.length; t++) {
+				if (embarcacoes[t].indexOf("#") != -1) {
+					embarcacoes[t] = embarcacoes[t].split("#"); //embarcacoes = [ ["0,0", "0,2", "1,1"], ["3,3", "3,4", "3,5", "3,6"], "8,8"];
+					for (var f:int = 0; f < embarcacoes[t].length; f++) {
+						embarcacoes[t][f] = embarcacoes[t][f].split(","); //embarcacoes = [ [ ["0","0"], ["0", "2"], ["1", "1"] ], ["3,3", "3,4", "3,5", "3,6"], "8,8"];
+					}
+				}else {
+					embarcacoes[t] = [embarcacoes[t].split(",")]; //embarcacoes = [ [ ["0","0"], ["0", "2"], ["1", "1"] ], ["3,3", "3,4", "3,5", "3,6"], [["8","8"]]];
+				}
+				
+			}						
+			
+			for (var i:int = 0; i < embarcacoes.length; i++) {
+				for (var j:int = 0; j < embarcacoes[i].length; j++) {
+					var peca:Peca = this.pecas[ int(embarcacoes[i][j][0]) ][ int( embarcacoes[i][j][1]) ];
+					this.frota[i].adicionarPeca(peca);	
+					//peca.estado = EstadoPeca.PECAEXPOSTA;
+				}
+			}
+		}
 		
 		
 		
@@ -74,7 +98,7 @@
 		public function liberarClique(liberado:Boolean):void {
 			for (var i:int = 0; i < this.pecas.length; i++) {
 				for (var j:int = 0; j < this.pecas[i].length; j++) {
-					if (this.pecas[i][j].estado == EstadoPeca.PECAOCULTA) {
+					if (this.pecas[i][j].estado == EstadoPeca.PECAOCULTA || this.pecas[i][j].estado == EstadoPeca.PECAEXPOSTA) {
 						this.pecas[i][j].mouseEnabled = liberado;
 					}					
 				}	
