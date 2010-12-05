@@ -251,7 +251,7 @@
 		}
 		
 		private function dispararEventoTerminarJogo(e:Event):void{
-			//this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.TERMINARJOGO ) );
+			this.dispatchEvent( new EventosBatalhaNaval(EventosBatalhaNaval.TERMINARJOGO ) );
 		}
 		
 		private function sair(e:Event):void{
