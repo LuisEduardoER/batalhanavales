@@ -98,7 +98,7 @@
 		private function informarJogada(e:Event):void {			
 			var tabuleiro:Tabuleiro = Tabuleiro(e.target);			
 			this.oponenteTabuleiro.liberarClique(false);			
-			this.meuTabuleiro.liberarClique(false);		
+			//this.meuTabuleiro.liberarClique(false);		
 			this.escreverLog("\n" + this.jogadores[this.vez].nome + " jogou em (" + tabuleiro.ultimaPecaClicada.linha + ", " + tabuleiro.ultimaPecaClicada.coluna + ") ");			
 			if (this.oponente.nome != "Computador" && this.vez == 0 && !this.jogadaEnviada) {
 				var msg:Mensagem = new Mensagem();
@@ -146,11 +146,11 @@
 			this.jogadaEnviada = false;
 			if (this.vez == 0) {				
 				this.oponenteTabuleiro.liberarClique(true);
-				this.meuTabuleiro.liberarClique(false);
+				//this.meuTabuleiro.liberarClique(false);
 			}			
 			else {				
 				this.oponenteTabuleiro.liberarClique(false);
-				this.meuTabuleiro.liberarClique(true);
+				//this.meuTabuleiro.liberarClique(true);
 				if (this.jogadores[this.vez].nome == "Computador") {
 					this.revalorarDelay();
 					this.delay.start();
