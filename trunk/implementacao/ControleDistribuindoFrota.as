@@ -1,5 +1,6 @@
 ﻿package {
 	import fl.controls.Button;
+	import fl.controls.progressBarClasses.IndeterminateBar;
 	import fl.controls.TextArea;
 	import flash.display.MovieClip;
 	import flash.events.Event;
@@ -50,8 +51,11 @@
 			this.tipoOponente = tipoOponente;
 			
 			this.submarino = this.frota_mc.submarino_mc;
+			this.submarino.addEventListener(EventosBatalhaNaval.APAGARPECASSUBMARINO, this.apagarPecasSubmarino);
 			this.destroyer = this.frota_mc.destroyer_mc;
-			this.portaAvioes = this.frota_mc.portaAvioes_mc;
+			this.destroyer.addEventListener(EventosBatalhaNaval.APAGARPECASDESTROYER, this.apagarPecasDestroyer);
+			this.portaAvioes = this.frota_mc.portaAvioes_mc;			
+			this.portaAvioes.addEventListener(EventosBatalhaNaval.APAGARPECASPORTAAVIOES, this.apagarPecasPortaAvioes);
 			this._tabuleiro = this.tabuleiro_mc;
 			
 			/*Botoes*/
@@ -72,6 +76,16 @@
 			this.inicializarMatriz();
 			this.configurar();
 			this.liberar();
+		}
+		
+		private function apagarPecasSubmarino(e:Event):void {
+			this.apagarPecas(2);
+		}
+		private function apagarPecasPortaAvioes(e:Event):void {
+			this.apagarPecas(1);
+		}
+		private function apagarPecasDestroyer(e:Event):void {
+			this.apagarPecas(0);
 		}
 		
 		private function habilitarEnviar(e:Event):void{
@@ -610,6 +624,15 @@
 			
 		}
 		
+		private function apagarPecas(indice:int):void {
+			for (var i:int = 0; i < this.tabuleiro.frota[indice].pecas.length; i++) {
+				var peca:Peca = this.tabuleiro.frota[indice].pecas[i];
+				this._matrizTabuleiro[peca.linha][peca.coluna] = "X";
+				peca.estado = EstadoPeca.PECAOCULTA;				
+			}
+			this.tabuleiro.frota[indice].pecas = new Array();
+		}
+		
 		private function pegarIndice(array:Array,indice:String,tipo:String):int {
 			var retorno:int = -1;
 			var ind:int = -1;
@@ -701,6 +724,7 @@
 		
 		public function liberar():void {
 			this.log_txt.htmlText += "Posicione sua frota nos locais desejados e clique em \"Iniciar jogo\".\n";						
+			this.log_txt.htmlText += "Se você quiser reposicionar alguma embarcação, basta arrastá-la novamente que a primeira será apagada.\n";
 		}
 		
 		public function get matrizTabuleiro():Array { 

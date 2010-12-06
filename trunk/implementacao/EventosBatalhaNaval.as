@@ -27,6 +27,10 @@ package {
 		public static const ACERTARAGUA: String = "acertarAgua";		
 		public static const ABATEREMBARCACAO: String = "abaterEmbarcacao";		
 		public static const TERMINARJOGO: String = "terminarJogo";		
+		
+		public static const APAGARPECASDESTROYER: String = "apagarPecasDestroyer";		
+		public static const APAGARPECASPORTAAVIOES: String = "apagarPecasPortaAvioes";		
+		public static const APAGARPECASSUBMARINO: String = "apagarPecasSubmarino";		
 		/*Fim de Jogo*/
 		
 		

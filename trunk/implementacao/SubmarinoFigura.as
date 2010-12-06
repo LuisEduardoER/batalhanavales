@@ -36,6 +36,7 @@
 		}
 		
 		private function iniciarArrasto(m:MouseEvent):void {
+			this.dispatchEvent( new Event( EventosBatalhaNaval.APAGARPECASSUBMARINO ) );
 			this.figura.startDrag(true);
 		}
 				

@@ -48,6 +48,7 @@
 		}
 		
 		private function iniciarArrasto(m:MouseEvent):void {
+			this.dispatchEvent( new Event( EventosBatalhaNaval.APAGARPECASDESTROYER ) );
 			this.desaparecer();
 			this.figura.startDrag(true);
 		}
