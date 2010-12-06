@@ -7,13 +7,12 @@
 	* ...
 	* @author Lorena Tablada
 	*/
-	public class IJogando extends MovieClip{
+	public class Apresentacao extends MovieClip{
 		private var avanca:Button;
 		
-		public function IJogando() {
+		public function Apresentacao() {
 			this.avanca = this.avanca_btn;			
-			this.avanca.addEventListener(MouseEvent.MOUSE_UP, clicar);		
-						
+			this.avanca.addEventListener(MouseEvent.MOUSE_UP, clicar);						
 			this.gotoAndStop(1);
 		}
 		
