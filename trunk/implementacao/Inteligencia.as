@@ -121,7 +121,7 @@
 				if (orientacao == 0) {					
 					for (var e:int = (linha - 1); e <= (linha + 3) ; e++) {
 						for (var f:int = (coluna - 1); f <= (coluna + 2) ; f++) {
-							if (  (e >= 0) && (f >= 0) && (e <= (this.minhaMatriz.length - 1) ) && (f <= (this.minhaMatriz.length - 1) ) ) {
+							if (  (e >= 0) && (f >= 0) && (e <= (this.minhaMatriz.length - 1) ) && (f <= (this.minhaMatriz[0].length - 1) ) ) {
 								if( !( ( e == (linha - 1) ) && ( f == (coluna + 2) ) ) && !( ( e == (linha + 3) ) && ( f == (coluna + 2) ) ) ){
 									if (this.minhaMatriz[e][f] != "X") {
 										retorno = false;
@@ -136,7 +136,7 @@
 				else if(orientacao == 1){
 					for (var g:int = (linha - 1); g <= (linha + 2) ; g++) {
 						for (var h:int = (coluna - 1); h <= (coluna + 3) ; h++) {
-							if (  (g >= 0) && (h >= 0) && (g <= (this.minhaMatriz.length - 1) ) && (h <= (this.minhaMatriz.length - 1) ) ) {
+							if (  (g >= 0) && (h >= 0) && (g <= (this.minhaMatriz.length - 1) ) && (h <= (this.minhaMatriz[0].length - 1) ) ) {
 								if( !( ( g == (linha + 2) ) && ( h == (coluna - 1) ) ) && !( ( g == (linha + 2) ) && ( h == (coluna + 3) ) ) ){
 									if (this.minhaMatriz[g][h] != "X") {
 										retorno = false;
@@ -150,7 +150,7 @@
 				else if(orientacao == 2){
 					for (var m:int = (linha - 2); m <= (linha + 2) ; m++) {
 						for (var n:int = (coluna - 1); n <= (coluna + 2) ; n++) {
-							if (  (m >= 0) && (n >= 0) && (m <= (this.minhaMatriz.length - 1) ) && (n <= (this.minhaMatriz.length - 1) ) ) {
+							if (  (m >= 0) && (n >= 0) && (m <= (this.minhaMatriz.length - 1) ) && (n <= (this.minhaMatriz[0].length - 1) ) ) {
 								if( !( ( m == (linha - 2) ) && ( n == (coluna - 1) ) ) && !( ( m == (linha + 2) ) && ( n == (coluna - 1) ) ) ){
 									if (this.minhaMatriz[m][n] != "X") {
 										retorno = false;
@@ -164,7 +164,7 @@
 				else{
 					for (var o:int = (linha - 2); o <= (linha + 1) ; o++) {
 						for (var p:int = (coluna - 1); p <= (coluna + 3) ; p++) {
-							if (  (o >= 0) && (p >= 0) && (o <= (this.minhaMatriz.length - 1) ) && (p <= (this.minhaMatriz.length - 1) ) ) {
+							if (  (o >= 0) && (p >= 0) && (o <= (this.minhaMatriz.length - 1) ) && (p <= (this.minhaMatriz[0].length - 1) ) ) {
 								if( !( ( o == (linha - 2) ) && ( p == (coluna - 1) ) ) && !( ( o == (linha - 2) ) && ( p == (coluna + 3) ) ) ){
 									if (this.minhaMatriz[o][p] != "X") {
 										retorno = false;
@@ -181,7 +181,7 @@
 		
 		private function distribuirSubmarino():void {
 			var linha:int = Math.floor(Math.random()*this.minhaMatriz.length);
-			var coluna:int = Math.floor(Math.random() * this.minhaMatriz[0].length);
+			var coluna:int = Math.floor(Math.random() * this.minhaMatriz[0].length);			
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
 				this.minhaMatriz[linha][coluna] = "P";
 				
@@ -299,7 +299,7 @@
 				}
 			}
 			else if(orientacao == 2){
-				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 1) );
+				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 2) ) + 1;
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 1) );
 				trace("linha = " + linha);
 				trace("coluna = " + coluna);
@@ -322,7 +322,7 @@
 				}
 			}
 			else{
-				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 2) ) + 1;
+				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 1) ) + 1;
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 2) );
 				trace("linha = " + linha);
 				trace("coluna = " + coluna);
@@ -352,8 +352,7 @@
 			if ( (peca[0] == -1) && (peca[1] == -1) ) { // nao existe nenhuma peca atingida, entao escolhe qualquer peca
 				this.ultimaLinhaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas.length );
 				this.ultimaColunaEscolhida = Math.floor( Math.random() * this.tabuleiro.pecas[0].length );
-				if ( (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") && (!this.temAbatidoAoRedor(new Array(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida)))) { //Se ainda n tiver atirado nessa posicao,
-					//this.tabuleiro.pecas[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida].clicar(); //Atirar.
+				if ( (this.matrizOponente[this.ultimaLinhaEscolhida][this.ultimaColunaEscolhida] == "X") && (!this.temAbatidoAoRedor(new Array(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida)))) { //Se ainda n tiver atirado nessa posicao,					
 					jogada = new Jogada(this.ultimaLinhaEscolhida, this.ultimaColunaEscolhida);				
 				}
 				else {
