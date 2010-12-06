@@ -15,17 +15,20 @@
 		public var pecas:Array;
 		private var xIni:Number;
 		private var yIni:Number;
-		
+		private var _NOME:String = "D";
+		private var _orientacao:int;
 		
 		public function DestroyerFigura() {
 			super();
-			trace("Lorena comentou todo o construtor de DestroyerFigura.as");
-			/*this.figura = this.figura_mc;
+			//trace("Lorena comentou todo o construtor de DestroyerFigura.as");
+			this.figura = this.figura_mc;
+			this.figura.visible = true;
 			this.mais90 = this.mais90_mc;
 			this.menos90 = this.menos90_mc;
 			this.pecas = [this.figura.peca1_mc, this.figura.peca2_mc, this.figura.peca3_mc];
 			this.xIni = this.figura.x;
 			this.yIni = this.figura.y;
+			this.orientacao = 0;
 			
 			
 			this.figura.addEventListener(MouseEvent.MOUSE_DOWN, this.iniciarArrasto);
@@ -36,7 +39,7 @@
 			this.addEventListener(EventosBatalhaNaval.FORATABULEIRO, voltarPosicaoInicial);
 			
 			this.mais90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
-			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);*/
+			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
 		}
 		
 		private function voltarPosicaoInicial(e:EventosBatalhaNaval):void {
@@ -78,6 +81,18 @@
 			else {
 				this.figura.rotation -= 90;
 			}
+		}
+		
+		public function get NOME():String { return _NOME; }
+		
+		public function set NOME(value:String):void {
+			_NOME = value;
+		}
+		
+		public function get orientacao():int { return _orientacao; }
+		
+		public function set orientacao(value:int):void {
+			_orientacao = value;
 		}
 		
 	}

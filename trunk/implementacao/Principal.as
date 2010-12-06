@@ -115,7 +115,11 @@
 												this.login.log_txt.text += "\nFalha na autenticação do login!";
 												this.login.ok_btn.enabled = true;
 												break;
+				case "conversaFrota":			//FAZER A CONVERSA SER ESCRITA NA TELA DO USUARIO
+												this.distribuindoFrota.receberFala(xml.nomeCliente,xml.texto)
+												break;
 				case "conversaJogo":			//FAZER A CONVERSA SER ESCRITA NA TELA DO USUARIO
+												this.jogo.receberFala(xml.nomeCliente,xml.texto)
 												break;
 				case "iniciaJogo":				this.irParaJogo();
 												break;

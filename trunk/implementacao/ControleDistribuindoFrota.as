@@ -86,7 +86,7 @@
 		private function enviarTexto(e:MouseEvent):void{
 			var msg:Mensagem = new Mensagem();			
 			msg.texto = this.fala.text;
-			msg.tipo = "conversaJogo";
+			msg.tipo = "conversaFrota";
 			this.comunicacao.send( msg.criarXML() );
 			this.fala.text = "";
 			this.enviar.enabled = false;
@@ -156,15 +156,19 @@
 				this.distribuirPecas();
 				this.habilitar(true);
 			}else {
-				this.distribuirPecas();
-				this.habilitar(true);
+				//this.distribuirPecas();
+				//this.habilitar(true);
+				this.frota_mc.submarinoLinha_mc.visible =
+				this.frota_mc.destroyerLinha_mc.visible =
+				this.frota_mc.portaAvioesLinha_mc.visible = true;
+				this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
+				this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 			}
 			
 			/*this.submarino.addEventListener(MouseEvent.MOUSE_DOWN, arrastarEmbarcacao);
 			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);*/
 			
-			this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
-			this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
+			
 		}
 		
 		//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.
@@ -407,28 +411,145 @@
 		}
 		
 		private function soltarEmbarcacao(e:EventosBatalhaNaval):void {
-			/*var movie:MovieClip = MovieClip(e.currentTarget);
+			var movie:MovieClip = MovieClip(e.currentTarget);
 			var posicoes:Array = this.localizarPosicoes(movie);
+			var tipo:String = movie.NOME;
+			var orientacao:int = movie.orientacao;
+			
 			trace(posicoes)
 			if (movie.pecas.length != posicoes.length) {//quando a embarcacao esta fora do tabuleiro ou parte fora
-				movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				//movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				movie.voltarPosicaoInicial();
 				
 			}else if(this.verificarPecas(posicoes)) {
-				movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				//movie.dispatchEvent(new EventosBatalhaNaval(EventosBatalhaNaval.FORATABULEIRO));
+				movie.voltarPosicaoInicial();
 				trace("colocou embarcacao em cima de outra embarcacao");
 				
 			}else {
- 				var embarcacao:Embarcacao = new Embarcacao();
+				
+				switch(tipo) {
+					case "P":
+						this.posicionarPortaAvioes(movie,posicoes,tipo,orientacao);
+						break;
+					case "D":
+						break;
+					
+				}
+				
+ 				//var embarcacao:Embarcacao = new Embarcacao();
+				/*switch(movie.NOME) {
+					case "portaAviao":
+						//CONTINUAR COM LORENA DAQUI
+					break;
+				}
 				for (var i:int = 0; i < posicoes.length; i++) {
 					var peca:Peca = this.tabuleiro.pecas[posicoes[i][0]][posicoes[i][1]];
 					embarcacao.adicionarPeca(peca);
 				}
-				this.frota.push(embarcacao);
-			}*/
+				this.frota.push(embarcacao);*/
+			}
 			
 			
 			
 			
+		}
+		
+		private function posicionarPortaAvioes(movie:MovieClip,posicoes:Array,tipo:String,orientacao:int):void{
+			var linha:int;
+			var coluna:int;
+			 var indice:int;
+			if (orientacao == 0) {	
+				indice = this.pegarIndice(posicoes, "linha", "menor");
+				linha = posicoes[indice][0];
+				coluna = posicoes[indice][1];
+			}else {
+				indice = this.pegarIndice(posicoes, "coluna", "menor");
+				linha = posicoes[indice][0];
+				coluna = posicoes[indice][1];
+			}
+			if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+				if (orientacao == 0) {
+					this._matrizTabuleiro[linha][coluna] = "P";
+					this._matrizTabuleiro[linha][coluna + 1] = "P";
+					this._matrizTabuleiro[linha][coluna + 2] = "P";
+					this._matrizTabuleiro[linha][coluna + 3] = "P";
+					
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 1]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 3]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna + 2].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha][coluna + 3].estado = EstadoPeca.PECAEXPOSTA;
+				}else {
+					this._matrizTabuleiro[linha][coluna] = "P";
+					this._matrizTabuleiro[linha + 1][coluna] = "P";
+					this._matrizTabuleiro[linha + 2][coluna] = "P";
+					this._matrizTabuleiro[linha + 3][coluna] = "P";			
+					
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+					this.tabuleiro.frota[1].adicionarPeca(this.tabuleiro.pecas[linha + 3][coluna]);
+					
+					this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha + 1][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha + 2][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					this.tabuleiro.pecas[linha + 3][coluna].estado = EstadoPeca.PECAEXPOSTA;
+				}
+				this.mostrarMatrizTabuleiro();
+				
+			}
+			movie.voltarPosicaoInicial();
+			
+		}
+		
+		private function pegarIndice(array:Array,indice:String,tipo:String):int {
+			var retorno:int = -1;
+			var ind:int = -1;
+			if (indice == "linha") {
+				var linha = array[0][0];
+				ind = 0;
+				if (tipo == "maior") {
+					for (var i:int = 1; i < array.length; i++) {
+						if (array[i][0] > linha) {
+							linha = array[i][0];
+							ind = i;
+						}
+					}
+				}else {
+					for (var i:int = 1; i < array.length; i++) {
+						if (array[i][0] < linha) {
+							linha = array[i][0];
+							ind = i;
+						}
+					}
+				}
+				retorno = ind;
+			}else {
+				var coluna = array[0][1];
+				ind = 0;
+				if (tipo == "maior") {
+					for (var i:int = 1; i < array.length; i++) {
+						if (array[i][1] > coluna) {
+							coluna = array[i][1];
+							ind = i;
+						}
+					}
+				}else {
+					for (var i:int = 1; i < array.length; i++) {
+						if (array[i][1] < coluna) {
+							coluna = array[i][1];
+							ind = i;
+						}
+					}
+				}
+				retorno = ind;
+			}
+			return retorno;
 		}
 		
 		private function localizarPosicoes(embarcacao:MovieClip):Array {
@@ -449,6 +570,9 @@
 					
 				}
 			}
+			/*trace("this.tabuleiro[quad+retorno[0][0]retorno[0][1]+_mc] = "+this.tabuleiro["quad"+retorno[0][0]+""+retorno[0][1]+"_mc"].name)
+			embarcacao.figura.x = this.tabuleiro.x+this.tabuleiro["quad"+retorno[0][0]+""+retorno[0][1]+"_mc"].x
+			embarcacao.figura.y = this.tabuleiro.y+this.tabuleiro["quad"+retorno[0][0]+""+retorno[0][1]+"_mc"].y*/
 			return retorno;
 		}
 		
@@ -473,7 +597,7 @@
 		}*/
 		
 		public function liberar():void {
-			this.log_txt.htmlText += "Posicione sua frota nos locais desejados e clique em \"Iniciar jogo\".";						
+			this.log_txt.htmlText += "Posicione sua frota nos locais desejados e clique em \"Iniciar jogo\".\n";						
 		}
 		
 		public function get matrizTabuleiro():Array { 
