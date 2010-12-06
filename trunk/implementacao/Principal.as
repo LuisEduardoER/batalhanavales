@@ -63,7 +63,7 @@
 		
 		private function receberMensagem(e:DataEvent):void {			
 			var xml:XML = new XML(e.data);	
-			trace("Principal recebeu msg do tipo " + xml.tipo);
+			//trace("Principal recebeu msg do tipo " + xml.tipo);
 			switch((xml.tipo).toString()) {
 				case "liberacao": 				this.distribuindoFrota.liberar();									
 												break;
@@ -163,8 +163,7 @@
 			}
 		}
 		
-		private function preencherDataGrid(texto:String, novoJogador:Boolean = false):void {
-			trace("texto = " + texto);
+		private function preencherDataGrid(texto:String, novoJogador:Boolean = false):void {			
 			var nomes:Array = texto.split(",");
 			var ids:Array = [];			
 			var estados:Array = [];			

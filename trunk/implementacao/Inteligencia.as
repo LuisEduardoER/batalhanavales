@@ -251,10 +251,14 @@
 			var orientacao:int = Math.floor(Math.random() * 4);
 			var linha:int;
 			var coluna:int;
+			trace("orientacao = " + orientacao);
 			if (orientacao == 0) {
 				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 2) );
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 1) );
+				trace("linha = " + linha);
+				trace("coluna = " + coluna);
 				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+					trace("---> OK");
 					this.minhaMatriz[linha][coluna] = "P";
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";
 					this.minhaMatriz[linha + 2][coluna] = "P";		
@@ -274,7 +278,10 @@
 			else if(orientacao == 1){
 				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 1) );
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 2) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				trace("linha = " + linha);
+				trace("coluna = " + coluna);
+				if ( this.posicaoLegal(linha, coluna, "D", 1) ) {
+					trace("---> OK");
 					this.minhaMatriz[linha][coluna] = "P";
 					this.minhaMatriz[linha][coluna + 2] = "P";
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";		
@@ -294,7 +301,10 @@
 			else if(orientacao == 2){
 				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 1) );
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 1) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				trace("linha = " + linha);
+				trace("coluna = " + coluna);
+				if ( this.posicaoLegal(linha, coluna, "D", 2) ) {
+					trace("---> OK");
 					this.minhaMatriz[linha][coluna] = "P";
 					this.minhaMatriz[linha - 1][coluna + 1] = "P";
 					this.minhaMatriz[linha + 1][coluna + 1] = "P";	
@@ -314,7 +324,10 @@
 			else{
 				linha = Math.floor(Math.random() * (this.minhaMatriz.length - 2) ) + 1;
 				coluna = Math.floor( Math.random() * (this.minhaMatriz[0].length - 2) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				trace("linha = " + linha);
+				trace("coluna = " + coluna);
+				if ( this.posicaoLegal(linha, coluna, "D", 3) ) {
+					trace("---> OK");
 					this.minhaMatriz[linha][coluna] = "P";
 					this.minhaMatriz[linha - 1][coluna + 1] = "P";
 					this.minhaMatriz[linha][coluna + 2] = "P";	

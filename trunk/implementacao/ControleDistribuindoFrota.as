@@ -57,6 +57,7 @@
 			this.portaAvioes = this.frota_mc.portaAvioes_mc;			
 			this.portaAvioes.addEventListener(EventosBatalhaNaval.APAGARPECASPORTAAVIOES, this.apagarPecasPortaAvioes);
 			this._tabuleiro = this.tabuleiro_mc;
+			this.tabuleiro.liberarClique(false);
 			
 			/*Botoes*/
 			this.sair = this.sair_btn;
@@ -173,9 +174,7 @@
 			}/*else {*/
 				//this.distribuirPecas();
 				//this.habilitar(true);
-				this.frota_mc.submarinoLinha_mc.visible =
-				this.frota_mc.destroyerLinha_mc.visible =
-				this.frota_mc.portaAvioesLinha_mc.visible = true;
+
 				this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 				this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 				this.submarino.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
@@ -187,15 +186,15 @@
 			
 		}
 		
-		//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.
+		/*//Nem esse método, nem os 4 próximos serão usados aqui posteriormente. Eles estão aqui por enquanto que a frota ainda não está sendo distribuida através de arrasto.
 		private function distribuirPecas():void {
-			//this.tabuleiro.inicializarFrota();
+			this.tabuleiro.inicializarFrota();
 			this.distribuirDestroyer();
 			this.distribuirPortaAvioes();
 			this.distribuirSubmarino();
 			
 			this.mostrarMatrizTabuleiro();			
-		}
+		}*/
 		
 		private function posicaoLegal(linha:int, coluna:int, embarcacao:String, orientacao:int = undefined):Boolean {
 			var retorno:Boolean = true;
@@ -300,7 +299,7 @@
 			return retorno;
 		}	
 		
-		private function distribuirSubmarino():void {
+		/*private function distribuirSubmarino():void {
 			var linha:int = Math.floor(Math.random()*this._matrizTabuleiro.length);
 			var coluna:int = Math.floor(Math.random() * this._matrizTabuleiro[0].length);
 			if ( this.posicaoLegal(linha, coluna, "S") ) {
@@ -424,7 +423,7 @@
 					this.distribuirDestroyer();
 				}
 			}						
-		}
+		}*/
 		
 		private function soltarEmbarcacao(e:EventosBatalhaNaval):void {
 			var movie:MovieClip = MovieClip(e.currentTarget);
@@ -647,10 +646,10 @@
 						}
 					}
 				}else {
-					for (var i:int = 1; i < array.length; i++) {
-						if (array[i][0] < linha) {
-							linha = array[i][0];
-							ind = i;
+					for (var j:int = 1; j < array.length; j++) {
+						if (array[j][0] < linha) {
+							linha = array[j][0];
+							ind = j;
 						}
 					}
 				}
@@ -659,17 +658,17 @@
 				var coluna = array[0][1];
 				ind = 0;
 				if (tipo == "maior") {
-					for (var i:int = 1; i < array.length; i++) {
-						if (array[i][1] > coluna) {
-							coluna = array[i][1];
-							ind = i;
+					for (var k:int = 1; k < array.length; k++) {
+						if (array[k][1] > coluna) {
+							coluna = array[k][1];
+							ind = k;
 						}
 					}
 				}else {
-					for (var i:int = 1; i < array.length; i++) {
-						if (array[i][1] < coluna) {
-							coluna = array[i][1];
-							ind = i;
+					for (var m:int = 1; m < array.length; m++) {
+						if (array[m][1] < coluna) {
+							coluna = array[m][1];
+							ind = m;
 						}
 					}
 				}
