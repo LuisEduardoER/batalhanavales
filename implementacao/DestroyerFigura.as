@@ -16,7 +16,7 @@
 		private var xIni:Number;
 		private var yIni:Number;
 		private var _NOME:String = "D";
-		private var _orientacao:int;
+		private var _orientacao:int;		
 		
 		public function DestroyerFigura() {
 			super();
@@ -42,7 +42,7 @@
 			this.menos90.addEventListener(MouseEvent.MOUSE_UP, this.rotacionar);
 		}
 		
-		private function voltarPosicaoInicial(e:EventosBatalhaNaval):void {
+		public function voltarPosicaoInicial():void {
 			this.figura.x = this.xIni;
 			this.figura.y = this.yIni;
 		}
@@ -77,10 +77,46 @@
 			var botao:String = Button(e.currentTarget).name;
 			if (botao == "mais90_mc") {
 				this.figura.rotation += 90;
+				this.orientacao++;
 			}
 			else {
 				this.figura.rotation -= 90;
+				this.orientacao--;
 			}
+			/*var valor:Number = (this.figura.rotation < 0)?(360 - this.figura.rotation):this.figura.rotation;
+			this.orientacao = this.definirOrientacao(valor / 90);-*/
+			
+			if (this.orientacao == -1) {
+				this.orientacao = 3;
+			}
+			else if (this.orientacao == 4) {
+				this.orientacao = 0;
+			}
+			trace("this.orientacao: " + this.orientacao);
+		}
+		
+		private function definirOrientacao(numero:Number):int {
+			trace("numero: "+numero)
+			var retorno:int = 0;
+			switch(Math.abs(numero)) {
+				case 0:
+					retorno = 0;
+					break;
+				case 1:
+					retorno = 1;
+					break;
+				case 2:
+					retorno = 2;
+					break;
+				case 3:
+					retorno = 3;
+					break;
+				case 4:
+					retorno = 0;
+					this.figura.rotation = 0;
+					break;
+			}
+			return retorno;
 		}
 		
 		public function get NOME():String { return _NOME; }

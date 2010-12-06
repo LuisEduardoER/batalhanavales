@@ -148,14 +148,15 @@
 		}
 		
 		private function configurar():void {
-			this.frota_mc.submarinoLinha_mc.visible =
+			/*this.frota_mc.submarinoLinha_mc.visible =
 			this.frota_mc.destroyerLinha_mc.visible =
-			this.frota_mc.portaAvioesLinha_mc.visible = false;
+			this.frota_mc.portaAvioesLinha_mc.visible = false;*/
 			
 			if (this.tipoOponente == "Computador") {
-				this.distribuirPecas();
-				this.habilitar(true);
-			}else {
+				this.fala.enabled =
+				this.fala.editable =
+				this.fala.mouseEnabled = false;				
+			}/*else {*/
 				//this.distribuirPecas();
 				//this.habilitar(true);
 				this.frota_mc.submarinoLinha_mc.visible =
@@ -163,7 +164,8 @@
 				this.frota_mc.portaAvioesLinha_mc.visible = true;
 				this.portaAvioes.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
 				this.destroyer.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
-			}
+				this.submarino.addEventListener(EventosBatalhaNaval.SOLTAREMBARCACAO, this.soltarEmbarcacao);
+			//}
 			
 			/*this.submarino.addEventListener(MouseEvent.MOUSE_DOWN, arrastarEmbarcacao);
 			this.submarino.addEventListener(MouseEvent.MOUSE_UP, soltarEmbarcacao);*/
@@ -363,7 +365,7 @@
 			else if(orientacao == 1){
 				linha = Math.floor(Math.random() * (this._matrizTabuleiro.length - 1) );
 				coluna = Math.floor( Math.random() * (this._matrizTabuleiro[0].length - 2) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				if ( this.posicaoLegal(linha, coluna, "D", 1) ) {
 					this._matrizTabuleiro[linha][coluna] = "P";
 					this._matrizTabuleiro[linha][coluna + 2] = "P";
 					this._matrizTabuleiro[linha + 1][coluna + 1] = "P";		
@@ -379,7 +381,7 @@
 			else if(orientacao == 2){
 				linha = Math.floor(Math.random() * (this._matrizTabuleiro.length - 1) );
 				coluna = Math.floor( Math.random() * (this._matrizTabuleiro[0].length - 1) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				if ( this.posicaoLegal(linha, coluna, "D", 2) ) {
 					this._matrizTabuleiro[linha][coluna] = "P";
 					this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
 					this._matrizTabuleiro[linha + 1][coluna + 1] = "P";	
@@ -395,7 +397,7 @@
 			else{
 				linha = Math.floor(Math.random() * (this._matrizTabuleiro.length - 2) ) + 1;
 				coluna = Math.floor( Math.random() * (this._matrizTabuleiro[0].length - 2) );
-				if ( this.posicaoLegal(linha, coluna, "D", 0) ) {
+				if ( this.posicaoLegal(linha, coluna, "D", 3) ) {
 					this._matrizTabuleiro[linha][coluna] = "P";
 					this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
 					this._matrizTabuleiro[linha][coluna + 2] = "P";	
@@ -433,8 +435,11 @@
 						this.posicionarPortaAvioes(movie,posicoes,tipo,orientacao);
 						break;
 					case "D":
+						this.posicionarDestroyer(movie, posicoes, tipo, orientacao);
 						break;
-					
+					case "S":
+						this.posicionarSubmarino(movie, posicoes, tipo, orientacao);
+						break;
 				}
 				
  				//var embarcacao:Embarcacao = new Embarcacao();
@@ -455,10 +460,108 @@
 			
 		}
 		
+		private function posicionarSubmarino(movie:MovieClip,posicoes:Array,tipo:String,orientacao:int):void{
+			var linha:int = posicoes[0][0];
+			var coluna:int = posicoes[0][1];
+			if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+				this._matrizTabuleiro[linha][coluna] = "P";
+				
+				this.tabuleiro.frota[2].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+				
+				this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+			}
+			this.mostrarMatrizTabuleiro();
+			movie.voltarPosicaoInicial();
+		}
+		
+		private function posicionarDestroyer(movie:MovieClip,posicoes:Array,tipo:String,orientacao:int):void{
+			var linha:int;
+			var coluna:int;
+			var indice:int;
+			
+			switch(orientacao) {
+				case 0:
+					indice = this.pegarIndice(posicoes, "linha", "menor");
+					linha = posicoes[indice][0];
+					coluna = posicoes[indice][1];
+					if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+						this._matrizTabuleiro[linha][coluna] = "P";
+						this._matrizTabuleiro[linha + 1][coluna + 1] = "P";
+						this._matrizTabuleiro[linha + 2][coluna] = "P";		
+						
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 2][coluna]);
+						
+						this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha + 1][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha + 2][coluna].estado = EstadoPeca.PECAEXPOSTA;
+					}
+					break;
+				case 1:
+					indice = this.pegarIndice(posicoes, "coluna", "menor");
+					linha = posicoes[indice][0];
+					coluna = posicoes[indice][1];
+					if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+						this._matrizTabuleiro[linha][coluna] = "P";
+						this._matrizTabuleiro[linha][coluna + 2] = "P";
+						this._matrizTabuleiro[linha + 1][coluna + 1] = "P";		
+						
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+						
+						this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha][coluna + 2].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha + 1][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+					}
+					break;
+				case 2:
+					indice = this.pegarIndice(posicoes, "coluna", "menor");
+					linha = posicoes[indice][0];
+					coluna = posicoes[indice][1];
+					if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+						this._matrizTabuleiro[linha][coluna] = "P";
+						this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
+						this._matrizTabuleiro[linha + 1][coluna + 1] = "P";	
+						
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha + 1][coluna + 1]);
+						
+						this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha - 1][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha + 1][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+					}
+					break;
+				case 3:
+					indice = this.pegarIndice(posicoes, "coluna", "menor");
+					linha = posicoes[indice][0];
+					coluna = posicoes[indice][1];
+					if (this.posicaoLegal(linha, coluna, tipo, orientacao)) {
+						this._matrizTabuleiro[linha][coluna] = "P";
+						this._matrizTabuleiro[linha - 1][coluna + 1] = "P";
+						this._matrizTabuleiro[linha][coluna + 2] = "P";	
+						
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha - 1][coluna + 1]);
+						this.tabuleiro.frota[0].adicionarPeca(this.tabuleiro.pecas[linha][coluna + 2]);
+						
+						this.tabuleiro.pecas[linha][coluna].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha - 1][coluna + 1].estado = EstadoPeca.PECAEXPOSTA;
+						this.tabuleiro.pecas[linha ][coluna + 2].estado = EstadoPeca.PECAEXPOSTA;
+					}
+					break;
+			}
+			
+			this.mostrarMatrizTabuleiro();
+			movie.voltarPosicaoInicial();
+		}
+		
 		private function posicionarPortaAvioes(movie:MovieClip,posicoes:Array,tipo:String,orientacao:int):void{
 			var linha:int;
 			var coluna:int;
-			 var indice:int;
+			var indice:int;
 			if (orientacao == 0) {	
 				indice = this.pegarIndice(posicoes, "linha", "menor");
 				linha = posicoes[indice][0];
