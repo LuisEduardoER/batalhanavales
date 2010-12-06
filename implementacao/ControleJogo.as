@@ -32,6 +32,9 @@
 		
 		private var jogadaEnviada:Boolean;
 		
+		private var fala:TextArea;
+		private var enviar:Button;
+		
 		
 		public function ControleJogo(socket:XMLSocket,eu:Humano, oponente:Jogador, tabuleiro:Tabuleiro) {
 			this.eu = eu;
@@ -63,6 +66,11 @@
 			
 			this.delay = new Timer(1000);
 			
+			this.fala = this.fala_txt;
+			this.enviar = this.enviar_btn;
+			this.fala.addEventListener(Event.CHANGE, this.habilitarEnviar);
+			this.enviar.addEventListener(MouseEvent.MOUSE_UP, this.enviarTexto);
+			
 			
 			//-----------------------------//
 			this.meuTabuleiro.liberarClique(false);
@@ -73,6 +81,28 @@
 			//----------------------------//
 						
 						
+		}
+		
+		private function habilitarEnviar(e:Event):void{
+			if (this.fala.text != "") {
+				this.enviar.enabled = true;
+			}
+			else {
+				this.enviar.enabled = false;
+			}
+		}
+		
+		private function enviarTexto(e:MouseEvent):void{
+			var msg:Mensagem = new Mensagem();			
+			msg.texto = this.fala.text;
+			msg.tipo = "conversaJogo";
+			this.comunicacao.send( msg.criarXML() );
+			this.fala.text = "";
+			this.enviar.enabled = false;
+		}
+		
+		public function receberFala(remetente:String, fala:String):void {
+			this.log_txt.text += ("\n"+remetente + " falou: " + fala);
 		}
 		
 		public function adicionarFrota(frota:String):void {

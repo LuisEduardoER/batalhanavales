@@ -125,7 +125,7 @@ public class InterpretadorMensagem {
                 msgMudancaEstado3.setTexto("Jogando");
                 this.servidor.broadcastMessage(msgMudancaEstado3);
                 break;
-            case 11://conversaJogo
+            case 11://conversaFrota ou conversaJogo
                 this.mensagem.setNomeCliente(this.cliente.getNome());
                 Cliente dupla = this.servidor.getOponente(cliente);
                 this.servidor.enviarMensagem(this.mensagem, dupla);
@@ -191,7 +191,7 @@ public class InterpretadorMensagem {
             retorno = 9;
         } else if (tipo.equals("jogarXPC")) {
             retorno = 10;
-        } else if (tipo.equals("conversaJogo")) {
+        } else if (tipo.equals("conversaFrota")) {
             retorno = 11;
         } else if (tipo.equals("frotaDistribuida")) {
             retorno = 12;
@@ -202,6 +202,8 @@ public class InterpretadorMensagem {
 //        }
         } else if (tipo.equals("frota")) {
             retorno = 14;
+        }else if (tipo.equals("conversaJogo")) {
+            retorno = 11;
         }
 
 

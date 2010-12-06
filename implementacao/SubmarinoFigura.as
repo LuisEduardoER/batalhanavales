@@ -7,6 +7,9 @@
 	*/
 	public class SubmarinoFigura extends MovieClip {
 		
+		
+		private static var NOME:String = "submarino";
+		
 		public function SubmarinoFigura() {
 			super();			
 		}
