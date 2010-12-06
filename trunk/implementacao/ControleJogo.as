@@ -150,6 +150,9 @@
 		
 		private function verificarTipoOponente():void{
 			if (this.oponente.nome == "Computador") {
+				this.fala.enabled =
+				this.fala.editable =
+				this.fala.mouseEnabled = false;	
 				Computador(this.oponente).criarInteligencia(oponenteTabuleiro);				
 				this.iniciarJogo();
 			}else {
