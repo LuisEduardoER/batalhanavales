@@ -18,6 +18,7 @@ public class Cliente extends Thread {
     private static int count = 0;
 
     private String nome;
+    private Usuario usuario;
     private String estado;
     private boolean frotaDistribuida;
 
@@ -113,14 +114,14 @@ public class Cliente extends Thread {
      * @return the nome
      */
     public String getNome() {
-        return nome;
+        return this.usuario.getNome();
     }
 
     /**
      * @param nome the nome to set
      */
     public void setNome(String nome) {
-        this.nome = nome;        
+        this.usuario.setNome(nome);
     }
 
     public String getEstado() {
