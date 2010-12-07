@@ -1,0 +1,36 @@
+id1 = 30
+id2 = 29
+
+X	X	X	X	X	X	X	X	X	4
+X	X	X	X	X	X	X	X	X	4
+X	A	X	X	X	X	A	X	A	4
+X	X	X	X	X	X	X	X	X	3
+X	X	1	X	1	X	X	X	X	X
+X	X	X	1	X	X	X	X	X	X
+X	X	X	X	X	X	X	X	X	X
+X	X	X	X	X	X	X	X	X	X
+X	A	X	X	X	X	X	X	A	X
+X	X	X	5	X	X	X	X	X	X
+
+X	A	X	X	X	X	X	X	A	X
+A	X	X	3	3	3	3	X	X	X
+X	X	X	X	A	X	X	X	X	A
+X	X	A	X	X	A	X	X	X	X
+X	A	X	A	X	X	X	X	X	X
+X	X	X	X	X	X	X	X	X	A
+X	X	A	X	X	1	X	X	6	X
+A	X	X	X	X	X	1	X	X	X
+X	X	X	X	X	1	X	X	X	X
+X	X	X	A	X	X	X	X	X	A
+			
+						
+Legenda:
+									
+X = Peca oculta									
+A = Peca agua									
+1 = Peca do destroyer que ainda não foi encontrada									
+2 = Peca do destroyer que já foi encontrada									
+3 = Peca do porta-aviões que ainda não foi encontrada									
+4 = Peca do porta-aviões que já foi encontrada									
+5 = Peca do submarino que ainda não foi encontrada									
+6 = Peca do submarino que já foi encontrada									
