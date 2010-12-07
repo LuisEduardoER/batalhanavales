@@ -40,8 +40,13 @@ public class InterpretadorMensagem {
 
             case 2://envioNome
                 Mensagem validacao = new Mensagem();
+                Usuario jogador;
+                FabricaAbstrata fabrica = FabricaAbstrata.getFabricaUsuario();
+                
                 if (this.servidor.validarUsuario(this.mensagem.getTexto(), this.mensagem.getSenha())) {
-                    this.cliente.setNome(this.mensagem.getTexto());
+                    jogador = fabrica.criarUsuario(this.mensagem.getTexto(), this.mensagem.getSenha());
+                    this.cliente.setUsuario(jogador);
+                    //this.cliente.setNome(this.mensagem.getTexto());
                     this.servidor.writeActivity(this.cliente.getIdCliente() + " => " + this.cliente.getNome() + " conectado ao servidor.");
 
                     validacao.setTipo("usuarioValido");

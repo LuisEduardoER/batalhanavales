@@ -234,8 +234,9 @@ public class Servidor {
     }
 
     protected Boolean validarUsuario(String nome, String senha){
+        FabricaAbstrata fabrica = FabricaAbstrata.getFabricaUsuario();
         boolean retorno = false;
-        Usuario teste = new Usuario(nome, senha);
+        Usuario teste = fabrica.criarUsuario(nome, senha);//new Usuario(nome, senha);
         for (int i = 0; i < this.usuarios.size(); i++) {
             if(teste.equals(this.usuarios.get(i))){
                 retorno = true;
