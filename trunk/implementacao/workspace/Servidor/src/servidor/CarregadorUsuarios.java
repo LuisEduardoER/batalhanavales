@@ -32,6 +32,7 @@ public class CarregadorUsuarios {
     private NodeList listaNo;
     private String caminho;
     private Document doc;
+    private FabricaAbstrata fabricaUsuario;
 
     public CarregadorUsuarios() {
         this.usuarios = new ArrayList<Usuario>();
@@ -41,6 +42,7 @@ public class CarregadorUsuarios {
         this.caminho = caminho;
         this.arquivo = new File(this.caminho);
         this.fabrica = DocumentBuilderFactory.newInstance();
+        this.fabricaUsuario = FabricaAbstrata.getFabricaUsuario();
         try {
             this.criador = this.fabrica.newDocumentBuilder();
             this.doc =  this.criador.parse(arquivo);
@@ -58,7 +60,8 @@ public class CarregadorUsuarios {
                      Element senhaElemento = (Element) senha.item(0);
                      NodeList senhaUsuario = senhaElemento.getChildNodes();
                      //System.out.println("senha: "+((Node)senhaUsuario.item(0)).getNodeValue());
-                     Usuario usuario = new Usuario(((Node) nomeUsuario.item(0) ).getNodeValue(),((Node)senhaUsuario.item(0)).getNodeValue());
+                     //Usuario usuario = new Usuario(((Node) nomeUsuario.item(0) ).getNodeValue(),((Node)senhaUsuario.item(0)).getNodeValue());
+                     Usuario usuario = this.fabricaUsuario.criarUsuario(((Node) nomeUsuario.item(0) ).getNodeValue(),((Node)senhaUsuario.item(0)).getNodeValue());
                      this.usuarios.add(usuario);
                  }
 

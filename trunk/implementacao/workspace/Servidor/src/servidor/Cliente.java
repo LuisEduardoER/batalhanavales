@@ -17,7 +17,8 @@ public class Cliente extends Thread {
 
     private static int count = 0;
 
-    private String nome;
+    //private String nome;
+   // private FabricaAbstrata fabrica;
     private Usuario usuario;
     private String estado;
     private boolean frotaDistribuida;
@@ -68,6 +69,15 @@ public class Cliente extends Thread {
         }
     }
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
+
+    
     public String getIP() {
         return ip;
     }
@@ -114,7 +124,13 @@ public class Cliente extends Thread {
      * @return the nome
      */
     public String getNome() {
+       if(this.usuario != null){
         return this.usuario.getNome();
+       }else{
+           return "";
+       }
+
+        
     }
 
     /**
